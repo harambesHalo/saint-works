@@ -44,3 +44,14 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .slider {
+      height: 300px !important; /* Smaller height for mobile */
+    }
+    
+    .project {
+      width: 250px !important; /* Smaller width for mobile */
+      height: 250px !important; /* Smaller height for mobile */
+    }
+  }

@@ -1,36 +1,73 @@
 'use client'
 import Image from 'next/image'
 import styles from './style.module.scss'
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { slideUp } from './animation';
 import { motion } from 'framer-motion';
 
 export default function Home() {
-
   const firstText = useRef(null);
   const secondText = useRef(null);
   const slider = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
   let xPercent = 0;
   let direction = -1;
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    handleResize(); // Check initially
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useLayoutEffect( () => {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.to(slider.current, {
-      scrollTrigger: {
-        trigger: document.documentElement,
-        scrub: 0.25,
-        start: 0,
-        end: window.innerHeight,
-        onUpdate: e => direction = e.direction * -1
-      },
-      x: "-500px",
-    })
-    requestAnimationFrame(animate);
-  }, [])
+    
+    let scrollAnimation;
+    
+    if (!isMobile) {
+      // Desktop animation
+      scrollAnimation = gsap.to(slider.current, {
+        scrollTrigger: {
+          trigger: document.documentElement,
+          scrub: 0.25,
+          start: 0,
+          end: window.innerHeight,
+          onUpdate: e => direction = e.direction * -1
+        },
+        x: "-500px",
+      });
+      
+      requestAnimationFrame(animate);
+    } else {
+      // Simpler mobile animation
+      scrollAnimation = gsap.to(slider.current, {
+        scrollTrigger: {
+          trigger: document.documentElement,
+          scrub: 0.25,
+          start: 0,
+          end: window.innerHeight/2,
+        },
+        x: "-100px",
+      });
+    }
+    
+    return () => {
+      if (scrollAnimation) scrollAnimation.kill();
+    };
+  }, [isMobile]);
 
   const animate = () => {
+    if (isMobile) return; // Don't run this animation on mobile
+    
     if(xPercent < -100){
       xPercent = 0;
     }
@@ -49,6 +86,9 @@ export default function Home() {
         src="/images/art.jpg"
         fill={true}
         alt="background"
+        priority
+        sizes="100vw"
+        style={{objectFit: 'cover'}}
       />
       <div className={styles.sliderContainer}>
         <div ref={slider} className={styles.slider}>

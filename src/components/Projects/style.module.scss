@@ -70,3 +70,22 @@
     
 }
 
+@media (max-width: 768px) {
+    .projects {
+      padding: 50px 20px !important;
+    }
+    
+    .body {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    .project h2 {
+      font-size: 7vw !important; /* Responsive font size */
+    }
+    
+    .modalContainer {
+      width: 90vw !important;
+      height: 50vh !important;
+    }
+  }

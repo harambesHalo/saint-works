@@ -10,23 +10,50 @@ import SlidingImages from '../components/SlidingImages';
 import Contact from '../components/Contact';
 
 export default function Home() {
-
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect( () => {
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    handleResize(); // Check initially
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     (
       async () => {
-          const LocomotiveScroll = (await import('locomotive-scroll')).default
-          const locomotiveScroll = new LocomotiveScroll();
+        try {
+          const LocomotiveScroll = (await import('locomotive-scroll')).default;
+          
+          // Only use smooth scrolling on desktop
+          if (!isMobile) {
+            const locomotiveScroll = new LocomotiveScroll();
+          }
 
-          setTimeout( () => {
+          setTimeout(() => {
             setIsLoading(false);
-            document.body.style.cursor = 'default'
+            document.body.style.cursor = 'default';
+            document.body.style.overflowY = 'auto'; // Allow vertical scrolling
+            document.body.style.overflowX = 'hidden'; // Prevent horizontal scrolling
             window.scrollTo(0,0);
-          }, 2000)
+          }, 2000);
+        } catch (error) {
+          console.error("Error initializing scroll:", error);
+          setIsLoading(false);
+          document.body.style.cursor = 'default';
+          document.body.style.overflowY = 'auto';
+          document.body.style.overflowX = 'hidden';
+        }
       }
     )()
-  }, [])
+  }, [isMobile]);
 
   return (
     <main className={styles.main}>

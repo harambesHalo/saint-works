@@ -147,3 +147,23 @@
     }
 }
 
+@media (max-width: 768px) {
+    .header {
+      padding: 15px !important;
+    }
+    
+    .nav {
+      display: none !important; /* Hide desktop nav on mobile */
+    }
+    
+    .headerButtonContainer {
+      top: 15px !important;
+      right: 15px !important;
+      z-index: 999 !important;
+    }
+    
+    .button {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }

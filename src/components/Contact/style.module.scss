@@ -128,3 +128,30 @@
     }
     
 }
+
+
+@media (max-width: 768px) {
+    .contact {
+      padding: 50px 20px !important;
+    }
+    
+    .title h2 {
+      font-size: 7vw !important; /* Responsive font size */
+    }
+    
+    .button {
+      height: 45px !important;
+      width: 180px !important;
+    }
+    
+    .nav {
+      flex-direction: column !important;
+      gap: 20px !important;
+      align-items: flex-start !important;
+    }
+    
+    .info {
+      flex-direction: column !important;
+      gap: 40px !important;
+    }
+  }

@@ -4,3 +4,9 @@ body{
     overflow: hidden; /* Hide scrollbars */
     cursor: wait;
 }
+
+@media (max-width: 768px) {
+    html, body {
+      font-size: 14px; /* Slightly smaller base font size for mobile */
+    }
+  }

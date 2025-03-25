@@ -51,3 +51,18 @@
     }
   }
   
+  @media (max-width: 768px) {
+    .landing {
+      height: 100vh !important;
+    }
+    
+    .sliderContainer {
+      width: 100% !important;
+      font-size: 10vw !important; /* Responsive font size */
+    }
+    
+    .description {
+      bottom: 20px !important;
+      left: 20px !important;
+    }
+  }

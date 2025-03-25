@@ -38,3 +38,13 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .menu {
+      width: 100% !important;
+    }
+    
+    .body {
+      padding: 80px 20px !important;
+    }
+  }
