@@ -28,7 +28,7 @@ export default function Home() {
     };
   }, []);
 
-  useLayoutEffect( () => {
+  useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     
     let scrollAnimation;
@@ -65,8 +65,25 @@ export default function Home() {
     };
   }, [isMobile]);
 
+  // Link ScrollTrigger with Lenis
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.lenis) {
+      const linkLenisToScrollTrigger = () => {
+        ScrollTrigger.update();
+      };
+      
+      window.lenis.on('scroll', linkLenisToScrollTrigger);
+      
+      return () => {
+        if (window.lenis) {
+          window.lenis.off('scroll', linkLenisToScrollTrigger);
+        }
+      };
+    }
+  }, []);
+
   const animate = () => {
-    if (isMobile) return; // Don't run this animation on mobile
+    if (isMobile) return; // Skip for mobile
     
     if(xPercent < -100){
       xPercent = 0;
