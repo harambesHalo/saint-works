@@ -9,31 +9,31 @@ import Rounded from '../../common/RoundedButton';
 
 const projects = [
   {
-    title: "C2 Montreal",
+    title: "Studio Work",
     src: "c2montreal.png",
     color: "#000000"
   },
   {
-    title: "Office Studio",
-    src: "officestudio.png",
+    title: "Ariel Photography",
+    src: "ariel_image.jpg",
     color: "#8C8C8C"
   },
   {
-    title: "Locomotive",
-    src: "locomotive.png",
+    title: "White Border",
+    src: "wb-2.png",
     color: "#EFE8D3"
   },
   {
-    title: "Silencio",
-    src: "silencio.png",
+    title: "Your Accounting Friend",
+    src: "yaf.png",
     color: "#706D63"
   }
 ]
 
 const scaleAnimation = {
-    initial: {scale: 0, x:"-50%", y:"-50%"},
-    enter: {scale: 1, x:"-50%", y:"-50%", transition: {duration: 0.4, ease: [0.76, 0, 0.24, 1]}},
-    closed: {scale: 0, x:"-50%", y:"-50%", transition: {duration: 0.4, ease: [0.32, 0, 0.67, 0]}}
+    initial: {scale: 0, x:"-20%", y:"-20%"},
+    enter: {scale: 1, x:"-20%", y:"-20%", transition: {duration: 0.4, ease: [0.76, 0, 0.24, 1]}},
+    closed: {scale: 0, x:"-20%", y:"-20%", transition: {duration: 0.4, ease: [0.32, 0, 0.67, 0]}}
 }
 
 export default function Home() {
@@ -97,7 +97,7 @@ export default function Home() {
                 return <div className={styles.modal} style={{backgroundColor: color}} key={`modal_${index}`}>
                     <Image 
                     src={`/images/${src}`}
-                    width={300}
+                    width={350}
                     height={0}
                     alt="image"
                     />
