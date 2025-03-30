@@ -133,14 +133,14 @@ export default function Home() {
 
   return (
     <motion.main variants={slideUp} initial="initial" animate="enter" className={styles.landing}>
-      <Image
-        src="/images/art.jpg"
-        fill={true}
-        alt="background"
-        priority
-        sizes="90vw"
-        style={{objectFit: 'cover'}}
-      />
+        <Image
+          src="/images/art.jpg"
+          fill={true}
+          alt="background"
+          priority
+          sizes="90vw"
+          style={{objectFit: 'cover'}}
+        />
       <div className={styles.sliderContainer}>
         <div ref={slider} className={styles.slider}>
           <p ref={firstText}>Artist - Developer -</p>

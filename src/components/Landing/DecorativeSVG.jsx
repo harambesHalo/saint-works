@@ -1,89 +1,106 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import gsap from 'gsap';
 
 const DecorativeSVG = React.forwardRef((props, ref) => {
+  // New state to track if we should start animation
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  // Add a state to prevent flash of content
+  const [initialHideApplied, setInitialHideApplied] = useState(false);
+  
+  // First effect - immediately hide all paths to prevent flash
   useEffect(() => {
-    if (ref?.current) {
-      // We need direct control over the paths to animate them
-      const svgPaths = Array.from(ref.current.querySelectorAll('path[fill]'));
-      
-      // Create separate path elements for drawing the outlines
-      svgPaths.forEach((path, index) => {
-        const originalPath = path;
-        const pathData = originalPath.getAttribute('d');
-        const originalFill = originalPath.getAttribute('fill');
-        
-        // Hide original paths initially
-        gsap.set(originalPath, { 
-          opacity: 0,
-          fillOpacity: 0 
-        });
-        
-        // Create a stroke path for drawing
-        const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        strokePath.setAttribute('d', pathData);
-        strokePath.setAttribute('fill', 'none');
-        strokePath.setAttribute('stroke', originalFill);
-        strokePath.setAttribute('stroke-width', '2');
-        strokePath.setAttribute('stroke-linecap', 'round');
-        strokePath.setAttribute('data-index', index);
-        originalPath.parentNode.appendChild(strokePath);
-        
-        // Set up initial state for stroke drawing
-        const pathLength = strokePath.getTotalLength();
-        strokePath.style.strokeDasharray = pathLength;
-        strokePath.style.strokeDashoffset = pathLength;
+    if (ref?.current && !initialHideApplied) {
+      // Hide all paths immediately
+      const allPaths = ref.current.querySelectorAll('path[fill]');
+      allPaths.forEach(path => {
+        path.style.opacity = 0;
+        path.style.fillOpacity = 0;
       });
-      
-      // Get all our newly created stroke paths
-      const strokePaths = Array.from(ref.current.querySelectorAll('path[stroke][data-index]'))
-        .sort((a, b) => parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index')));
-      
-      // Create animation timeline
-      const mainTimeline = gsap.timeline({
-        delay: 0.5,
-        onComplete: () => {
-          // Clean up - remove the stroke paths once animation is complete
-          strokePaths.forEach(path => path.remove());
-        }
-      });
-
-      // Prepare for smooth, overlapping animations
-      const staggerDelay = 0.0; // No delay between paths for continuous flow
-      const drawDuration = 0.5;  // 0.5 seconds per path as requested
-      const fillDelay = 0.4;     // When to start filling relative to stroke
-      
-      // Animate each path with overlapping timing for organic feel
-      strokePaths.forEach((strokePath, i) => {
-        const originalPath = svgPaths[i];
-        const pathLength = strokePath.getTotalLength();
-        
-        // Create a sub-timeline for this path
-        const pathTimeline = gsap.timeline({
-          delay: i * staggerDelay  // Stagger the start times
-        });
-        
-        // Draw the path
-        pathTimeline.to(strokePath, {
-          strokeDashoffset: 0,
-          duration: drawDuration,
-          ease: "power1.inOut" // Smoother easing
-        });
-        
-        // Fade in the fill for the original path
-        pathTimeline.to(originalPath, {
-          opacity: 1,
-          fillOpacity: 1,
-          duration: 0.3,
-          ease: "power1.inOut"
-        }, `-=${fillDelay}`); // Start fill animation before stroke completes
-        
-        // Add this path's timeline to the main timeline
-        // Adjust the overlap to create a fluid, continuous drawing motion
-        mainTimeline.add(pathTimeline, i > 0 ? `-=${drawDuration * 0.8}` : 0);
-      });
+      setInitialHideApplied(true);
     }
-  }, [ref]);
+  }, [ref, initialHideApplied]);
+  
+  useEffect(() => {
+    // Use a simple approach - wait until after typical preloader disappears + 1 second
+    const totalDelayTime = 2000 + 1000; // 2s preloader time + 1s extra delay
+    
+    const animationTimer = setTimeout(() => {
+      setShouldAnimate(true);
+    }, totalDelayTime);
+    
+    return () => clearTimeout(animationTimer);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate || !ref?.current || !initialHideApplied) return;
+    
+    // We need direct control over the paths to animate them
+    const svgPaths = Array.from(ref.current.querySelectorAll('path[fill]'));
+    
+    // Create separate path elements for drawing the outlines
+    svgPaths.forEach((path, index) => {
+      const originalPath = path;
+      const pathData = originalPath.getAttribute('d');
+      const originalFill = originalPath.getAttribute('fill');
+      
+      // Create a stroke path for drawing
+      const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      strokePath.setAttribute('d', pathData);
+      strokePath.setAttribute('fill', 'none');
+      strokePath.setAttribute('stroke', originalFill);
+      strokePath.setAttribute('stroke-width', '2');
+      strokePath.setAttribute('stroke-linecap', 'round');
+      strokePath.setAttribute('data-index', index);
+      originalPath.parentNode.appendChild(strokePath);
+      
+      // Set up initial state for stroke drawing
+      const pathLength = strokePath.getTotalLength();
+      strokePath.style.strokeDasharray = pathLength;
+      strokePath.style.strokeDashoffset = pathLength;
+    });
+    
+    // Rest of your animation code remains the same...
+    const strokePaths = Array.from(ref.current.querySelectorAll('path[stroke][data-index]'))
+      .sort((a, b) => parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index')));
+    
+    // Create animation timeline
+    const mainTimeline = gsap.timeline({
+      delay: 0.5,
+      onComplete: () => {
+        // Clean up - remove the stroke paths once animation is complete
+        strokePaths.forEach(path => path.remove());
+      }
+    });
+
+    // Animation code remains the same...
+    const staggerDelay = 0.0;
+    const drawDuration = 0.5; 
+    const fillDelay = 0.4;
+    
+    strokePaths.forEach((strokePath, i) => {
+      const originalPath = svgPaths[i];
+      const pathLength = strokePath.getTotalLength();
+      
+      const pathTimeline = gsap.timeline({
+        delay: i * staggerDelay
+      });
+      
+      pathTimeline.to(strokePath, {
+        strokeDashoffset: 0,
+        duration: drawDuration,
+        ease: "power1.inOut"
+      });
+      
+      pathTimeline.to(originalPath, {
+        opacity: 1,
+        fillOpacity: 1,
+        duration: 0.3,
+        ease: "power1.inOut"
+      }, `-=${fillDelay}`);
+      
+      mainTimeline.add(pathTimeline, i > 0 ? `-=${drawDuration * 0.8}` : 0);
+    });
+  }, [ref, shouldAnimate, initialHideApplied]);
 
   return (
     <svg 
@@ -94,6 +111,7 @@ const DecorativeSVG = React.forwardRef((props, ref) => {
       preserveAspectRatio="xMidYMid meet"
       xmlns="http://www.w3.org/2000/svg"
       className={props.className}
+      style={{ opacity: initialHideApplied ? 1 : 0 }} // Hide SVG until we've applied initial hide
     >
       <defs>
         <clipPath id="53aecdca3c">

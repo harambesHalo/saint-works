@@ -4,14 +4,10 @@
   height: 100vh;
   overflow: hidden;
 
-  img{
-    object-fit: cover;
-  }
-
   .photoContainer{
     position: relative;
-    width: 300px;
-    height: 350px;
+    width: 350px;
+    height: 400px;
     margin-top: 0px;
     overflow: visible; /* Changed from hidden to allow SVG to overflow */
     border: 8px solid #e2e2e2;
@@ -27,18 +23,17 @@
     
     .svgOverlay {
       position: absolute;
-      top: 15px;
-      left: 60px;
+      top: 25px;
+      left: 85px;
       z-index: 10;
       pointer-events: none;
-      transform: rotate(10deg);
+      transform: rotate(12deg) scale(1.2);
     }
 
     .decorativeSvg {
       transform: scale(1.2);
       filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
       transition: transform 0.3s ease;
-      transform: rotate(1deg);
     }
   }
 
@@ -83,34 +78,31 @@
 
 @media (max-width: 768px) {
   .landing {
-    height: 100vh !important;
-  }
+    height: 100vh;
   
-  .photoContainer{
-    width: 200px;
-    height: 300px;
-    
-    .svgOverlay {
-      top: -30px;
-      left: -60px;
+    .photoContainer{
+      width: 300px;
+      height: 350px;
+      
+      .svgOverlay {
+        top: 15px;
+        left: 60px;
+        .decorativeSvg {
+          transform: rotate(-10deg) scale(0.8) !important;
+        }
+      }
     }
-    
-    .decorativeSvg {
-      transform: scale(0.8);
+    .description {
+      bottom: 10%;
+      left: 10%;
     }
-  }
-  
-  .description {
-    bottom: 10% !important;
-    left: 10% !important;
-  }
-  
-  .slider p{
-    position: relative;
-    margin: 0px;
-    color: white;
-    font-size: 150px !important;
-    font-weight: 500;
-    padding-right: 50px;
-  }
+    .slider p{
+      position: relative;
+      margin: 0px;
+      color: white;
+      font-size: 150px;
+      font-weight: 500 ;
+      padding-right: 50px;
+    }
+  } 
 }
