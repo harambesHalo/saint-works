@@ -1,9 +1,31 @@
+.slatWallSegment {
+    position: absolute;
+        top: 100%;
+        right: 0%;
+        width: 30%; /* Right 2/5ths of the page */
+        height: 100vh;
+        z-index: 0; /* Behind everything else but the background */
+        pointer-events: none;
+        background-color: #171614;
+}
+
+.slatWallContainer {
+    position: absolute;
+    top: 100%;
+    right: 5%;
+    width: 30%; /* Right 2/5ths of the page */
+    height: 95vh;
+    z-index: 0; /* Behind everything else but the background */
+    pointer-events: none; /* Allows clicking through */
+    box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5); 
+  }
+
 .description {
     margin-top: 100px;
     padding: 0 5%;
     display: flex;
     justify-content: center;
-    
+
     .body {
         max-width: 1400px;
         width: 100%;
@@ -67,12 +89,13 @@
                     position: relative;
                     width: 100%;
                     height: 450px;
-                    
+                    z-index: 3;
                     .paintingInner {
                         position: absolute;
                         width: 100%;
                         height: 100%;
                         transform-origin: top right; /* Key: Anchor at top right */
+                        transform-box: fill-box;
                     }
                 }
             }

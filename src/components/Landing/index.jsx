@@ -6,11 +6,13 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { slideUp } from './animation';
 import { motion } from 'framer-motion';
+import DecorativeSVG from './DecorativeSVG';
 
 export default function Home() {
   const firstText = useRef(null);
   const secondText = useRef(null);
   const slider = useRef(null);
+  const svgRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   let xPercent = 0;
   let direction = -1;
@@ -46,6 +48,22 @@ export default function Home() {
         x: "-500px",
       });
       
+      // Add animation for the SVG
+      if (svgRef.current) {
+        gsap.from(svgRef.current, {
+          scrollTrigger: {
+            trigger: document.documentElement,
+            scrub: 0.5,
+            start: "top top",
+            end: "bottom bottom",
+          },
+          rotate: -10,
+          scale: 0.9,
+          opacity: 0.7,
+          duration: 1.5
+        });
+      }
+      
       requestAnimationFrame(animate);
     } else {
       // Simpler mobile animation
@@ -58,6 +76,22 @@ export default function Home() {
         },
         x: "-100px",
       });
+      
+      // Mobile SVG animation
+      if (svgRef.current) {
+        gsap.from(svgRef.current, {
+          scrollTrigger: {
+            trigger: document.documentElement,
+            scrub: 0.5,
+            start: "top top",
+            end: "center center",
+          },
+          rotate: -5,
+          scale: 0.95,
+          opacity: 0.8,
+          duration: 1
+        });
+      }
     }
     
     return () => {
@@ -114,9 +148,6 @@ export default function Home() {
         </div>
       </div>
       <div data-scroll data-scroll-speed={0.1} className={styles.description}>
-        <div className="imageText">
-          
-        </div>
         <div className={styles.photoContainer}>
           <Image
             src="/images/profile_picture.jpg"
@@ -126,6 +157,9 @@ export default function Home() {
             sizes="100vw"
             style={{objectFit: 'cover'}}
           />
+          <div className={styles.svgOverlay}>
+            <DecorativeSVG ref={svgRef} className={styles.decorativeSvg} />
+          </div>
         </div>
       </div>
     </motion.main>

@@ -16,9 +16,9 @@ export default function index() {
     
     // InView for triggering the swing
     const isSwingTrigger = useInView(imageRef, { 
-        once: true, 
+        once: true,
         amount: 0.9,
-        margin: "0px 0px -200px 0px" // Trigger when scrolled further down
+        margin: "0px 0px -425px 0px" // Trigger when scrolled further down
     });
     
     // Handle the initial animation completion
@@ -64,6 +64,18 @@ export default function index() {
 
     return (
         <div ref={description} className={styles.description}>
+          {/* Layered background elements */}
+          <div className={styles.slatWallSegment}></div> 
+          <div className={styles.slatWallContainer}>
+            <Image
+              src="/images/slatWall.png"
+              fill={true}
+              alt="slat wall background"
+              priority
+              sizes="30vw"
+              style={{objectFit: 'cover'}}
+              />
+            </div>
             <div className={styles.body}>
                 <div className={styles.titleText}>
                   <p>
@@ -103,6 +115,11 @@ export default function index() {
                         className={styles.paintingInner}
                         variants={finalPendulumSwing}
                         animate={swingTriggered ? "swing" : undefined}
+                        style={{
+                          transformOrigin: 'top right',
+                          originX: 1,
+                          originY: 0
+                        }}
                       >
                         <Image
                           src="/images/squiggle2.png"
@@ -110,7 +127,10 @@ export default function index() {
                           alt="background"
                           priority
                           sizes="100vw"
-                          style={{objectFit: 'contain'}}
+                          style={{
+                            objectFit: 'contain',
+                            objectPosition: 'right top'
+                          }}
                         />
                       </motion.div>
                     </motion.div>
