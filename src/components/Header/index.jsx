@@ -38,9 +38,9 @@ export default function index() {
             <div className={styles.logo}>
                 <p className={styles.copyright}>©</p>
                 <div className={styles.name}>
-                    <p className={styles.codeBy}>Code by</p>
-                    <p className={styles.dennis}>Dennis</p>
-                    <p className={styles.snellenberg}>Snellenberg</p>
+                    <p className={styles.codeBy}>Authored By</p>
+                    <p className={styles.joe}>Joe</p>
+                    <p className={styles.stromain}>St.Romain</p>
                 </div>
             </div>
             <div className={styles.nav}>

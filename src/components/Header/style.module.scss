@@ -3,7 +3,7 @@
     display: flex;
     z-index: 1;
     top: 0;
-    color: white;
+    color: #000;
     padding: 35px;
     justify-content: space-between;
     width: 100%;
@@ -43,15 +43,15 @@
                 transform: rotate(360deg);
             }
             .name{
-                padding-right: 30px;
+                padding-right: 0px;
                 .codeBy{
                     transform: translateX(-100%);
                 }
-                .dennis{
-                    transform: translateX(-65px);
+                .joe{
+                    transform: translateX(-275%);
                 }
-                .snellenberg{
-                    transform: translateX(-65px);
+                .stromain{
+                    transform: translateX(-100%);
                 }
             }
         }
