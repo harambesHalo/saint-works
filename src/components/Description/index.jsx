@@ -12,12 +12,12 @@ export default function index() {
     const [swingTriggered, setSwingTriggered] = useState(false);
     
     // InView for initial animations
-    const isInView = useInView(description, { once: false, amount: 0.5 });
+    const isInView = useInView(description, { once: true, amount: 0.5 });
     
     // InView for triggering the swing
     const isSwingTrigger = useInView(imageRef, { 
-        once: false, 
-        amount: 0.8,
+        once: true, 
+        amount: 0.9,
         margin: "0px 0px -200px 0px" // Trigger when scrolled further down
     });
     

@@ -69,7 +69,7 @@ export const finalPendulumSwing = {
     swing: {
         rotate: [0, -45, -35, -42, -37, -40, -38, -39], // Ends at -20 degrees
         transition: {
-            duration: 3.5,
+            duration: 3.1,
             times: [0, 0.05, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1],
             ease: "easeOut"
         }
