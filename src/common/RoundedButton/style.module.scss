@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px 60px 15px 60px;
+    padding: 10px 40px 10px 40px;
 
     p{
         position: relative;
@@ -16,7 +16,7 @@
 
     &:hover{
         p{
-            color: white;
+            color: #000;
         }
     }
 }
