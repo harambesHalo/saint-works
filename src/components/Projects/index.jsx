@@ -19,7 +19,7 @@ const projects = [
     color: "#8C8C8C"
   },
   {
-    title: "White Border",
+    title: "MTG Alters",
     src: "wb-2.png",
     color: "#EFE8D3"
   },

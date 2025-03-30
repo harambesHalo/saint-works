@@ -19,7 +19,7 @@ export default function index() {
     const isSwingTrigger = useInView(imageRef, { 
         once: true,
         amount: 0.9,
-        margin: "0px 0px -425px 0px" // Trigger when scrolled further down
+        margin: "0px 0px -475px 0px" // Trigger when scrolled further down
     });
     
     // Handle the initial animation completion
