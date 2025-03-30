@@ -10,6 +10,7 @@ export default function index() {
     const imageRef = useRef(null);
     const [initialAnimationComplete, setInitialAnimationComplete] = useState(false);
     const [swingTriggered, setSwingTriggered] = useState(false);
+    const [lightOn, setLightOn] = useState(false);
     
     // InView for initial animations
     const isInView = useInView(description, { once: true, amount: 0.5 });
@@ -27,14 +28,22 @@ export default function index() {
             // Set a timer to mark when the initial hanging animation is complete
             const timer = setTimeout(() => {
                 setInitialAnimationComplete(true);
-            }, 2000); // Slightly longer than the hanging animation duration
+            }, 2000);
             
-            return () => clearTimeout(timer);
+            const lightTimer = setTimeout(() => {
+              setLightOn(true); // Turn on the light after 2 seconds
+            }, 2000);// Turn on the light when the animation is complete
+
+            return () => {
+              clearTimeout(timer)
+              clearTimeout(lightTimer);
+            };
         } else {
             setInitialAnimationComplete(false);
             setSwingTriggered(false);
+            setLightOn(false);
         }
-    }, [isInView]);
+    }, [isInView, setLightOn]);
     
     // Handle the swing trigger separately
     useEffect(() => {
@@ -65,7 +74,14 @@ export default function index() {
     return (
         <div ref={description} className={styles.description}>
           {/* Layered background elements */}
-          <div className={styles.slatWallSegment}></div> 
+          <div className={styles.slatWallSegment}></div>
+            <div 
+              className={styles.spotlight} 
+              style={{ 
+                opacity: lightOn ? 1 : 0,
+                transition: 'opacity 0.5s ease-in-out'
+              }}
+            ></div>
           <div className={styles.slatWallContainer}>
             <Image
               src="/images/slatWall.png"

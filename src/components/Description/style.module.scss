@@ -20,6 +20,17 @@
     box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5); 
   }
 
+.spotlight {
+    position: absolute;
+    top: 100%;
+    right: 5%;;
+    width: 30%;
+    height: 95vh;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none; /* Allows clicking through */
+    z-index: 4;
+}
+
 .description {
     margin-top: 100px;
     padding: 0 5%;
