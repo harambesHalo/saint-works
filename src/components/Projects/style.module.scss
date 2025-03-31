@@ -5,7 +5,7 @@
     padding-right: 200px;
     flex-direction: column;
     margin-top: 0px;
-    background-color: white;
+    background-color: var(--alt-bg);
 
     .body{
         max-width: 1400px;
@@ -67,8 +67,7 @@
     .cursorLabel{
         background-color: transparent;
     }
-    
-    
+
 }
 
 @media (max-width: 768px) {

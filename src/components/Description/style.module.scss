@@ -3,28 +3,29 @@
     top: 100%;
     right: 0%;
     width: 30%;
-    height: 100vh;
+    height: 95vh;
     z-index: 0;
     pointer-events: none;
-    background-color: #171614;
+    background-color: var(--alt-bg);
 }
 
 .slatWallContainer {
     position: absolute;
     top: 100%;
-    right: 5%;
-    width: 30%;
+    right: 8%;
+    width: 35%;
     height: 100vh;
     z-index: 0;
     pointer-events: none;
     box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5);
+    background-color: aqua;
 }
 
 .spotlight {
     position: absolute;
     top: 100%;
-    right: 5%;
-    width: 30%;
+    right: 8%;
+    width: 35%;
     height: 95vh;
     background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
     pointer-events: none;

@@ -88,7 +88,7 @@ export default function index() {
               fill={true}
               alt="slat wall background"
               priority
-              sizes="30vw"
+              sizes="50vw"
               style={{objectFit: 'cover'}}
               />
             </div>
@@ -113,7 +113,7 @@ export default function index() {
                     <div className={styles.textOverlay}>
                       {/* Title text */}
                       <div className={styles.titleText}>
-                        non animated text
+                        {/* non animated text */}
                       </div>
                     </div>
                   </div>
