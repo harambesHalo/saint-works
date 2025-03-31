@@ -1,131 +1,121 @@
-.slatWallSegment {
+.spotlight {
     position: absolute;
-    top: 100%;
-    right: 0%;
-    width: 30%;
-    height: 100vh;
+    top: 0;
+    right: 8%;
+    width: 65%;
+    height: 100%;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0) 70%
+    );
+    pointer-events: none;
+    z-index: 2;
+  }
+
+.description {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+
+  .galleryBody {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    position: relative;
+    gap: 15%;
+
+    .slatImageWrapper {
+      display: flex;
+      position: relative;
+      width: 100%;
+      z-index: 1;
+
+      .backgroundImage {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        display: block;
+        z-index: 1;
+      }
+    }
+  }
+  .slatWallSegment {
+    position: relative;
+    width: 100%;
     z-index: 0;
     pointer-events: none;
     background-color: var(--alt-bg);
-}
+  
+    .slatWallContainer {
+      position: relative;
+      top: 0;
+      right: 8%;
+      width: 75%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.3);
 
-.slatWallContainer {
-    position: absolute;
-    top: 100%;
-    right: 8%;
-    width: 35%;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-    box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.3);
-}
-
-.spotlight {
-    position: absolute;
-    top: 100%;
-    right: 8%;
-    width: 35%;
-    height: 100vh;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
-    pointer-events: none;
-    z-index: 2;
-}
-
-.description {
-    margin-top: 70px;
-    padding: 0 5%;
-    display: flex;
-    justify-content: center;
-
-    .body {
-        max-width: 1200px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        position: relative;
-
-        .content {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-
-            .contentText {
-                width: 45%;
-                padding-right: 30px;
-
-                .rightContent {
-                    position: relative;
-                    width: 100%;
-                    overflow: hidden;
-
-                    .imageWrapper {
-                        display: flex;
-                        position: relative;
-                        width: 100%;
-                        z-index: 1;
-                        
-                        .backgroundImage {
-                            width: 100%;
-                            height: auto;
-                            object-fit: contain;
-                            display: block;
-                            z-index: 1;
-                        }
-                    }
-                }
-            }
-
-            .imageContainer {
-                width: 50%;
-                display: flex;
-                justify-content: center;
-                min-height: 550px;
-                height: 65vh;
-
-                .painting {
-                    position: relative;
-                    width: 100%;
-                    height: 550px;
-                    z-index: 1;
-
-                    .paintingInner {
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        transform-origin: top right;
-                        transform-box: fill-box;
-                    }
-                }
-            }
-        }
     }
+  
+    .imageContainer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      min-height: 550px;
+      height: 100vh;
+      position: relative;
+      z-index: 3;
+  
+      .painting {
+        padding-left: 50%;
+        padding-top: 50%;
+        position: absolute;
+        width: 100%;
+        height: 550px;
+        z-index: 1;
+  
+        .paintingInner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform-origin: top right;
+          transform-box: fill-box;
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 768px) {
-    .description {
-        padding: 40px 20px !important;
+  .description {
+    padding: 40px 20px !important;
 
-        .body {
-            .content {
-                flex-direction: column;
+    .body {
+      .content {
+        flex-direction: column;
 
-                .contentText {
-                    width: 100%;
-                    padding-right: 0;
-                    margin-bottom: 30px;
-                }
-
-                .imageContainer {
-                    width: 100%;
-
-                    .painting {
-                        height: 450px;
-                    }
-                }
-            }
+        .contentText {
+          width: 100%;
+          padding-right: 0;
+          margin-bottom: 30px;
         }
+      }
     }
+
+    .slatWallSegment {
+      .imageContainer {
+        width: 100%;
+
+        .painting {
+          height: 450px;
+        }
+      }
+    }
+  }
 }
