@@ -14,7 +14,7 @@
     top: 100%;
     right: 5%;
     width: 30%;
-    height: 95vh;
+    height: 100vh;
     z-index: 0;
     pointer-events: none;
     box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5);
@@ -43,7 +43,6 @@
         display: flex;
         flex-direction: column;
         gap: 30px;
-        /* Reduced from 50px */
         position: relative;
 
         .content {
@@ -57,86 +56,39 @@
                 width: 45%;
                 padding-right: 30px;
 
-                .rightContent{
+                .rightContent {
                     position: relative;
                     width: 100%;
                     overflow: hidden;
 
                     .imageWrapper {
+                        display: flex;
                         position: relative;
                         width: 100%;
                         z-index: 1;
-
+                        
                         .backgroundImage {
                             width: 100%;
                             height: auto;
                             object-fit: contain;
                             display: block;
-                        }
-                    }
-
-                    .textOverlay {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 85%;
-                        height: 100%;
-                        z-index: 2;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: top;
-                        padding-left: 10%;
-                        padding-top: 4%;
-
-                        .titleText {
-                            margin-bottom: 20px;
-                            font-family: var(--caveat);
-
-                            p {
-                                margin: 0;
-                                font-size: 72px;
-                                line-height: 1.3;
-                                color: var(--blue);
-                                text-shadow: 1px 1px 3px rgba(0, 47, 70, 0.1);
-                                opacity: 0.8;
-
-                                span {
-                                    margin-right: 5px;
-                                }
-
-                                .headerMask {
-                                    position: relative;
-                                    overflow: hidden;
-                                    display: inline-flex;
-                                }
-                            }
-                        }
-
-                        .descriptionText {
-                            font-family: var(--nunito);
-                            opacity: 0.8;
-                            margin: 0;
-                            font-size: 40px;
-                            line-height: 1.4;
-                            font-weight: 500;
-                            font-style: italic;
-                            color: var(--alt-bg);
-                            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.0);
+                            z-index: 1;
                         }
                     }
                 }
             }
 
             .imageContainer {
-                width: 45%;
+                width: 50%;
                 display: flex;
                 justify-content: center;
-                min-height: 450px;
+                min-height: 550px;
+                height: 65vh;
 
                 .painting {
                     position: relative;
                     width: 100%;
-                    height: 450px;
+                    height: 550px;
                     z-index: 1;
 
                     .paintingInner {
@@ -145,36 +97,6 @@
                         height: 100%;
                         transform-origin: top right;
                         transform-box: fill-box;
-                    }
-                }
-            }
-        }
-    }
-
-    .moreWork {
-        padding: 20px;
-        border-radius: 40px;
-        border: 1px solid grey;
-    }
-}
-
-@media (max-width: 1024px) {
-    .description {
-        padding: 0 5%;
-
-        .body {
-            .content {
-                .contentText {
-                    .rightMask {
-                        .textOverlay {
-                            .titleText p {
-                                font-size: 42px;
-                            }
-
-                            .descriptionText {
-                                font-size: 24px;
-                            }
-                        }
                     }
                 }
             }
@@ -194,27 +116,13 @@
                     width: 100%;
                     padding-right: 0;
                     margin-bottom: 30px;
-
-                    .rightMask {
-                        .textOverlay {
-                            padding: 15px;
-
-                            .titleText p {
-                                font-size: 36px;
-                            }
-
-                            .descriptionText {
-                                font-size: 20px;
-                            }
-                        }
-                    }
                 }
 
                 .imageContainer {
                     width: 100%;
 
                     .painting {
-                        height: 350px;
+                        height: 450px;
                     }
                 }
             }

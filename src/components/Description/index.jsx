@@ -5,6 +5,7 @@ import { slideUp, hangingAnimation, finalPendulumSwing } from './animation';
 import Image from 'next/image';
 
 export default function index() {
+    const phrase = "Art and oddities out of Boise.Idaho";
     const description = useRef(null);
     const imageRef = useRef(null);
     const [initialAnimationComplete, setInitialAnimationComplete] = useState(false);
@@ -12,13 +13,13 @@ export default function index() {
     const [lightOn, setLightOn] = useState(false);
     
     // InView for initial animations
-    const isInView = useInView(description, { once: true, amount: 0.5 });
+    const isInView = useInView(description, { once: true, amount: 0.2 });
     
     // InView for triggering the swing
     const isSwingTrigger = useInView(imageRef, { 
         once: true,
-        amount: 0.9,
-        margin: "0px 0px -475px 0px" // Trigger when scrolled further down
+        amount: 0.95,
+        margin: "0px 0px -300px 0px" // Trigger when scrolled further down
     });
     
     // Handle the initial animation completion
@@ -96,6 +97,7 @@ export default function index() {
                 <div className={styles.contentText}>
                   <div className={styles.rightContent}>
                     {/* Image as background */}
+                    
                     <div className={styles.imageWrapper}>
                       <Image
                         src="/images/blankCanvas3.png"
@@ -106,6 +108,13 @@ export default function index() {
                         sizes="(max-width: 768px) 100vw, 55vw"
                         className={styles.backgroundImage}
                       />
+                    </div>
+                    {/* Text container that overlays the image */}
+                    <div className={styles.textOverlay}>
+                      {/* Title text */}
+                      <div className={styles.titleText}>
+                        non animated text
+                      </div>
                     </div>
                   </div>
                 </div>
