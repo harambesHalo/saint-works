@@ -5,7 +5,6 @@ import { slideUp, hangingAnimation, finalPendulumSwing } from './animation';
 import Image from 'next/image';
 
 export default function index() {
-    const phrase = "Art and oddities out of Boise.Idaho";
     const description = useRef(null);
     const imageRef = useRef(null);
     const [initialAnimationComplete, setInitialAnimationComplete] = useState(false);
@@ -19,7 +18,7 @@ export default function index() {
     const isSwingTrigger = useInView(imageRef, { 
         once: true,
         amount: 0.95,
-        margin: "0px 0px -300px 0px" // Trigger when scrolled further down
+        margin: "0px 0px -340px 0px" // Trigger when scrolled further down
     });
     
     // Handle the initial animation completion
