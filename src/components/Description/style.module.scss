@@ -3,7 +3,7 @@
     top: 100%;
     right: 0%;
     width: 30%;
-    height: 95vh;
+    height: 100vh;
     z-index: 0;
     pointer-events: none;
     background-color: var(--alt-bg);
@@ -17,8 +17,7 @@
     height: 100vh;
     z-index: 0;
     pointer-events: none;
-    box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5);
-    background-color: aqua;
+    box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.3);
 }
 
 .spotlight {

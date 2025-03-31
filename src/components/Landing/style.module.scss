@@ -9,8 +9,8 @@
     width: 350px;
     height: 400px;
     margin-top: 0px;
-    overflow: visible; /* Changed from hidden to allow SVG to overflow */
-    border: 8px solid #fffafa;
+    overflow: visible;
+    border: 8px solid var(--light-text);
     border-radius: 2px 0px 2px 4px;
     box-shadow: 
         0 1px 1px rgba(0,0,0,0.12), 
@@ -50,7 +50,7 @@
   .slider p{
     position: relative;
     margin: 0px;
-    color: #fffafa;
+    color: var(--light-text);
     font-size: 230px;
     font-weight: 500;
     padding-right: 50px;

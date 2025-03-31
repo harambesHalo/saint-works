@@ -9,10 +9,11 @@ body{
 :root {
   --bg: #f0ead6;
   --alt-bg: #141516;
-  --light-text: #f0f0f0;
-  --dark-text: #1a1a1a;
+  --sig-green: #65695a;
   --blue: #0078b3;
-  --secondary: #ff4081;
+  --pink: #ef606f;
+  --light-text: #fffafa;
+  --dark-text: #292929;
 }
 
 @media (max-width: 768px) {
