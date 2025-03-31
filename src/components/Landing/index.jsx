@@ -138,7 +138,7 @@ export default function Home() {
           fill={true}
           alt="background"
           priority
-          sizes="90vw"
+          // sizes="(max-width: 768px) 100vw, 33vw" 
           style={{objectFit: 'cover'}}
         />
       <div className={styles.sliderContainer}>
@@ -154,7 +154,7 @@ export default function Home() {
             fill={true}
             alt="background"
             priority
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 33vw" 
             style={{objectFit: 'cover'}}
           />
           <div className={styles.svgOverlay}>

@@ -1,8 +1,6 @@
 import './globals.css'
-import { Inter, Euphoria_Script, Nunito } from 'next/font/google'
+import { Inter, Caveat, Nunito } from 'next/font/google'
 import Header from '../components/Header';
-
-
 
 export const metadata = {
   title: 'Saint Works',
@@ -16,25 +14,25 @@ const inter = Inter({
   display: 'swap'
 })
 
-const euphoria = Euphoria_Script({
-  variable: "--euphoria",
+const caveat = Caveat({
+  variable: "--caveat",
   subsets: ["latin"],
-  weight: ["400"], // Euphoria Script only supports weight 400
+  weight: ["400"],
   display: "swap",
 });
 
 const nunito = Nunito({
-  variable: "--nunito", // Define a variable for Nunito
+  variable: "--nunito",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
-  style: ["normal", "italic"],
+  weight: ["300", "400", "600"],
+  style: ["normal"],
   display: "swap",
 });
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${euphoria.variable} ${nunito.variable}`}>
+      <body className={`${inter.variable} ${caveat.variable} ${nunito.variable}`}>
         <Header />
         {children}
       </body>

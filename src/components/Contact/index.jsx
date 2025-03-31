@@ -22,6 +22,7 @@ export default function index() {
                         <div className={styles.imageContainer}>
                             <Image 
                             fill={true}
+                            sizes="(max-width: 768px) 40vw, 20vw" // Add appropriate sizes
                             alt={"image"}
                             src={`/images/profile_picture.jpg`}
                             />

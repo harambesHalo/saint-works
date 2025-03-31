@@ -7,11 +7,11 @@ body{
 }
 
 :root {
-  --bg: #1a1a1a;
-  --alt-bg: #2a2a2a;
+  --bg: #f0ead6;
+  --alt-bg: #141516;
   --light-text: #f0f0f0;
   --dark-text: #1a1a1a;
-  --primary: #0070f3;
+  --blue: #0078b3;
   --secondary: #ff4081;
 }
 
