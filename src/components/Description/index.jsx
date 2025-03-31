@@ -5,7 +5,6 @@ import { slideUp, hangingAnimation, finalPendulumSwing } from './animation';
 import Image from 'next/image';
 
 export default function index() {
-    const phrase = "Art and oddities out of Boise.Idaho";
     const description = useRef(null);
     const imageRef = useRef(null);
     const [initialAnimationComplete, setInitialAnimationComplete] = useState(false);
@@ -93,65 +92,62 @@ export default function index() {
               />
             </div>
             <div className={styles.body}>
-                <div className={styles.titleText}>
-                  <p>
-                  {
-                      phrase.split(" ").map((word, index) => {
-                          return <span key={index} className={styles.leftMask}><motion.span variants={slideUp} custom={index} animate={isInView ? "open" : "closed"} key={index}>{word}</motion.span></span>
-                      })
-                  }
-                  </p>
-                </div>
-                <div className={styles.content}>
-                  <div className={styles.contentText}>
-                    <div className={styles.rightMask}>
-                      <motion.p 
-                        variants={slideUp}
-                        custom={phrase.split(" ").length} 
-                        animate={isInView ? "open" : "closed"}>
-                          Combining a passion for studio art, web development, and architecting business solutions, I proudly present SaintWorks. An amalgamation of my creations, both digital and physical.
-                      </motion.p>
+              <div className={styles.content}>
+                <div className={styles.contentText}>
+                  <div className={styles.rightContent}>
+                    {/* Image as background */}
+                    <div className={styles.imageWrapper}>
+                      <Image
+                        src="/images/blankCanvas3.png"
+                        width={500}
+                        height={300}
+                        alt="background"
+                        priority
+                        sizes="(max-width: 768px) 100vw, 55vw"
+                        className={styles.backgroundImage}
+                      />
                     </div>
                   </div>
-                  <div 
-                    className={styles.imageContainer} 
-                    data-scroll 
-                    data-scroll-speed={0.1}
-                    ref={imageRef}
-                  >
-                    {/* First motion div for the initial animation */}
-                    <motion.div 
-                      className={styles.painting}
-                      variants={hangingAnimation}
-                      initial="initial"
-                      animate={isInView ? "open" : "closed"}
-                    >
-                      {/* Nested motion div for the swing animation */}
-                      <motion.div
-                        className={styles.paintingInner}
-                        variants={finalPendulumSwing}
-                        animate={swingTriggered ? "swing" : undefined}
-                        style={{
-                          transformOrigin: 'top right',
-                          originX: 1,
-                          originY: 0
-                        }}
-                      >
-                        <Image
-                          src="/images/squiggle2.png"
-                          fill={true}
-                          alt="background"
-                          priority
-                          sizes="100vw"
-                          style={{
-                            objectFit: 'contain',
-                            objectPosition: 'right top'
-                          }}
-                        />
-                      </motion.div>
-                    </motion.div>
-                  </div>
                 </div>
+                <div 
+                  className={styles.imageContainer} 
+                  data-scroll 
+                  data-scroll-speed={0.1}
+                  ref={imageRef}
+                >
+                  {/* First motion div for the initial animation */}
+                  <motion.div 
+                    className={styles.painting}
+                    variants={hangingAnimation}
+                    initial="initial"
+                    animate={isInView ? "open" : "closed"}
+                  >
+                    {/* Nested motion div for the swing animation */}
+                    <motion.div
+                      className={styles.paintingInner}
+                      variants={finalPendulumSwing}
+                      animate={swingTriggered ? "swing" : undefined}
+                      style={{
+                        transformOrigin: 'top right',
+                        originX: 1,
+                        originY: 0
+                      }}
+                    >
+                      <Image
+                        src="/images/squiggle2.png"
+                        fill={true}
+                        alt="background"
+                        priority
+                        sizes="100vw"
+                        style={{
+                          objectFit: 'contain',
+                          objectPosition: 'right top'
+                        }}
+                      />
+                    </motion.div>
+                  </motion.div>
+                </div>
+              </div>
             </div>
         </div>
     )

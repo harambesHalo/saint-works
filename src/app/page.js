@@ -1,8 +1,7 @@
 'use client';
 import styles from './page.module.scss'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion';
-// Import fix - check if Lenis provides different exports
 import Lenis from 'lenis'
 import Preloader from '../components/Preloader';
 import Landing from '../components/Landing';
@@ -11,10 +10,14 @@ import Description from '../components/Description';
 import SlidingImages from '../components/SlidingImages';
 import Contact from '../components/Contact';
 
+// Create a context for Lenis if needed
+import { createContext } from 'react';
+export const LenisContext = createContext(null);
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [lenis, setLenis] = useState(null);
+  const lenisRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,16 +32,18 @@ export default function Home() {
     };
   }, []);
 
-  // Initialize Lenis manually instead of using ReactLenis component
+  // Initialize Lenis with better cleanup
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    // Simple loading without locomotive-scroll
-    setTimeout(() => {
+    let timeoutId;
+    
+    // Setup loading timeout
+    timeoutId = setTimeout(() => {
       setIsLoading(false);
       document.body.style.cursor = 'default';
-      document.body.style.overflowY = 'auto'; // Allow vertical scrolling
-      document.body.style.overflowX = 'hidden'; // Prevent horizontal scrolling
+      document.body.style.overflowY = 'auto';
+      document.body.style.overflowX = 'hidden';
       window.scrollTo(0, 0);
       
       // Initialize Lenis after loading
@@ -49,32 +54,43 @@ export default function Home() {
         gestureOrientation: 'vertical',
         smoothWheel: true,
         wheelMultiplier: 1,
-        smoothTouch: false, // Usually better to disable smooth scrolling on touch devices
+        smoothTouch: false,
         touchMultiplier: 2,
       };
       
       const lenisInstance = new Lenis(lenisOptions);
       
+      // Store reference
+      lenisRef.current = lenisInstance;
+      window.lenis = lenisInstance; // For global access
+      
+      // Setup RAF
+      let rafId;
       function raf(time) {
         lenisInstance.raf(time);
-        requestAnimationFrame(raf);
+        rafId = requestAnimationFrame(raf);
       }
       
-      requestAnimationFrame(raf);
-      setLenis(lenisInstance);
+      rafId = requestAnimationFrame(raf);
       
+      // Return cleanup function
       return () => {
-        lenisInstance.destroy();
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        if (lenisInstance) {
+          lenisInstance.destroy();
+        }
+        window.lenis = null;
+        lenisRef.current = null;
       };
     }, 2000);
+    
+    // Cleanup timeout
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [isMobile]);
-
-  // Provide Lenis instance to child components via context
-  useEffect(() => {
-    if (lenis) {
-      window.lenis = lenis;
-    }
-  }, [lenis]);
 
   return (
     <main className={styles.main}>

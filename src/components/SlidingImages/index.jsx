@@ -91,6 +91,7 @@ export default function index() {
                             <div key={index} className={styles.imageContainer}>
                                 <Image 
                                 fill={true}
+                                sizes="(max-width: 768px) 100vw, 33vw"
                                 alt={"image"}
                                 src={`/images/${project.src}`}/>
                             </div>
