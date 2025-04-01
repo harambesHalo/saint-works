@@ -1,91 +1,95 @@
 .spotlight {
-    position: absolute;
-    top: 0;
-    right: 8%;
-    width: 65%;
-    height: 100%;
-    background: radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 70%
-    );
-    pointer-events: none;
-    z-index: 2;
-  }
+  position: absolute;
+  top: 0;
+  right: 8%;
+  width: 65%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
 
-.description {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
+.sectionContainer {
+  background-color: var(--sig-green);
 
-  .galleryBody {
-    max-width: 1200px;
-    width: 100%;
+  .description {
     display: flex;
-    flex-direction: row;
-    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     position: relative;
-    gap: 15%;
 
-    .slatImageWrapper {
-      display: flex;
-      position: relative;
+    .galleryBody {
+      max-width: 1200px;
       width: 100%;
-      z-index: 1;
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      position: relative;
+      gap: 10%;
+      background-color: var(--sig-green);
 
-      .backgroundImage {
+      .contextImageWrapper {
+        display: flex;
+        position: relative;
         width: 100%;
-        height: auto;
-        object-fit: contain;
-        display: block;
         z-index: 1;
+
+        .backgroundImage {
+          width: 100%;
+          height: auto;
+          object-fit: contain;
+          display: block;
+          z-index: 1;
+        }
       }
     }
-  }
-  .slatWallSegment {
-    position: relative;
-    width: 100%;
-    z-index: 0;
-    pointer-events: none;
-    background-color: var(--alt-bg);
-  
-    .slatWallContainer {
+    .slatWallSegment {
       position: relative;
-      top: 0;
-      right: 8%;
-      width: 75%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-      box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.3);
-
-    }
-  
-    .imageContainer {
       width: 100%;
-      display: flex;
-      justify-content: center;
-      min-height: 550px;
-      height: 100vh;
-      position: relative;
-      z-index: 3;
-  
-      .painting {
-        padding-left: 50%;
-        padding-top: 50%;
-        position: absolute;
-        width: 100%;
-        height: 550px;
+      z-index: 0;
+      pointer-events: none;
+      background-color: var(--alt-bg);
+
+      .slatWallContainer {
+        position: relative;
+        top: 0;
+        right: 8%;
+        width: 75%;
+        height: 100%;
         z-index: 1;
-  
-        .paintingInner {
-          position: relative;
+        pointer-events: none;
+        box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.3);
+      }
+
+      .imageContainer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        min-height: 550px;
+        height: 100vh;
+        position: relative;
+        z-index: 3;
+
+        .painting {
+          padding-left: 50%;
+          padding-top: 50%;
+          position: absolute;
           width: 100%;
-          height: 100%;
-          transform-origin: top right;
-          transform-box: fill-box;
+          height: 550px;
+          z-index: 1;
+
+          .paintingInner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-origin: top right;
+            transform-box: fill-box;
+          }
         }
       }
     }
@@ -93,29 +97,60 @@
 }
 
 @media (max-width: 768px) {
-  .description {
-    padding: 40px 20px !important;
+    .spotlight {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 50%;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.2) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        pointer-events: none;
+        z-index: 2;
+      }
 
-    .body {
-      .content {
-        flex-direction: column;
-
-        .contentText {
-          width: 100%;
-          padding-right: 0;
-          margin-bottom: 30px;
+    .description {
+      padding: 40px 20px !important;
+  
+      .galleryBody {
+        flex-direction: column !important; /* Force vertical stacking on mobile */
+        gap: 20px !important; /* Reduce the gap between stacked elements */
+      }
+  
+      .body {
+        .content {
+          flex-direction: column;
+  
+          .contentText {
+            width: 100%;
+            padding-right: 0;
+            margin-bottom: 30px;
+          }
         }
       }
-    }
-
-    .slatWallSegment {
-      .imageContainer {
-        width: 100%;
-
-        .painting {
-          height: 450px;
+  
+      .slatWallSegment {
+        .slatWallContainer {
+          width: 90% !important; /* Make slat wall wider on mobile */
+          right: 5% !important; /* Center it better */
         }
+        
+        .imageContainer {
+          width: 100%;
+          min-height: 450px !important; /* Reduce height on mobile */
+  
+          .painting {
+            height: 450px;
+            padding-left: 30% !important; /* Adjust padding for mobile */
+            padding-top: 30% !important;
+          }
+        }
+      }
+      
+      .contextImageWrapper {
+        margin-top: 30px; /* Add space at top */
       }
     }
   }
-}

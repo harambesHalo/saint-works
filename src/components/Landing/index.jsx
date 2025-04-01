@@ -45,7 +45,7 @@ export default function Home() {
           end: window.innerHeight,
           onUpdate: e => direction = e.direction * -1
         },
-        x: "-500px",
+        x: "-600px",
       });
       
       // Add animation for the SVG
@@ -128,23 +128,24 @@ export default function Home() {
     gsap.set(firstText.current, {xPercent: xPercent})
     gsap.set(secondText.current, {xPercent: xPercent})
     requestAnimationFrame(animate);
-    xPercent += 0.1 * direction;
+    xPercent += 0.08 * direction;
   }
 
   return (
     <motion.main variants={slideUp} initial="initial" animate="enter" className={styles.landing}>
-        <Image
-          src="/images/art.jpg"
-          fill={true}
-          alt="background"
-          priority
-          // sizes="(max-width: 768px) 100vw, 33vw" 
-          style={{objectFit: 'cover'}}
-        />
+        <div className={styles.backgroundImageContainer}>
+          <Image
+            src="/images/header.png"
+            fill={true}
+            alt="background"
+            priority
+            className={styles.backgroundImage}
+          />
+        </div>
       <div className={styles.sliderContainer}>
         <div ref={slider} className={styles.slider}>
-          <p ref={firstText}>Artist - Developer -</p>
-          <p ref={secondText}>Artist - Developer -</p>
+          <p ref={firstText}>Artist - Developer - MBA - Consultant -</p>
+          <p ref={secondText}>Artist - Developer - MBA - Consultant -</p>
         </div>
       </div>
       <div data-scroll data-scroll-speed={0.1} className={styles.description}>

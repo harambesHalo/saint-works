@@ -44,7 +44,7 @@ export default function index() {
     const handleScroll = () => {
       if (!swingTriggered && initialAnimationComplete && paintingRef.current) {
         const rect = paintingRef.current.getBoundingClientRect();
-        
+
         // This is the key change: trigger when the top of the image is NEGATIVE (scrolled past top)
         // -100 means it's 100px past the top of the screen (adjust as needed)
         if (rect.top <= -1000) {
@@ -54,8 +54,8 @@ export default function index() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [swingTriggered, initialAnimationComplete]);
 
   // Lenis scroll integration
@@ -67,7 +67,11 @@ export default function index() {
       if (scrollElements.length) {
         window.lenis.on("scroll", () => {
           // We can also add a late trigger here if needed
-          if (!swingTriggered && initialAnimationComplete && paintingRef.current) {
+          if (
+            !swingTriggered &&
+            initialAnimationComplete &&
+            paintingRef.current
+          ) {
             const rect = paintingRef.current.getBoundingClientRect();
             if (rect.top <= -100) {
               setSwingTriggered(true);
@@ -85,77 +89,78 @@ export default function index() {
   }, [swingTriggered, initialAnimationComplete]);
 
   return (
-    <div ref={description} className={styles.description}>
-      <div
-        className={styles.spotlight}
-        style={{
-          opacity: lightOn ? 1 : 0,
-          transition: "opacity 0.5s ease-in-out",
-        }}
-      ></div>
-      {/* Main body container */}
-      <div className={styles.galleryBody}>
-        {/* Image as background */}
-        <div className={styles.slatImageWrapper}>
-          <Image
-            src="/images/blankCanvas3.png"
-            width={500}
-            height={300}
-            alt="background"
-            priority
-            sizes="(max-width: 768px) 100vw, 55vw"
-            className={styles.backgroundImage}
-          />
-        </div>
-        {/* Slat wall background with spotlight */}
-        <div className={styles.slatWallSegment}>
-          <div className={styles.slatWallContainer}>
+    <div className={styles.sectionContainer}>
+      <div ref={description} className={styles.description}>
+        <div
+          className={styles.spotlight}
+          style={{
+            opacity: lightOn ? 1 : 0,
+            transition: "opacity 0.5s ease-in-out",
+          }}
+        ></div>
+        <div className={styles.galleryBody}>
+
+          <div className={styles.contextImageWrapper}>
             <Image
-              src="/images/lgSlatWall.png"
-              fill={true}
-              alt="slat wall background"
+              src="/images/blankCanvas3.png"
+              width={500}
+              height={300}
+              alt="background"
               priority
-              sizes="50vw"
-              style={styles.slatWall}
+              sizes="(max-width: 768px) 100vw, 55vw"
+              className={styles.backgroundImage}
             />
-            <div
-              className={styles.imageContainer}
-              data-scroll
-              data-scroll-speed={0.1}
-              ref={imageRef}
-            >
-              {/* First motion div for the initial animation */}
-              <motion.div
-                className={styles.painting}
-                variants={hangingAnimation}
-                initial="initial"
-                animate={isInView ? "open" : "closed"}
-                ref={paintingRef}
+          </div>
+
+          <div className={styles.slatWallSegment}>
+            <div className={styles.slatWallContainer}>
+              <Image
+                src="/images/lgSlatWall.png"
+                fill={true}
+                alt="slat wall background"
+                priority
+                sizes="50vw"
+                style={styles.slatWall}
+              />
+              <div
+                className={styles.imageContainer}
+                data-scroll
+                data-scroll-speed={0.1}
+                ref={imageRef}
               >
-                {/* Nested motion div for the swing animation */}
+                {/* First motion div for the initial animation */}
                 <motion.div
-                  className={styles.paintingInner}
-                  variants={finalPendulumSwing}
-                  animate={swingTriggered ? "swing" : undefined}
-                  style={{
-                    transformOrigin: "top right",
-                    originX: 1,
-                    originY: 0,
-                  }}
+                  className={styles.painting}
+                  variants={hangingAnimation}
+                  initial="initial"
+                  animate={isInView ? "open" : "closed"}
+                  ref={paintingRef}
                 >
-                  <Image
-                    src="/images/squiggle2.png"
-                    fill={true}
-                    alt="background"
-                    priority
-                    sizes="100vw"
+                  {/* Nested motion div for the swing animation */}
+                  <motion.div
+                    className={styles.paintingInner}
+                    variants={finalPendulumSwing}
+                    animate={swingTriggered ? "swing" : undefined}
                     style={{
-                      objectFit: "contain",
-                      objectPosition: "right top",
+                      transformOrigin: "top right",
+                      originX: 1,
+                      originY: 0,
                     }}
-                  />
+                  >
+                    <Image
+                      src="/images/squiggle2.png"
+                      fill={true}
+                      alt="background"
+                      priority
+                      sizes="100vw"
+                      style={{
+                        objectFit: "contain",
+                        objectPosition: "right top",
+                      }}
+                    />
+                  </motion.div>
                 </motion.div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
