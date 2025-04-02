@@ -52,7 +52,7 @@ export default function Header() {
           <p className={styles.copyright}>©</p>
           <Link href="/" className={styles.name}>
             <p className={styles.codeBy}>SaintWorks</p>
-            <p className={styles.joe}>-</p>
+            <p className={styles.joe}></p>
             <p className={styles.stromain}>Home</p>
           </Link>
         </div>

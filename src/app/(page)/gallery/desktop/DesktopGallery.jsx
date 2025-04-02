@@ -9,7 +9,7 @@ const DesktopGallery = () => {
         <div className='gallery-page'>
            <div className='spotlight-1'></div>
            <div className='spotlight-2'></div> 
-           <div className="newsImageWrapper">
+           <div className="newsWrapper">
             <Image
               src="/images/news.png"
               width={500}
@@ -20,7 +20,7 @@ const DesktopGallery = () => {
               className="news-painting"
             />
           </div>
-          <div className="redlineImageWrapper">
+          <div className="redlineWrapper">
             <Image
               src="/images/redline2.png"
               width={500}
@@ -28,10 +28,10 @@ const DesktopGallery = () => {
               alt="background"
               priority
               sizes="(max-width: 768px) 100vw, 55vw"
-              className="redline-painting"
+              className="red-painting"
             />
           </div>
-          <div className="squiggleImageWrapper">
+          <div className="squiggleWrapper">
             <Image
               src="/images/squiggle2.png"
               width={500}
