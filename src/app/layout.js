@@ -33,8 +33,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${caveat.variable} ${nunito.variable}`}>
-        <Header />
-        {children}
+          <Header />
+          {children}
       </body>
     </html>
   )

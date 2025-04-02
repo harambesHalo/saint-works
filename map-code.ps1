@@ -1,5 +1,5 @@
 # Define the path to scan
-$Path = ".\src\"  # Change this if needed
+$Path = ".\src"  # Change this if needed
 
 # Define folders to exclude (add your exclusions here)
 $ExcludeFolders = @("dashboard", "services")  # Example exclusions

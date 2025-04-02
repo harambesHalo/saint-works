@@ -1,3 +1,9 @@
+.customLink {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
 .header{
     position: absolute;
     display: flex;
@@ -13,6 +19,8 @@
     
     .logo{
         display: flex;
+        font-size: 28px;
+        align-items: center;
         cursor: pointer;
         p{
             margin: 0px;
@@ -20,21 +28,25 @@
         }
         .name{
             display: flex;
+            text-decoration: none;
+            color: inherit;
             position: relative;
             overflow: hidden;
             white-space: nowrap;
             margin-left: 5px;
-            font-family: var(--nunito);
-            transition: all 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+            font-size: 40px;
+            font-weight: 600;
+            font-family: var(--caveat);
+            transition: all 0.8s cubic-bezier(0.76, 0, 0.24, 1);
             p{
                 position: relative;
-                transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+                transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
                 &:nth-of-type(2){
                     padding-left: 0.3em;
                 }
                 &:nth-of-type(3){
                     position: absolute;
-                    left: 120px;
+                    left: 200px;
                     padding-left: 0.3em;
                 }
             }
@@ -46,13 +58,27 @@
             .name{
                 padding-right: 0px;
                 .codeBy{
-                    transform: translateX(-100%);
+                    transform: translateX(-120%);
                 }
                 .joe{
-                    transform: translateX(-275%);
+                    transform: translateX(-1000%);
                 }
                 .stromain{
-                    transform: translateX(-100%);
+                    transform: translateX(-225%);
+                    .indicator{
+                        position: absolute;
+                        border-radius: 30px 40px 35px 50px;
+                        width: 18px;
+                        height: 18px;
+                        top: 45px;
+                        left: 50%;
+                        opacity: 0;
+                        transform: scale(0) translateX(-50%);
+                        background: radial-gradient(circle, var(--blue) 0%, var(--blue) 90%, transparent 70%);
+                        filter: blur(0.8px) brightness(1.5);
+                        transition: transform 0.2s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.2s cubic-bezier(0.76, 0, 0.24, 1);
+                        pointer-events: none;
+                    }
                 }
             }
         }

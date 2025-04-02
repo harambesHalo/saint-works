@@ -25,7 +25,7 @@ const slider1 = [
 const slider2 = [
   {
     color: "#d4e3ec",
-    src: "piece-5.jpg",
+    src: "news.png",
   },
   {
     color: "#e5e0e1",
