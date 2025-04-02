@@ -1,55 +1,45 @@
 'use client'
 import Image from 'next/image'
 import styles from './style.module.scss'
-import { useRef, useLayoutEffect, useState, useEffect } from 'react';
+import { useRef, useLayoutEffect, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { slideUp } from './animation';
 import { motion } from 'framer-motion';
 import DecorativeSVG from './DecorativeSVG';
+import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
 
 export default function Home() {
   const firstText = useRef(null);
   const secondText = useRef(null);
   const slider = useRef(null);
   const svgRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-  let xPercent = 0;
-  let direction = -1;
+  const { isMobile, isClient } = useDeviceContext();
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+  useLayoutEffect(() => { 
+    if (!isClient) return; 
     
-    handleResize(); // Check initially
-    window.addEventListener('resize', handleResize);
+    gsap.registerPlugin(ScrollTrigger); 
     
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let scrollAnimation; 
+    let xPercent = 0; 
+    let direction = -1; 
     
-    let scrollAnimation;
-    
-    if (!isMobile) {
-      // Desktop animation
-      scrollAnimation = gsap.to(slider.current, {
-        scrollTrigger: {
-          trigger: document.documentElement,
-          scrub: 0.25,
-          start: 0,
-          end: window.innerHeight,
-          onUpdate: e => direction = e.direction * -1
-        },
-        x: "-600px",
-      });
+    if (!isMobile) { 
+      // Desktop animation 
+      scrollAnimation = gsap.to(slider.current, { 
+        scrollTrigger: { 
+          trigger: document.documentElement, 
+          scrub: 0.25, 
+          start: 0, 
+          end: window.innerHeight, 
+          onUpdate: e => direction = e.direction * -1 
+        }, 
+        x: "-600px", 
+      }); 
       
-      // Add animation for the SVG
-      if (svgRef.current) {
+      // Add animation for the SVG 
+      if (svgRef.current) { 
         gsap.from(svgRef.current, {
           scrollTrigger: {
             trigger: document.documentElement,
@@ -62,10 +52,30 @@ export default function Home() {
           opacity: 0.7,
           duration: 1.5
         });
-      }
+      } 
       
-      requestAnimationFrame(animate);
-    } else {
+      // Use GSAP ticker instead of requestAnimationFrame 
+      const tickerFunction = () => { 
+        if (!firstText.current || !secondText.current) return; 
+        
+        if(xPercent < -100){ 
+          xPercent = 0; 
+        } 
+        else if(xPercent > 0){ 
+          xPercent = -100; 
+        } 
+        gsap.set(firstText.current, {xPercent: xPercent}); 
+        gsap.set(secondText.current, {xPercent: xPercent}); 
+        xPercent += 0.08 * direction; 
+      }; 
+      
+      gsap.ticker.add(tickerFunction); 
+      
+      return () => { 
+        if (scrollAnimation) scrollAnimation.kill(); 
+        gsap.ticker.remove(tickerFunction); 
+      }; 
+    } else { 
       // Simpler mobile animation
       scrollAnimation = gsap.to(slider.current, {
         scrollTrigger: {
@@ -92,44 +102,48 @@ export default function Home() {
           duration: 1
         });
       }
-    }
-    
-    return () => {
-      if (scrollAnimation) scrollAnimation.kill();
-    };
-  }, [isMobile]);
+
+      const mobileTickerFunction = () => {
+        if (!firstText.current || !secondText.current) return;
+        
+        if(xPercent < -100) {
+          xPercent = 0;
+        }
+        else if(xPercent > 0) {
+          xPercent = -100;
+        }
+        
+        gsap.set(firstText.current, {xPercent: xPercent});
+        gsap.set(secondText.current, {xPercent: xPercent});
+        // Use a smaller increment for mobile for smoother animation
+        xPercent += 0.04 * direction;
+      };
+      
+      gsap.ticker.add(mobileTickerFunction);
+      
+      return () => { 
+        if (scrollAnimation) scrollAnimation.kill();
+        gsap.ticker.remove(mobileTickerFunction);
+      }; 
+    } 
+  }, [isMobile, isClient]);
 
   // Link ScrollTrigger with Lenis
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.lenis) {
-      const linkLenisToScrollTrigger = () => {
-        ScrollTrigger.update();
-      };
-      
-      window.lenis.on('scroll', linkLenisToScrollTrigger);
-      
-      return () => {
-        if (window.lenis) {
-          window.lenis.off('scroll', linkLenisToScrollTrigger);
-        }
-      };
-    }
-  }, []);
+    if (!isClient || !window.lenis) return;
 
-  const animate = () => {
-    if (isMobile) return; // Skip for mobile
-
-    if(xPercent < -100){
-      xPercent = 0;
-    }
-    else if(xPercent > 0){
-      xPercent = -100;
-    }
-    gsap.set(firstText.current, {xPercent: xPercent})
-    gsap.set(secondText.current, {xPercent: xPercent})
-    requestAnimationFrame(animate);
-    xPercent += 0.08 * direction;
-  }
+    const linkLenisToScrollTrigger = () => {
+      ScrollTrigger.update();
+    };
+    
+    window.lenis.on('scroll', linkLenisToScrollTrigger);
+    
+    return () => {
+      if (window.lenis) {
+        window.lenis.off('scroll', linkLenisToScrollTrigger);
+      }
+    };
+  }, [isClient]);
 
   return (
     <motion.main variants={slideUp} initial="initial" animate="enter" className={styles.landing}>

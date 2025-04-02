@@ -2,6 +2,7 @@
 import styles from './page.module.scss'
 import { useEffect, useState, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion';
+import { useDeviceContext } from '../lib/hooks/useDeviceContext'
 import Lenis from 'lenis'
 import Preloader from '../components/Preloader';
 import Landing from '../components/Landing';
@@ -15,26 +16,13 @@ import { createContext } from 'react';
 export const LenisContext = createContext(null);
 
 export default function Home() {
+  const { isClient, isMobile } = useDeviceContext();
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const lenisRef = useRef(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    handleResize(); // Check initially
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   // Initialize Lenis with better cleanup
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!isClient) return;
     
     let timeoutId;
     
@@ -90,7 +78,7 @@ export default function Home() {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [isMobile]);
+  }, [isMobile, isClient]);
 
   return (
     <main className={styles.main}>

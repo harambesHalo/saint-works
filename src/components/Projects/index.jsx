@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import Image from 'next/image';
 import Rounded from '../../common/RoundedButton';
+import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
 
 const projects = [
   {
@@ -37,7 +38,7 @@ const scaleAnimation = {
 }
 
 export default function Home() {
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile, isClient } = useDeviceContext();
   const [modal, setModal] = useState({active: false, index: 0})
   const { active, index } = modal;
   const modalContainer = useRef(null);
@@ -52,22 +53,8 @@ export default function Home() {
   let yMoveCursorLabel = useRef(null);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    handleResize(); // Check initially
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Initialize GSAP animations
-    if (isMobile) {
-      // Don't set up cursor animations on mobile
+    // Initialize GSAP animations only if client-side and not mobile
+    if (!isClient || isMobile) {
       return;
     }
     
@@ -82,11 +69,11 @@ export default function Home() {
     // Move cursor label
     xMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "left", {duration: 0.45, ease: "power3"});
     yMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "top", {duration: 0.45, ease: "power3"});
-  }, [isMobile]);
+  }, [isMobile, isClient]);
 
   // Handle mobile touch events to close modal when tapping outside
   useEffect(() => {
-    if (!isMobile) return;
+    if (!isClient || !isMobile) return;
     
     const handleTouchOutside = (e) => {
       if (active && modalContainer.current && !modalContainer.current.contains(e.target)) {
@@ -98,13 +85,14 @@ export default function Home() {
     return () => {
       document.removeEventListener('touchend', handleTouchOutside);
     };
-  }, [active, isMobile]);
+  }, [active, isMobile, isClient]);
 
   const moveItems = (x, y) => {
-    if (!xMoveContainer.current || !yMoveContainer.current || 
+    if (!isClient || isMobile || 
+        !xMoveContainer.current || !yMoveContainer.current || 
         !xMoveCursor.current || !yMoveCursor.current ||
         !xMoveCursorLabel.current || !yMoveCursorLabel.current) {
-      return; // Guard clause if animations aren't initialized
+      return; // Guard clause if animations aren't initialized or on mobile
     }
     
     xMoveContainer.current(x);
@@ -127,7 +115,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (!active) return;
+    if (!isClient || !active) return;
     
     const handleClickOutside = (e) => {
       // Check if click is outside the modal
@@ -143,7 +131,7 @@ export default function Home() {
     return () => {
       document.removeEventListener(eventType, handleClickOutside);
     };
-  }, [active, isMobile]);
+  }, [active, isMobile, isClient]);
   
   return (
     <main 

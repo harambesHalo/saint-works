@@ -2,9 +2,11 @@ import styles from "./style.module.scss";
 import { useInView, motion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { slideUp, hangingAnimation, finalPendulumSwing } from "./animation";
+import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
 import Image from "next/image";
 
 export default function index() {
+  const { isMobile, isClient } = useDeviceContext();
   const description = useRef(null);
   const imageRef = useRef(null);
   const paintingRef = useRef(null);
@@ -18,6 +20,7 @@ export default function index() {
 
   // Handle the initial animation completion
   useEffect(() => {
+    if (!isClient) return;
     if (isInView) {
       // Set a timer to mark when the initial hanging animation is complete
       const timer = setTimeout(() => {
@@ -37,10 +40,11 @@ export default function index() {
       setSwingTriggered(false);
       setLightOn(false);
     }
-  }, [isInView, setLightOn]);
+  }, [isInView, setLightOn, isClient]);
 
   // Add precise scroll position tracking to trigger only when the element is almost off the screen
   useEffect(() => {
+    if (!isClient) return;
     const handleScroll = () => {
       if (!swingTriggered && initialAnimationComplete && paintingRef.current) {
         const rect = paintingRef.current.getBoundingClientRect();
@@ -56,10 +60,11 @@ export default function index() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [swingTriggered, initialAnimationComplete]);
+  }, [swingTriggered, initialAnimationComplete, isClient]);
 
   // Lenis scroll integration
   useEffect(() => {
+    if (!isClient) return;
     if (description.current && typeof window !== "undefined" && window.lenis) {
       const scrollElements =
         description.current.querySelectorAll("[data-scroll]");
@@ -86,7 +91,7 @@ export default function index() {
         }
       };
     }
-  }, [swingTriggered, initialAnimationComplete]);
+  }, [swingTriggered, initialAnimationComplete, isClient]);
 
   return (
     <div className={styles.sectionContainer}>

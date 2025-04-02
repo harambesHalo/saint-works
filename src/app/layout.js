@@ -1,6 +1,6 @@
 import './globals.css'
 import { Inter, Caveat, Nunito } from 'next/font/google'
-import Header from '../components/Header';
+import ClientLayout from "./ClientLayout";
 
 export const metadata = {
   title: 'Saint Works',
@@ -33,8 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${caveat.variable} ${nunito.variable}`}>
-          <Header />
-          {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   )
