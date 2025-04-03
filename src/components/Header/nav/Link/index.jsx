@@ -1,11 +1,16 @@
 'use client';
 import styles from './style.module.scss';
-import NextLink from 'next/link';
 import { motion } from 'framer-motion';
 import { slide, scale } from '../../animation';
 
-export default function LinkComponent({data, isActive, setSelectedIndicator}) {
+export default function LinkComponent({data, isActive, setSelectedIndicator, onNavigate}) {
   const { title, href, index } = data;
+  
+  const handleClick = (e) => {
+    e.preventDefault();
+    setSelectedIndicator(href);
+    onNavigate(href);
+  };
   
   return (
     <motion.div 
@@ -22,7 +27,7 @@ export default function LinkComponent({data, isActive, setSelectedIndicator}) {
         animate={isActive ? "open" : "closed"} 
         className={styles.indicator}
       />
-      <NextLink href={href}>{title}</NextLink>
+      <a href={href} onClick={handleClick}>{title}</a>
     </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter, Caveat, Nunito } from 'next/font/google'
 import ClientLayout from "./ClientLayout";
+import SvgFilters from '../components/SvgFilters';
 
 export const metadata = {
   title: 'Saint Works',
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${caveat.variable} ${nunito.variable}`}>
+        <SvgFilters />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

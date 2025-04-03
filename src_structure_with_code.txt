@@ -8,6 +8,9 @@ app/
 │   │   ├── contact.scss
 │   │   ├── page.jsx
 │   ├── gallery/
+│   │   └── components/
+│   │   │   ├── GalleryLoader.jsx
+│   │   │   ├── GalleryLoader.module.scss
 │   │   └── desktop/
 │   │   │   ├── DesktopGallery.jsx
 │   │   │   ├── DesktopGallery.scss
@@ -27,6 +30,9 @@ common/
 ├── Magnetic/
 │   ├── index.jsx
 ├── RoundedButton/
+│   ├── index.jsx
+│   ├── style.module.scss
+├── SquareButton/
 │   └── index.jsx
 │   └── style.module.scss
 components/
@@ -70,8 +76,12 @@ components/
 │   ├── index.jsx
 │   ├── style.module.scss
 ├── SlidingImages/
-│   └── index.jsx
-│   └── style.module.scss
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Transitions/
+│   ├── LiquidTransition.jsx
+│   ├── LiquidTransition.module.scss
+├── SvgFilters.jsx
 lib/
 ├── contexts/
 │   ├── DeviceContext.ts
@@ -80,6 +90,7 @@ lib/
 │   └── useDeviceContext.ts
 providers/
 └── DeviceProvider.jsx
+└── NavigationProvider.jsx
 
 
 📄 Code Contents:
@@ -114,6 +125,87 @@ const Contact = () => {
 }
 
 export default Contact;
+
+
+
+GalleryLoader.jsx:
+
+"use client";
+import { useState, useEffect } from "react";
+import styles from "./GalleryLoader.module.scss";
+import Square from '../../../../common/SquareButton';
+import Image from "next/image";
+
+const GalleryLoader = ({ onComplete, imageUrls }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const totalImages = imageUrls.length;
+
+  useEffect(() => {
+    // Create an array to track loaded images
+    const imagePromises = imageUrls.map((src) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+        img.onerror = () => {
+          // Still count errors as "loaded" to prevent getting stuck
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+      });
+    });
+
+    // When all images are loaded, set loading to false
+    Promise.all(imagePromises)
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading images:", err);
+        setIsLoading(false); // Stop loading even if there's an error
+      });
+  }, [imageUrls]);
+
+  return (
+    <div>
+      <div className={styles.backgroundContainer}>
+        <Image
+          src="/images/gallery-wall.png"
+          fill={true}
+          alt="background"
+          priority
+          className={styles.galleryWallImg}
+        />
+      </div>
+      <div className={styles.loader}>
+        <div className={styles.loaderContent}>
+          {isLoading ? (
+            <div className={styles.loadingState}>
+              <div className={styles.spinner}></div>
+              <p>
+                Loading Gallery ({loadedCount}/{totalImages})
+              </p>
+            </div>
+          ) : (
+            <Square onClick={onComplete}>
+                <p>Enter Gallery</p>
+            </Square>
+            // <button className={styles.enterButton} onClick={onComplete}>
+            //   Enter Gallery
+            // </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default GalleryLoader;
+
 
 
 
@@ -273,18 +365,51 @@ page.jsx:
 
 "use client";
 
+import { useState } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
 import DesktopGallery from "./desktop/DesktopGallery";
 import MobileGallery from "./mobile/MobileGallery";
+import GalleryLoader from "./components/GalleryLoader";
 
 const Gallery = () => {
   const { isMobile, isClient } = useDeviceContext();
+  const [showLoader, setShowLoader] = useState(true);
+  
+  // Collection of all image URLs from both galleries
+  const imageUrls = [
+    "/images/news.png",
+    "/images/redline2.png",
+    "/images/squiggle2.png",
+    "/images/header.png",
+    "/images/blue-ocean.png",
+    "/images/weather.png",
+    "/images/redline.png"
+  ];
 
-  return <>{isMobile ? <MobileGallery /> : <DesktopGallery />}</>;
+  const handleEnterGallery = () => {
+    // When button is clicked, hide the loader and show the gallery
+    setShowLoader(false);
+  };
+
+  return (
+    <>
+      {/* First show the gallery (it will appear when loader is gone) */}
+      {!showLoader && (
+        isMobile ? <MobileGallery /> : <DesktopGallery />
+      )}
+      
+      {/* Show the loader overlay while loading/waiting for user action */}
+      {showLoader && (
+        <GalleryLoader 
+          imageUrls={imageUrls} 
+          onComplete={handleEnterGallery} 
+        />
+      )}
+    </>
+  );
 };
 
 export default Gallery;
-
 
 
 
@@ -339,7 +464,7 @@ ClientLayout.js:
 import { useDeviceContext } from '../lib/hooks/useDeviceContext';
 import { useDevice } from '../lib/hooks/useDevice';
 import { DeviceProvider } from '../providers/DeviceProvider';
-
+import NavigationProvider from '../providers/NavigationProvider';
 import Header from '../components/Header';
 
 function LayoutContent({ children }) {
@@ -359,7 +484,9 @@ function LayoutContent({ children }) {
 const ClientLayout = ({ children }) => {
   return (
     <DeviceProvider>
-      <LayoutContent>{children}</LayoutContent>
+      <NavigationProvider>
+        <LayoutContent>{children}</LayoutContent>
+      </NavigationProvider>
     </DeviceProvider>
   );
 }
@@ -374,7 +501,6 @@ globals.css:
 body{
     margin: 0px;
     overflow: hidden; /* Hide scrollbars */
-    cursor: wait;
     font-family: var(--inter)
 }
 
@@ -401,6 +527,7 @@ layout.js:
 import './globals.css'
 import { Inter, Caveat, Nunito } from 'next/font/google'
 import ClientLayout from "./ClientLayout";
+import SvgFilters from '../components/SvgFilters';
 
 export const metadata = {
   title: 'Saint Works',
@@ -433,12 +560,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} ${caveat.variable} ${nunito.variable}`}>
+        <SvgFilters />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   )
 }
-
 
 
 
@@ -612,6 +739,52 @@ export default function index({children, backgroundColor="#0078b3", ...attribute
   return (
     <Magnetic>
       <div className={styles.roundedButton} style={{overflow: "hidden"}} onMouseEnter={() => {manageMouseEnter()}} onMouseLeave={() => {manageMouseLeave()}} {...attributes}>
+          {
+            children
+          }
+        <div ref={circle} style={{backgroundColor}} className={styles.circle}></div>
+      </div>
+    </Magnetic>
+  )
+}
+
+
+
+
+index.jsx:
+
+import React from 'react'
+import { useEffect, useRef } from 'react';
+import styles from './style.module.scss';
+import gsap from 'gsap';
+import Magnetic from '../Magnetic';
+
+export default function index({children, backgroundColor="#141516", ...attributes}) {
+
+  const circle = useRef(null);
+  let timeline = useRef(null);
+  let timeoutId = null;
+  useEffect( () => {
+    timeline.current = gsap.timeline({paused: true})
+    timeline.current
+      .to(circle.current, {top: "-25%", width: "150%", duration: 0.4, ease: "power3.in"}, "enter")
+      .to(circle.current, {top: "-150%", width: "125%", duration: 0.25}, "exit")
+  }, [])
+  
+  const manageMouseEnter = () => {
+    if(timeoutId) clearTimeout(timeoutId)
+    timeline.current.tweenFromTo('enter', 'exit');
+  }
+
+  const manageMouseLeave = () => {
+    timeoutId = setTimeout( () => {
+      timeline.current.play();
+    }, 300)
+  }
+
+  return (
+    <Magnetic>
+      <div className={styles.squareButton} style={{overflow: "hidden"}} onMouseEnter={() => {manageMouseEnter()}} onMouseLeave={() => {manageMouseLeave()}} {...attributes}>
           {
             children
           }
@@ -1031,12 +1204,17 @@ index.jsx:
 
 'use client';
 import styles from './style.module.scss';
-import NextLink from 'next/link';
 import { motion } from 'framer-motion';
 import { slide, scale } from '../../animation';
 
-export default function LinkComponent({data, isActive, setSelectedIndicator}) {
+export default function LinkComponent({data, isActive, setSelectedIndicator, onNavigate}) {
   const { title, href, index } = data;
+  
+  const handleClick = (e) => {
+    e.preventDefault();
+    setSelectedIndicator(href);
+    onNavigate(href);
+  };
   
   return (
     <motion.div 
@@ -1053,7 +1231,7 @@ export default function LinkComponent({data, isActive, setSelectedIndicator}) {
         animate={isActive ? "open" : "closed"} 
         className={styles.indicator}
       />
-      <NextLink href={href}>{title}</NextLink>
+      <a href={href} onClick={handleClick}>{title}</a>
     </motion.div>
   );
 }
@@ -1071,6 +1249,7 @@ import { menuSlide } from '../animation';
 import Link from './Link';
 import Curve from './Curve';
 import Footer from './Footer';
+import { useNavigation } from '../../../providers/NavigationProvider';
 
 const navItems = [
   {
@@ -1098,6 +1277,12 @@ const navItems = [
 export default function Nav() {
   const pathname = usePathname();
   const [selectedIndicator, setSelectedIndicator] = useState(pathname);
+  const { navigateTo } = useNavigation();
+
+  // Update Link component to use our custom navigation
+  const handleNavigation = (path) => {
+    navigateTo(path);
+  };
 
   return (
     <motion.div 
@@ -1122,6 +1307,7 @@ export default function Nav() {
                 data={{...data, index}} 
                 isActive={selectedIndicator === data.href} 
                 setSelectedIndicator={setSelectedIndicator}
+                onNavigate={handleNavigation}
               />
             );
           })}
@@ -1159,8 +1345,8 @@ export const scale = {
 index.jsx:
 
 'use client';
-import { usePathname } from "next/navigation"; // App Router's navigation hook
-import Link from "next/link"; // For client-side navigation
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import Nav from "./nav";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -1169,12 +1355,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Rounded from "../../common/RoundedButton";
 import Magnetic from "../../common/Magnetic";
+import { useNavigation } from "../../providers/NavigationProvider";
 
 export default function Header() {
   const header = useRef(null);
   const [isActive, setIsActive] = useState(false);
-  const pathname = usePathname(); // Get current path from App Router
+  const pathname = usePathname();
   const button = useRef(null);
+  const { navigateTo } = useNavigation();
 
   useEffect(() => {
     if (isActive) setIsActive(false);
@@ -1205,33 +1393,62 @@ export default function Header() {
     });
   }, []);
 
+  const handleNavigation = (e, path) => {
+    e.preventDefault();
+    if (path !== pathname) {
+      navigateTo(path);
+    }
+  };
+
   return (
     <>
       <div ref={header} className={styles.header}>
         <div className={styles.logo}>
           <p className={styles.copyright}>©</p>
-          <Link href="/" className={styles.name}>
+          <a 
+            href="/" 
+            onClick={(e) => handleNavigation(e, "/")} 
+            className={styles.name}
+          >
             <p className={styles.codeBy}>SaintWorks</p>
-            <p className={styles.joe}>-</p>
+            <p className={styles.joe}></p>
             <p className={styles.stromain}>Home</p>
-          </Link>
+          </a>
         </div>
         <div className={styles.nav}>
           <Magnetic>
             <div className={styles.el}>
-              <Link href="/contact" className={styles.customLink}>Contact</Link>
+              <a 
+                href="/contact" 
+                onClick={(e) => handleNavigation(e, "/contact")}
+                className={styles.customLink}
+              >
+                Contact
+              </a>
               <div className={styles.indicator}></div>
             </div>
           </Magnetic>
           <Magnetic>
             <div className={styles.el}>
-              <Link href="/about" className={styles.customLink}>About</Link>
+              <a 
+                href="/about" 
+                onClick={(e) => handleNavigation(e, "/about")}
+                className={styles.customLink}
+              >
+                About
+              </a>
               <div className={styles.indicator}></div>
             </div>
           </Magnetic>
           <Magnetic>
             <div className={styles.el}>
-              <Link href="/gallery" className={styles.customLink}>Work</Link>
+              <a 
+                href="/gallery" 
+                onClick={(e) => handleNavigation(e, "/gallery")}
+                className={styles.customLink}
+              >
+                Work
+              </a>
               <div className={styles.indicator}></div>
             </div>
           </Magnetic>
@@ -2172,6 +2389,130 @@ export default function index() {
 
 
 
+LiquidTransition.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import styles from './LiquidTransition.module.scss';
+
+// This component combines liquid drip effect with your existing page transition
+export default function LiquidTransition({ onComplete }) {
+  const [liquidComplete, setLiquidComplete] = useState(false);
+  const [dimension, setDimension] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    setDimension({ width: window.innerWidth, height: window.innerHeight });
+    
+    // Trigger the second phase of animation after liquid effect completes
+    const timer = setTimeout(() => {
+      setLiquidComplete(true);
+      // Allow some time for the second animation to start before calling onComplete
+      setTimeout(() => {
+        if (onComplete) onComplete();
+      }, 500);
+    }, 2500); // Adjust based on your liquid animation duration
+    
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  // Second phase animation (your existing curve animation)
+  const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height + 300} 0 ${dimension.height} L0 0`;
+  const targetPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height} 0 ${dimension.height} L0 0`;
+
+  const curveVariant = {
+    initial: {
+      d: initialPath,
+      transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] }
+    },
+    exit: {
+      d: targetPath,
+      transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.3 }
+    }
+  };
+
+  // Slide transition for phase 2
+  const slideTransition = {
+    initial: {
+      top: 0
+    },
+    exit: {
+      top: "-100vh",
+      transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2 }
+    }
+  };
+
+  return (
+    <div className={styles.transitionContainer}>
+      {/* First phase: Liquid drip effect */}
+      {!liquidComplete && (
+        <div className={styles.liquidContainer}>
+          <div className={styles.blobs}>
+            <div className={styles.liquid}></div>
+            {/* Create 9 blob elements */}
+            {Array(9).fill().map((_, i) => (
+              <div key={i} className={styles.blob}></div>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {/* Second phase: Your original page transition */}
+      {liquidComplete && dimension.width > 0 && (
+        <motion.div
+          variants={slideTransition}
+          initial="initial"
+          exit="exit"
+          className={styles.pageTransition}
+        >
+          <svg>
+            <motion.path variants={curveVariant} initial="initial" exit="exit"></motion.path>
+          </svg>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+
+
+SvgFilters.jsx:
+
+'use client';
+
+// This component defines SVG filters that are used for special effects
+export default function SvgFilters() {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      version="1.1" 
+      height="0" 
+      style={{
+        position: 'absolute',
+        width: 0,
+        height: 0,
+        visibility: 'hidden',
+        overflow: 'hidden'
+      }}
+    >
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feColorMatrix 
+            in="blur" 
+            mode="matrix" 
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" 
+            result="goo" 
+          />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+
+
+
 DeviceContext.ts:
 
 import { createContext } from 'react';
@@ -2257,5 +2598,63 @@ export function DeviceProvider({ children }) {
 }
 
 export default DeviceProvider;
+
+
+
+NavigationProvider.jsx:
+
+'use client';
+import { createContext, useState, useContext } from 'react';
+import { useRouter } from 'next/navigation';
+import { AnimatePresence } from 'framer-motion';
+import LiquidTransition from '../components/Transitions/LiquidTransition';
+
+// Create context
+const NavigationContext = createContext({
+  isNavigating: false,
+  navigateTo: () => {},
+});
+
+export const useNavigation = () => useContext(NavigationContext);
+
+export default function NavigationProvider({ children }) {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [nextPath, setNextPath] = useState(null);
+  const router = useRouter();
+
+  // Function to handle navigation with transition
+  const navigateTo = (path) => {
+    // Don't trigger navigation if already navigating
+    if (isNavigating) return;
+    
+    setIsNavigating(true);
+    setNextPath(path);
+  };
+  
+  // Called when the liquid transition is complete
+  const handleTransitionComplete = () => {
+    if (nextPath) {
+      // Perform the actual navigation
+      router.push(nextPath);
+      
+      // Reset navigation state after a delay to ensure smooth transition
+      setTimeout(() => {
+        setIsNavigating(false);
+        setNextPath(null);
+      }, 100);
+    }
+  };
+
+  return (
+    <NavigationContext.Provider value={{ isNavigating, navigateTo }}>
+      <AnimatePresence mode="wait">
+        {isNavigating && (
+          <LiquidTransition onComplete={handleTransitionComplete} />
+        )}
+      </AnimatePresence>
+      {children}
+    </NavigationContext.Provider>
+  );
+}
 
 

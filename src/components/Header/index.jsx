@@ -1,6 +1,6 @@
 'use client';
-import { usePathname } from "next/navigation"; // App Router's navigation hook
-import Link from "next/link"; // For client-side navigation
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import Nav from "./nav";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -9,12 +9,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Rounded from "../../common/RoundedButton";
 import Magnetic from "../../common/Magnetic";
+import { useNavigation } from "../../providers/NavigationProvider";
 
 export default function Header() {
   const header = useRef(null);
   const [isActive, setIsActive] = useState(false);
-  const pathname = usePathname(); // Get current path from App Router
+  const pathname = usePathname();
   const button = useRef(null);
+  const { navigateTo } = useNavigation();
 
   useEffect(() => {
     if (isActive) setIsActive(false);
@@ -45,33 +47,62 @@ export default function Header() {
     });
   }, []);
 
+  const handleNavigation = (e, path) => {
+    e.preventDefault();
+    if (path !== pathname) {
+      navigateTo(path);
+    }
+  };
+
   return (
     <>
       <div ref={header} className={styles.header}>
         <div className={styles.logo}>
           <p className={styles.copyright}>©</p>
-          <Link href="/" className={styles.name}>
+          <a 
+            href="/" 
+            onClick={(e) => handleNavigation(e, "/")} 
+            className={styles.name}
+          >
             <p className={styles.codeBy}>SaintWorks</p>
             <p className={styles.joe}></p>
             <p className={styles.stromain}>Home</p>
-          </Link>
+          </a>
         </div>
         <div className={styles.nav}>
           <Magnetic>
             <div className={styles.el}>
-              <Link href="/contact" className={styles.customLink}>Contact</Link>
+              <a 
+                href="/contact" 
+                onClick={(e) => handleNavigation(e, "/contact")}
+                className={styles.customLink}
+              >
+                Contact
+              </a>
               <div className={styles.indicator}></div>
             </div>
           </Magnetic>
           <Magnetic>
             <div className={styles.el}>
-              <Link href="/about" className={styles.customLink}>About</Link>
+              <a 
+                href="/about" 
+                onClick={(e) => handleNavigation(e, "/about")}
+                className={styles.customLink}
+              >
+                About
+              </a>
               <div className={styles.indicator}></div>
             </div>
           </Magnetic>
           <Magnetic>
             <div className={styles.el}>
-              <Link href="/gallery" className={styles.customLink}>Work</Link>
+              <a 
+                href="/gallery" 
+                onClick={(e) => handleNavigation(e, "/gallery")}
+                className={styles.customLink}
+              >
+                Work
+              </a>
               <div className={styles.indicator}></div>
             </div>
           </Magnetic>

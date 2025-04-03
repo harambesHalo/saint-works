@@ -7,6 +7,7 @@ import { menuSlide } from '../animation';
 import Link from './Link';
 import Curve from './Curve';
 import Footer from './Footer';
+import { useNavigation } from '../../../providers/NavigationProvider';
 
 const navItems = [
   {
@@ -34,6 +35,12 @@ const navItems = [
 export default function Nav() {
   const pathname = usePathname();
   const [selectedIndicator, setSelectedIndicator] = useState(pathname);
+  const { navigateTo } = useNavigation();
+
+  // Update Link component to use our custom navigation
+  const handleNavigation = (path) => {
+    navigateTo(path);
+  };
 
   return (
     <motion.div 
@@ -58,6 +65,7 @@ export default function Nav() {
                 data={{...data, index}} 
                 isActive={selectedIndicator === data.href} 
                 setSelectedIndicator={setSelectedIndicator}
+                onNavigate={handleNavigation}
               />
             );
           })}

@@ -2,7 +2,7 @@
 import { useDeviceContext } from '../lib/hooks/useDeviceContext';
 import { useDevice } from '../lib/hooks/useDevice';
 import { DeviceProvider } from '../providers/DeviceProvider';
-
+import NavigationProvider from '../providers/NavigationProvider';
 import Header from '../components/Header';
 
 function LayoutContent({ children }) {
@@ -22,7 +22,9 @@ function LayoutContent({ children }) {
 const ClientLayout = ({ children }) => {
   return (
     <DeviceProvider>
-      <LayoutContent>{children}</LayoutContent>
+      <NavigationProvider>
+        <LayoutContent>{children}</LayoutContent>
+      </NavigationProvider>
     </DeviceProvider>
   );
 }
