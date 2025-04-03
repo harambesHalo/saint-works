@@ -50,7 +50,7 @@ export default function index() {
                 <div className={styles.info}>
                     <div>
                         <span>
-                            <h3>Version</h3>
+                            <h3>SaintWorks LLC.</h3>
                             <p>2025 © Edition</p>
                         </span>
                         <span>
@@ -62,14 +62,11 @@ export default function index() {
                         <span>
                             <h3>socials</h3>
                             <Magnetic>
-                                <p>Awwwards</p>
+                                <p>Facebook</p>
                             </Magnetic>
                         </span>
                         <Magnetic>
                             <p>Instagram</p>
-                        </Magnetic>
-                        <Magnetic>
-                            <p>Dribbble</p>
                         </Magnetic>
                         <Magnetic>
                             <p>Linkedin</p>
