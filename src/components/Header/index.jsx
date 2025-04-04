@@ -1,6 +1,5 @@
 'use client';
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import Nav from "./nav";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";

@@ -79,8 +79,9 @@ components/
 │   ├── index.jsx
 │   ├── style.module.scss
 ├── Transitions/
-│   ├── LiquidTransition.jsx
-│   ├── LiquidTransition.module.scss
+│   ├── liquid/
+│   │   └── LiquidTransition.jsx
+│   │   └── LiquidTransition.module.scss
 ├── SvgFilters.jsx
 lib/
 ├── contexts/
@@ -510,6 +511,7 @@ body{
   --sig-green: #65695a;
   --blue: #0078b3;
   --pink: #ef606f;
+  --slate: #3f3d3e;
   --light-text: #fffafa;
   --dark-text: #292929;
 }
@@ -851,7 +853,7 @@ export default function index() {
                 <div className={styles.info}>
                     <div>
                         <span>
-                            <h3>Version</h3>
+                            <h3>SaintWorks LLC.</h3>
                             <p>2025 © Edition</p>
                         </span>
                         <span>
@@ -863,14 +865,11 @@ export default function index() {
                         <span>
                             <h3>socials</h3>
                             <Magnetic>
-                                <p>Awwwards</p>
+                                <p>Facebook</p>
                             </Magnetic>
                         </span>
                         <Magnetic>
                             <p>Instagram</p>
-                        </Magnetic>
-                        <Magnetic>
-                            <p>Dribbble</p>
                         </Magnetic>
                         <Magnetic>
                             <p>Linkedin</p>
@@ -1346,7 +1345,6 @@ index.jsx:
 
 'use client';
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import Nav from "./nav";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -2411,7 +2409,7 @@ export default function LiquidTransition({ onComplete }) {
       setTimeout(() => {
         if (onComplete) onComplete();
       }, 500);
-    }, 2500); // Adjust based on your liquid animation duration
+    }, 1000); // Increased to match the slower liquid animation (4.5s)
     
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -2449,8 +2447,8 @@ export default function LiquidTransition({ onComplete }) {
         <div className={styles.liquidContainer}>
           <div className={styles.blobs}>
             <div className={styles.liquid}></div>
-            {/* Create 9 blob elements */}
-            {Array(9).fill().map((_, i) => (
+            {/* Create specific number of blobs to match the CSS */}
+            {Array(40).fill().map((_, i) => (
               <div key={i} className={styles.blob}></div>
             ))}
           </div>
@@ -2497,14 +2495,14 @@ export default function SvgFilters() {
     >
       <defs>
         <filter id="goo">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
           <feColorMatrix 
             in="blur" 
             mode="matrix" 
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" 
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" 
             result="goo" 
           />
-          <feBlend in="SourceGraphic" in2="goo" />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
         </filter>
       </defs>
     </svg>
@@ -2607,7 +2605,7 @@ NavigationProvider.jsx:
 import { createContext, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
-import LiquidTransition from '../components/Transitions/LiquidTransition';
+import LiquidTransition from '../components/Transitions/liquid/LiquidTransition';
 
 // Create context
 const NavigationContext = createContext({
