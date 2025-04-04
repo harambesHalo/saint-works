@@ -4,6 +4,12 @@ import styles from "./GalleryLoader.module.scss";
 import Square from '../../../../common/SquareButton';
 import Image from "next/image";
 
+import dynamic from 'next/dynamic'
+
+const Wall = dynamic(() => import('../media/Wall'), {
+    ssr: false,
+})
+
 const GalleryLoader = ({ onComplete, imageUrls }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
@@ -41,13 +47,14 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
   return (
     <div>
       <div className={styles.backgroundContainer}>
-        <Image
+        <div className={styles.galleryMedia}><Wall /></div>
+        {/* <Image
           src="/images/gallery-wall.png"
           fill={true}
           alt="background"
           priority
           className={styles.galleryWallImg}
-        />
+        /> */}
       </div>
       <div className={styles.loader}>
         <div className={styles.loaderContent}>

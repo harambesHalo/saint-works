@@ -9,7 +9,7 @@ export default function Model() {
   const modelRef = useRef(null)
   const mixerRef = useRef(null)
   const actionsRef = useRef([]) // Store animation actions here
-
+  
   // Set up the AnimationMixer and store actions, but don't auto-play
   useEffect(() => {
     if (animations.length) {
@@ -19,6 +19,7 @@ export default function Model() {
         // Pause the action so it doesn't play automatically
         action.paused = true
         actionsRef.current.push(action)
+        console.log("stored Animations", actionsRef)
       })
     }
   }, [animations, scene])
