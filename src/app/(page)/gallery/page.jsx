@@ -18,7 +18,8 @@ const Gallery = () => {
     "/images/header.png",
     "/images/blue-ocean.png",
     "/images/weather.png",
-    "/images/redline.png"
+    "/images/redline.png",
+    "/medias/3d_gallery_wall.glb"
   ];
 
   const handleEnterGallery = () => {
@@ -32,10 +33,10 @@ const Gallery = () => {
       {!showLoader && (
         isMobile ? <MobileGallery /> : <DesktopGallery />
       )}
-      
+
       {/* Show the loader overlay while loading/waiting for user action */}
       {showLoader && (
-        <GalleryLoader 
+        <GalleryLoader
           imageUrls={imageUrls} 
           onComplete={handleEnterGallery} 
         />

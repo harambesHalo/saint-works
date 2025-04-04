@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { AnimationMixer, Box3, Vector3 } from 'three'
 
 export default function Model() {
-  const { scene, animations } = useGLTF('/medias/test.glb')
+  const { scene, animations } = useGLTF('/medias/3d_gallery_wall.glb')
   const { viewport, clock } = useThree()
   const modelRef = useRef(null)
   const mixerRef = useRef(null)
