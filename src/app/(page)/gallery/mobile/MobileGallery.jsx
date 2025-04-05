@@ -4,57 +4,71 @@ import './MobileGallery.scss';
 
 const MobileGallery = () => {
 
-    return(
-        
-        <div className='gallery-page'>
-           <div className='spotlight-1'></div>
-           <div className='spotlight-2'></div> 
-           <div className="newsImageWrapper">
-            <Image
-              src="/images/news.png"
-              width={500}
-              height={300}
-              alt="background"
-              priority
-              sizes="(max-width: 768px) 100vw, 55vw"
-              className="news-painting"
-            />
-          </div>
-          <div className="redlineImageWrapper">
-            <Image
-              src="/images/redline2.png"
-              width={500}
-              height={300}
-              alt="background"
-              priority
-              sizes="(max-width: 768px) 100vw, 55vw"
-              className="redline-painting"
-            />
-          </div>
-          <div className="squiggleImageWrapper">
-            <Image
-              src="/images/squiggle2.png"
-              width={500}
-              height={300}
-              alt="background"
-              priority
-              sizes="(max-width: 768px) 100vw, 55vw"
-              className="squiggle-painting"
-            />
-          </div>
-          <div className="boxImageWrapper">
-            <Image
-              src="/images/header.png"
-              width={500}
-              height={300}
-              alt="background"
-              priority
-              sizes="(max-width: 768px) 100vw, 55vw"
-              className="box-painting"
-            />
-          </div>
-        </div>
-    );
+  return (
+
+    <div className='gallery-page-mobile'>
+      <div className="newsWrapperMobile">
+        <Image
+          src="/images/news.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="news-painting-mobile"
+        />
+      </div>
+      <div className="redlineWrapperMobile">
+        <Image
+          src="/images/redline2.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="red-painting-mobile"
+        />
+      </div>
+      <div className="squiggleWrapperMobile">
+        <Image
+          src="/images/squiggle2.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="squiggle-painting-mobile"
+        />
+      </div>
+      <div className="boxImageWrapperMobile">
+        <Image
+          src="/images/header.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="box-painting-mobile"
+        />
+      </div>
+      <div className="oceanImageWrapperMobile">
+        <Image
+          src="/images/blue-ocean.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="ocean-painting-mobile"
+        />
+      </div>
+      <div className="weatherImageWrapperMobile">
+        <Image
+          src="/images/weather.png"
+          width={500}
+          height={300}
+          alt="background-mobile"
+          priority
+          className="weather-painting-mobile"
+        />
+      </div>
+    </div>
+  );
 }
 
 export default MobileGallery;

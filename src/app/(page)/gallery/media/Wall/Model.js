@@ -16,7 +16,7 @@ const Model = ({ registerMoveForward }) => {
   useEffect(() => {
     if (registerMoveForward) {
       registerMoveForward(() => {
-        console.log("🔥 moveForward() called");
+        console.log("moveForward() called");
         velocity.current = 0.02;
       });
     }

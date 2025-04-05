@@ -1,19 +1,13 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import styles from "./GalleryLoader.module.scss";
+import { useState, useEffect } from "react";
+import styles from "./MobileGalleryLoader.module.scss";
 import Square from '@/common/SquareButton';
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
-const Wall = dynamic(() => import('../media/Wall'), {
-  ssr: false,
-  loading: () => <p>Loading 3D...</p>,
-});
-
-const GalleryLoader = ({ onComplete, imageUrls }) => {
+const MobileGalleryLoader = ({ onComplete, imageUrls }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
   const totalImages = imageUrls.length;
-  const moveForwardFn = useRef(null);
 
   useEffect(() => {
     const imagePromises = imageUrls.map((src) => {
@@ -41,20 +35,20 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
   }, [imageUrls]);
 
   const handleClick = () => {
-    if (moveForwardFn.current) {
-      moveForwardFn.current();
-    }
-    setTimeout(() => {
-      onComplete();
-    }, 1500);
+    // Just directly call onComplete without any animations
+    onComplete();
   };
 
   return (
     <div>
       <div className={styles.backgroundContainer}>
-        <div className={styles.galleryMedia}>
-          <Wall registerMoveForward={fn => (moveForwardFn.current = fn)} />
-        </div>
+        <Image
+            src="/images/gallery-wall.png"
+            fill={true}
+            alt="background"
+            priority
+            className={styles.backgroundImage}
+          />
       </div>
       <div className={styles.loader}>
         <div className={styles.loaderContent}>
@@ -74,4 +68,4 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
   );
 };
 
-export default GalleryLoader;
+export default MobileGalleryLoader;
