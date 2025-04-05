@@ -4,7 +4,7 @@ import styles from './style.module.scss';
 import gsap from 'gsap';
 import Magnetic from '../Magnetic';
 
-export default function index({children, backgroundColor="#141516", ...attributes}) {
+export default function SquareButton({children, backgroundColor="#141516", ...attributes}) {
 
   const circle = useRef(null);
   let timeline = useRef(null);
