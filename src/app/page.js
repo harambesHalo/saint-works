@@ -1,9 +1,8 @@
 'use client';
 import styles from './page.module.scss'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion';
 import { useDeviceContext } from '../lib/hooks/useDeviceContext'
-import Lenis from 'lenis'
 import Preloader from '../components/Preloader';
 import Landing from '../components/Landing';
 import Projects from '../components/Projects';
@@ -11,16 +10,11 @@ import Description from '../components/Description';
 import SlidingImages from '../components/SlidingImages';
 import Contact from '../components/Contact';
 
-// Create a context for Lenis if needed
-import { createContext } from 'react';
-export const LenisContext = createContext(null);
-
 export default function Home() {
-  const { isClient, isMobile } = useDeviceContext();
+  const { isClient } = useDeviceContext();
   const [isLoading, setIsLoading] = useState(true);
-  const lenisRef = useRef(null);
 
-  // Initialize Lenis with better cleanup
+  // Initialize loading state and cleanup without Lenis
   useEffect(() => {
     if (!isClient) return;
     
@@ -30,55 +24,15 @@ export default function Home() {
     timeoutId = setTimeout(() => {
       setIsLoading(false);
       document.body.style.cursor = 'default';
-      document.body.style.overflowY = 'auto';
-      document.body.style.overflowX = 'hidden';
+      // Note: we're no longer handling scrolling here, just cursor and loading state
       window.scrollTo(0, 0);
-      
-      // Initialize Lenis after loading
-      const lenisOptions = {
-        duration: isMobile ? 1.2 : 1.8,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-      };
-      
-      const lenisInstance = new Lenis(lenisOptions);
-      
-      // Store reference
-      lenisRef.current = lenisInstance;
-      window.lenis = lenisInstance; // For global access
-      
-      // Setup RAF
-      let rafId;
-      function raf(time) {
-        lenisInstance.raf(time);
-        rafId = requestAnimationFrame(raf);
-      }
-      
-      rafId = requestAnimationFrame(raf);
-      
-      // Return cleanup function
-      return () => {
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-        }
-        if (lenisInstance) {
-          lenisInstance.destroy();
-        }
-        window.lenis = null;
-        lenisRef.current = null;
-      };
     }, 2000);
     
     // Cleanup timeout
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [isMobile, isClient]);
+  }, [isClient]);
 
   return (
     <main className={styles.main}>

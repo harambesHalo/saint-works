@@ -1,8 +1,9 @@
 
 body{
     margin: 0px;
-    overflow: hidden; /* Hide scrollbars */
-    font-family: var(--inter)
+    overflow-x: hidden; /* Hide scrollbars */
+    font-family: var(--inter);
+    -webkit-overflow-scrolling: touch;
 }
 
 :root {
