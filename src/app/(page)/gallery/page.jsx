@@ -60,7 +60,7 @@ const Gallery = () => {
     setIsHydrated(true);
     
     // Set initial body background to black to prevent white flashes
-    document.body.style.backgroundColor = "#000000";
+    document.body.style.backgroundColor = "#141516";
     
     return () => {
       // Restore default background when component unmounts
@@ -94,7 +94,7 @@ const Gallery = () => {
       <div style={containerStyle}>
         {isTransitioning ? (
           // Show a black div during component transitions
-          <div style={{width: '100%', height: '100%', backgroundColor: '#000000'}}></div>
+          <div style={{width: '100%', height: '100%', backgroundColor: '#141516'}}></div>
         ) : (
           <ComponentToRender {...props} />
         )}
