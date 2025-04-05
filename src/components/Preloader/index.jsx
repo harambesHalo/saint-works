@@ -6,7 +6,7 @@ import { opacity, slideUp } from './anim';
 
 const words = ["Artist", "Developer", "Consultant", "MBA", "Artist", "Developer", "Consultant", "Artist"]
 
-export default function Index() {
+export default function Preloader() {
     const [index, setIndex] = useState(0);
     const [dimension, setDimension] = useState({width: 0, height:0});
 

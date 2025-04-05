@@ -5,7 +5,7 @@ import { slideUp, hangingAnimation, finalPendulumSwing } from "./animation";
 import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
 import Image from "next/image";
 
-export default function index() {
+export default function Description() {
   const { isMobile, isClient } = useDeviceContext();
   const description = useRef(null);
   const imageRef = useRef(null);
