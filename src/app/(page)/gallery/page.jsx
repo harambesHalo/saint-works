@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
 import DesktopGallery from "./desktop/DesktopGallery";
 import MobileGallery from "./mobile/MobileGallery";
 import GalleryLoader from "./components/GalleryLoader";
 
 const Gallery = () => {
-  const { isMobile, isClient } = useDeviceContext();
+  const { isMobile } = useDeviceContext();
   const [showLoader, setShowLoader] = useState(true);
-  
-  // Collection of all image URLs from both galleries
+  const wallRef = useRef(); // 🔥 Move wallRef here
+
   const imageUrls = [
     "/images/news.png",
     "/images/redline2.png",
@@ -23,22 +23,27 @@ const Gallery = () => {
   ];
 
   const handleEnterGallery = () => {
-    // When button is clicked, hide the loader and show the gallery
-    setShowLoader(false);
+    // 👇 Trigger animation first
+    if (wallRef.current) {
+      wallRef.current.moveForward();
+    }
+
+    // 👇 Wait a sec for the animation to play before hiding loader
+    setTimeout(() => {
+      setShowLoader(false);
+    }, 1500);
   };
 
   return (
     <>
-      {/* First show the gallery (it will appear when loader is gone) */}
       {!showLoader && (
         isMobile ? <MobileGallery /> : <DesktopGallery />
       )}
 
-      {/* Show the loader overlay while loading/waiting for user action */}
       {showLoader && (
         <GalleryLoader
-          imageUrls={imageUrls} 
-          onComplete={handleEnterGallery} 
+          imageUrls={imageUrls}
+          onComplete={handleEnterGallery}
         />
       )}
     </>

@@ -1,77 +1,73 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./GalleryLoader.module.scss";
 import Square from '../../../../common/SquareButton';
 import Image from "next/image";
-
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 
 const Wall = dynamic(() => import('../media/Wall'), {
-    ssr: false,
-})
+  ssr: false,
+  loading: () => <p>Loading 3D...</p>,
+});
 
 const GalleryLoader = ({ onComplete, imageUrls }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
   const totalImages = imageUrls.length;
+  const moveForwardFn = useRef(null); // 👈 store the trigger
 
   useEffect(() => {
-    // Create an array to track loaded images
     const imagePromises = imageUrls.map((src) => {
       return new Promise((resolve) => {
-        const img = new Image();
+        const img = typeof window !== 'undefined' ? new window.Image() : null;
+        if (!img) return resolve();
         img.src = src;
         img.onload = () => {
           setLoadedCount((prev) => prev + 1);
           resolve();
         };
         img.onerror = () => {
-          // Still count errors as "loaded" to prevent getting stuck
           setLoadedCount((prev) => prev + 1);
           resolve();
         };
       });
     });
 
-    // When all images are loaded, set loading to false
     Promise.all(imagePromises)
-      .then(() => {
-        setIsLoading(false);
-      })
+      .then(() => setIsLoading(false))
       .catch((err) => {
         console.error("Error loading images:", err);
-        setIsLoading(false); // Stop loading even if there's an error
+        setIsLoading(false);
       });
   }, [imageUrls]);
+
+  const handleClick = () => {
+    if (moveForwardFn.current) {
+      moveForwardFn.current();
+    }
+    setTimeout(() => {
+      onComplete();
+    }, 1500);
+  };
 
   return (
     <div>
       <div className={styles.backgroundContainer}>
-        <div className={styles.galleryMedia}><Wall /></div>
-        {/* <Image
-          src="/images/gallery-wall.png"
-          fill={true}
-          alt="background"
-          priority
-          className={styles.galleryWallImg}
-        /> */}
+        <div className={styles.galleryMedia}>
+          <Wall registerMoveForward={fn => (moveForwardFn.current = fn)} />
+        </div>
       </div>
       <div className={styles.loader}>
         <div className={styles.loaderContent}>
           {isLoading ? (
             <div className={styles.loadingState}>
               <div className={styles.spinner}></div>
-              <p>
-                Loading Gallery ({loadedCount}/{totalImages})
-              </p>
+              <p>Loading Gallery ({loadedCount}/{totalImages})</p>
             </div>
           ) : (
-            <Square onClick={onComplete}>
-                <p>Enter Gallery</p>
+            <Square onClick={handleClick}>
+              <p>Enter Gallery</p>
             </Square>
-            // <button className={styles.enterButton} onClick={onComplete}>
-            //   Enter Gallery
-            // </button>
           )}
         </div>
       </div>

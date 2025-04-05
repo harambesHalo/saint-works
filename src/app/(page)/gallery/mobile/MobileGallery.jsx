@@ -22,7 +22,7 @@ const MobileGallery = () => {
           </div>
           <div className="redlineImageWrapper">
             <Image
-              src="/images/redline.png"
+              src="/images/redline2.png"
               width={500}
               height={300}
               alt="background"
