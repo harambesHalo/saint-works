@@ -4,14 +4,14 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
 const Model = ({ registerMoveForward }) => {
-  const { scene, animations } = useGLTF('/medias/3d_gallery_wall.glb');
+  const { scene, animations } = useGLTF('/medias/room5.glb');
   const { viewport, clock } = useThree();
   const modelRef = useRef();
   const mixerRef = useRef();
   const actionsRef = useRef([]);
 
   const velocity = useRef(0);
-  const direction = new Vector3(0.90, 0, 1);
+  const direction = new Vector3(2.0, 0, 2.0);
 
   useEffect(() => {
     if (registerMoveForward) {
@@ -53,13 +53,14 @@ const Model = ({ registerMoveForward }) => {
   return (
     <group
       ref={modelRef}
-      scale={viewport.width / 3.65}
+      scale={viewport.width / 5.35}
       rotation={[0, 4.72, 0]}
+      position={[-1.75, 0, 0]}
     >
       <primitive object={scene} />
     </group>
   );
 };
 
-useGLTF.preload('/medias/3d_gallery_wall.glb');
+useGLTF.preload('/medias/medias/room5.glb');
 export default Model;

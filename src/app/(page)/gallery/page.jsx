@@ -40,7 +40,8 @@ const Gallery = () => {
   ];
   
   const critical3dAssets = [
-    "/medias/3d_gallery_wall.glb",
+    // "/medias/3d_gallery_wall.glb",
+    "/medias/room5.glb",
     ...imageUrls
   ];
   
