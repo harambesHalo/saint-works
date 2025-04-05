@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import LiquidTransition from '../components/Transitions/liquid/LiquidTransition';
@@ -14,7 +14,7 @@ export const useNavigation = () => useContext(NavigationContext);
 
 export default function NavigationProvider({ children }) {
   const [isNavigating, setIsNavigating] = useState(false);
-  const [nextPath, setNextPath] = useState(null);
+  const nextPathRef = useRef(null);
   const router = useRouter();
 
   // Function to handle navigation with transition
@@ -22,32 +22,40 @@ export default function NavigationProvider({ children }) {
     // Don't trigger navigation if already navigating
     if (isNavigating) return;
     
+    // Store the target path in a ref for later use
+    nextPathRef.current = path;
+    
+    // Start the transition animation
     setIsNavigating(true);
-    setNextPath(path);
   };
   
-  // Called when the liquid transition is complete
-  const handleTransitionComplete = () => {
-    if (nextPath) {
-      // Perform the actual navigation
-      router.push(nextPath);
-      
-      // Reset navigation state after a delay to ensure smooth transition
-      setTimeout(() => {
-        setIsNavigating(false);
-        setNextPath(null);
-      }, 100);
+  // Called when the transition animation is at the midpoint
+  // This is the key change - we navigate during the transition, not after
+  const handleTransitionMidpoint = () => {
+    if (nextPathRef.current) {
+      // Perform the actual navigation during the transition
+      router.push(nextPathRef.current);
     }
+  };
+  
+  // Called when the transition is fully complete
+  const handleTransitionComplete = () => {
+    // Reset navigation state
+    setIsNavigating(false);
+    nextPathRef.current = null;
   };
 
   return (
     <NavigationContext.Provider value={{ isNavigating, navigateTo }}>
+      {children}
       <AnimatePresence mode="wait">
         {isNavigating && (
-          <LiquidTransition onComplete={handleTransitionComplete} />
+          <LiquidTransition 
+            onMidpoint={handleTransitionMidpoint} 
+            onComplete={handleTransitionComplete} 
+          />
         )}
       </AnimatePresence>
-      {children}
     </NavigationContext.Provider>
   );
 }

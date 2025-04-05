@@ -12,6 +12,8 @@ app/
 │   │   │   ├── desktop/
 │   │   │   │   ├── GalleryLoader.jsx
 │   │   │   │   ├── GalleryLoader.module.scss
+│   │   │   │   ├── InitialGalleryPreloader.jsx
+│   │   │   │   ├── InitialGalleryPreloader.module.scss
 │   │   │   ├── mobile/
 │   │   │   │   └── MobileGalleryLoader.module.scss
 │   │   │   │   └── MobileGalleryLoder.jsx
@@ -217,6 +219,91 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
 
 export default GalleryLoader;
 
+
+
+
+InitialGalleryPreloader.jsx:
+
+"use client";
+import { useState, useEffect } from "react";
+import styles from "./InitialGalleryPreloader.module.scss";
+
+const InitialGalleryPreloader = ({ onComplete, assets }) => {
+  const [progress, setProgress] = useState(0);
+  
+  useEffect(() => {
+    let loaded = 0;
+    const total = assets.length;
+    
+    // Preload all critical assets including the 3D model
+    const preloadPromises = assets.map(url => {
+      return new Promise((resolve) => {
+        if (url.endsWith('.glb')) {
+          // For 3D models, use fetch
+          fetch(url)
+            .then(() => {
+              loaded++;
+              setProgress(Math.floor((loaded / total) * 100));
+              resolve();
+            })
+            .catch(error => {
+              console.error(`Error preloading ${url}:`, error);
+              loaded++;
+              setProgress(Math.floor((loaded / total) * 100));
+              resolve();
+            });
+        } else {
+          // For images, use Image object
+          const img = new Image();
+          img.src = url;
+          img.onload = () => {
+            loaded++;
+            setProgress(Math.floor((loaded / total) * 100));
+            resolve();
+          };
+          img.onerror = () => {
+            console.error(`Error preloading ${url}`);
+            loaded++;
+            setProgress(Math.floor((loaded / total) * 100));
+            resolve();
+          };
+        }
+      });
+    });
+    
+    // When all assets are loaded, complete
+    Promise.all(preloadPromises)
+      .then(() => {
+        // Add small delay to ensure everything is ready
+        setTimeout(() => {
+          onComplete();
+        }, 500);
+      })
+      .catch(error => {
+        console.error("Error during preloading:", error);
+        // Still complete even if there are errors
+        onComplete();
+      });
+  }, [assets, onComplete]);
+
+  return (
+    <div className={styles.preloader}>
+      <div className={styles.content}>
+        <div className={styles.spinner}></div>
+        <h2>Loading Gallery</h2>
+        <div className={styles.progressBar}>
+          <div 
+            className={styles.progressFill} 
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p>{progress}%</p>
+      </div>
+    </div>
+  );
+};
+
+export default InitialGalleryPreloader;
 
 
 
@@ -610,18 +697,21 @@ page.jsx:
 
 'use client';
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
 import DesktopGallery from "./desktop/DesktopGallery";
 import MobileGallery from "./mobile/MobileGallery";
 import GalleryLoader from "./components/desktop/GalleryLoader";
-import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder"
+import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder";
+import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader";
 
 const Gallery = () => {
   const { isMobile } = useDeviceContext();
-  const [showLoader, setShowLoader] = useState(true);
-  const wallRef = useRef(); // Move wallRef here
-
+  
+  // Three possible states: "preloading", "loading3d", "gallery"
+  const [loadingState, setLoadingState] = useState("preloading");
+  
+  // Assets and URLs
   const imageUrls = [
     "/images/header.png",
     "/images/news.png",
@@ -630,9 +720,13 @@ const Gallery = () => {
     "/images/blue-ocean.png",
     "/images/weather.png",
     "/images/redline2.png",
-    "/medias/3d_gallery_wall.glb"
   ];
-
+  
+  const critical3dAssets = [
+    "/medias/3d_gallery_wall.glb",
+    ...imageUrls
+  ];
+  
   const mobileImageUrls = [
     "/images/header.png",
     "/images/news.png",
@@ -643,46 +737,53 @@ const Gallery = () => {
     "/images/redline2.png",
   ];
 
+  // Handle completion of the initial preloading step
+  const handlePreloadComplete = () => {
+    setLoadingState("loading3d");
+  };
+
+  // Handle when the gallery loader completes
   const handleEnterGallery = () => {
-    // Trigger animation first
-    if (wallRef.current) {
-      wallRef.current.moveForward();
-    }
-
-    // Wait a sec for the animation to play before hiding loader
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 1500);
+    setLoadingState("gallery");
   };
 
-  const handleMobileEnterGallery = () => {
-    // Mobile doesn't need animation, so just hide the loader directly
-    setShowLoader(false);
-  };
-
-  return (
-    <>
-      {!showLoader && (
-        isMobile ? <MobileGallery /> : <DesktopGallery />
-      )}
-
-      {showLoader && (
-         isMobile ? 
-         <MobileGalleryLoader 
-            imageUrls={mobileImageUrls}
-            onComplete={handleMobileEnterGallery}
-         /> : 
-         <GalleryLoader
-            imageUrls={imageUrls}
-            onComplete={handleEnterGallery}
+  // Mobile doesn't need the initial preloader
+  if (isMobile) {
+    if (loadingState === "preloading" || loadingState === "loading3d") {
+      return (
+        <MobileGalleryLoader 
+          imageUrls={mobileImageUrls}
+          onComplete={handleEnterGallery}
         />
-      )}
-    </>
-  );
+      );
+    } else {
+      return <MobileGallery />;
+    }
+  } 
+  
+  // Desktop flow with three distinct loading steps
+  else {
+    if (loadingState === "preloading") {
+      return (
+        <InitialGalleryPreloader 
+          assets={critical3dAssets} 
+          onComplete={handlePreloadComplete} 
+        />
+      );
+    } else if (loadingState === "loading3d") {
+      return (
+        <GalleryLoader
+          imageUrls={imageUrls}
+          onComplete={handleEnterGallery}
+        />
+      );
+    } else {
+      return <DesktopGallery />;
+    }
+  }
 };
 
 export default Gallery;
-
 
 
 
@@ -977,7 +1078,7 @@ index.jsx:
 import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap';
 
-export default function index({children}) {
+export default function Magnetic({children}) {
     const magnetic = useRef(null);
 
     useEffect( () => {
@@ -1016,7 +1117,7 @@ import styles from './style.module.scss';
 import gsap from 'gsap';
 import Magnetic from '../Magnetic';
 
-export default function index({children, backgroundColor="#0078b3", ...attributes}) {
+export default function RoundedButton({children, backgroundColor="#0078b3", ...attributes}) {
 
   const circle = useRef(null);
   let timeline = useRef(null);
@@ -1062,7 +1163,7 @@ import styles from './style.module.scss';
 import gsap from 'gsap';
 import Magnetic from '../Magnetic';
 
-export default function index({children, backgroundColor="#141516", ...attributes}) {
+export default function SquareButton({children, backgroundColor="#141516", ...attributes}) {
 
   const circle = useRef(null);
   let timeline = useRef(null);
@@ -1109,7 +1210,7 @@ import { useRef } from 'react';
 import { useScroll, motion, useTransform, useSpring } from 'framer-motion';
 import Magnetic from '../../common/Magnetic';
 
-export default function index() {
+export default function Contact() {
     const container = useRef(null);
     const { scrollYProgress } = useScroll({
         target: container,
@@ -1131,7 +1232,7 @@ export default function index() {
                             src={`/images/profile_picture.jpg`}
                             />
                         </div>
-                        <h2>Let's Create</h2>
+                        <h2>Let&apos;s Create</h2>
                     </span>
                     <h2>Something Amazing</h2>
                     <motion.div style={{x}} className={styles.buttonContainer}>
@@ -1276,7 +1377,7 @@ import { slideUp, hangingAnimation, finalPendulumSwing } from "./animation";
 import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
 import Image from "next/image";
 
-export default function index() {
+export default function Description() {
   const { isMobile, isClient } = useDeviceContext();
   const description = useRef(null);
   const imageRef = useRef(null);
@@ -2226,7 +2327,7 @@ import { opacity, slideUp } from './anim';
 
 const words = ["Artist", "Developer", "Consultant", "MBA", "Artist", "Developer", "Consultant", "Artist"]
 
-export default function Index() {
+export default function Preloader() {
     const [index, setIndex] = useState(0);
     const [dimension, setDimension] = useState({width: 0, height:0});
 
@@ -2610,7 +2711,7 @@ const slider2 = [
   },
 ];
 
-export default function index() {
+export default function SlidingImages() {
   const container = useRef(null);
 
   const { scrollYProgress } = useScroll({

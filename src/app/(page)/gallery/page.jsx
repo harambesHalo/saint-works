@@ -1,17 +1,34 @@
 'use client';
 
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
 import DesktopGallery from "./desktop/DesktopGallery";
 import MobileGallery from "./mobile/MobileGallery";
 import GalleryLoader from "./components/desktop/GalleryLoader";
-import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder"
+import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder";
+import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader";
+
+// Inline styles to prevent flash of white
+const containerStyle = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundColor: '#000000', // Black background
+  overflow: 'hidden',
+  zIndex: 1
+};
 
 const Gallery = () => {
-  const { isMobile } = useDeviceContext();
-  const [showLoader, setShowLoader] = useState(true);
-  const wallRef = useRef(); // Move wallRef here
-
+  const { isMobile, isClient } = useDeviceContext();
+  
+  // Three possible states: "preloading", "loading3d", "gallery"
+  const [loadingState, setLoadingState] = useState("preloading");
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  // Assets and URLs
   const imageUrls = [
     "/images/header.png",
     "/images/news.png",
@@ -20,9 +37,13 @@ const Gallery = () => {
     "/images/blue-ocean.png",
     "/images/weather.png",
     "/images/redline2.png",
-    "/medias/3d_gallery_wall.glb"
   ];
-
+  
+  const critical3dAssets = [
+    "/medias/3d_gallery_wall.glb",
+    ...imageUrls
+  ];
+  
   const mobileImageUrls = [
     "/images/header.png",
     "/images/news.png",
@@ -33,42 +54,86 @@ const Gallery = () => {
     "/images/redline2.png",
   ];
 
-  const handleEnterGallery = () => {
-    // Trigger animation first
-    if (wallRef.current) {
-      wallRef.current.moveForward();
-    }
+  // Handle hydration
+  useEffect(() => {
+    setIsHydrated(true);
+    
+    // Set initial body background to black to prevent white flashes
+    document.body.style.backgroundColor = "#000000";
+    
+    return () => {
+      // Restore default background when component unmounts
+      document.body.style.backgroundColor = "";
+    };
+  }, []);
 
-    // Wait a sec for the animation to play before hiding loader
+  // Handle completion of the initial preloading step
+  const handlePreloadComplete = () => {
+    setIsTransitioning(true);
+    // Add a short delay to ensure smooth transition
     setTimeout(() => {
-      setShowLoader(false);
-    }, 1500);
+      setLoadingState("loading3d");
+      setIsTransitioning(false);
+    }, 100);
   };
 
-  const handleMobileEnterGallery = () => {
-    // Mobile doesn't need animation, so just hide the loader directly
-    setShowLoader(false);
+  // Handle when the gallery loader completes
+  const handleEnterGallery = () => {
+    setIsTransitioning(true);
+    // Add a short delay to ensure smooth transition
+    setTimeout(() => {
+      setLoadingState("gallery");
+      setIsTransitioning(false);
+    }, 100);
   };
 
-  return (
-    <>
-      {!showLoader && (
-        isMobile ? <MobileGallery /> : <DesktopGallery />
-      )}
+  // Wrapper component to prevent flashes during transitions
+  const renderWithTransitionPrevention = (ComponentToRender, props = {}) => {
+    return (
+      <div style={containerStyle}>
+        {isTransitioning ? (
+          // Show a black div during component transitions
+          <div style={{width: '100%', height: '100%', backgroundColor: '#000000'}}></div>
+        ) : (
+          <ComponentToRender {...props} />
+        )}
+      </div>
+    );
+  };
 
-      {showLoader && (
-         isMobile ? 
-         <MobileGalleryLoader 
-            imageUrls={mobileImageUrls}
-            onComplete={handleMobileEnterGallery}
-         /> : 
-         <GalleryLoader
-            imageUrls={imageUrls}
-            onComplete={handleEnterGallery}
-        />
-      )}
-    </>
-  );
+  // If not yet hydrated, show a black screen
+  if (!isHydrated) {
+    return <div style={containerStyle}></div>;
+  }
+
+  // Mobile doesn't need the initial preloader
+  if (isMobile) {
+    if (loadingState === "preloading" || loadingState === "loading3d") {
+      return renderWithTransitionPrevention(MobileGalleryLoader, {
+        imageUrls: mobileImageUrls,
+        onComplete: handleEnterGallery
+      });
+    } else {
+      return renderWithTransitionPrevention(MobileGallery);
+    }
+  } 
+  
+  // Desktop flow with three distinct loading steps
+  else {
+    if (loadingState === "preloading") {
+      return renderWithTransitionPrevention(InitialGalleryPreloader, {
+        assets: critical3dAssets,
+        onComplete: handlePreloadComplete
+      });
+    } else if (loadingState === "loading3d") {
+      return renderWithTransitionPrevention(GalleryLoader, {
+        imageUrls: imageUrls,
+        onComplete: handleEnterGallery
+      });
+    } else {
+      return renderWithTransitionPrevention(DesktopGallery);
+    }
+  }
 };
 
 export default Gallery;
