@@ -1,8 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import styles from "./GalleryLoader.module.scss";
-import Square from '../../../../common/SquareButton';
-import Image from "next/image";
+import Square from '@/common/SquareButton';
 import dynamic from 'next/dynamic';
 
 const Wall = dynamic(() => import('../media/Wall'), {
@@ -14,7 +13,7 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
   const totalImages = imageUrls.length;
-  const moveForwardFn = useRef(null); // 👈 store the trigger
+  const moveForwardFn = useRef(null);
 
   useEffect(() => {
     const imagePromises = imageUrls.map((src) => {

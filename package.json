@@ -2,6 +2,7 @@
   "name": "saint-works",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,18 +10,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.92.7",
+    "@react-three/fiber": "^8.15.12",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "framer-motion": "^10.13.0",
     "gsap": "^3.12.2",
     "lenis": "^1.2.3",
+    "leva": "^0.9.35",
     "locomotive-scroll": "^5.0.0-beta.8",
     "next": "13.4.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sass": "^1.64.0",
-    "@react-three/drei": "^9.92.7",
-    "@react-three/fiber": "^8.15.12",
-    "leva": "^0.9.35"
+    "sass": "^1.64.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7",
+    "@types/node": "22.14.0"
   }
 }
