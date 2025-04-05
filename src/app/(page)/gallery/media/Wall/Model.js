@@ -11,7 +11,7 @@ const Model = ({ registerMoveForward }) => {
   const actionsRef = useRef([]);
 
   const velocity = useRef(0);
-  const direction = new Vector3(0, 0, -1);
+  const direction = new Vector3(0.90, 0, 1);
 
   useEffect(() => {
     if (registerMoveForward) {

@@ -18,7 +18,7 @@ const Gallery = () => {
     "/images/header.png",
     "/images/blue-ocean.png",
     "/images/weather.png",
-    "/images/redline.png",
+    "/images/redline2.png",
     "/medias/3d_gallery_wall.glb"
   ];
 
