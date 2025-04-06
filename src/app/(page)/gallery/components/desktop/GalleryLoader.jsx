@@ -44,9 +44,9 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
     if (moveForwardFn.current) {
       moveForwardFn.current();
     }
-    setTimeout(() => {
-      onComplete();
-    }, 1500);
+    // setTimeout(() => {
+    //   onComplete();
+    // }, 1500);
   };
 
   return (
