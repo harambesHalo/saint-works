@@ -1,0 +1,66 @@
+.backgroundContainer {
+    .galleryMedia{
+      z-index: 0;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+    .galleryWallImg{
+      z-index: 0;
+    }
+  }
+  
+  .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; // Using your bg color from globals.css
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .loaderContent {
+      text-align: center;
+      padding: 2rem;
+      .enterButton {
+        background-color: var(--blue);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        &:hover {
+          background-color: #0069a1; // Darker blue on hover
+        }
+      }
+      p {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+        color: var(--sig-green);
+      }
+      .loadingState {
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .spinner {
+          width: 50px;
+          height: 50px;
+          border: 5px solid rgba(0, 0, 0, 0.1);
+          border-radius: 50%;
+          border-top-color: var(--sig-green);
+          animation: spin 1s ease-in-out infinite;
+        }
+        
+      }
+    }
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }

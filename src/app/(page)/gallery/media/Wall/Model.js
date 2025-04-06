@@ -3,21 +3,22 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
-const Model = ({ registerMoveForward }) => {
-  const { scene, animations } = useGLTF('/medias/room5.glb');
+const Model = ({ registerMoveForward, onEnteredGallery }) => {
+  const { scene, animations } = useGLTF('/medias/test3pShift.glb');
   const { viewport, clock } = useThree();
   const modelRef = useRef();
   const mixerRef = useRef();
   const actionsRef = useRef([]);
 
   const velocity = useRef(0);
-  const direction = new Vector3(2.0, 0, 2.0);
+  const direction = new Vector3(0.9, 0, 1.0);
+  const stopZ = 3.1;
 
   useEffect(() => {
     if (registerMoveForward) {
       registerMoveForward(() => {
         console.log("moveForward() called");
-        velocity.current = 0.02;
+        velocity.current = 0.03;
       });
     }
   }, [registerMoveForward]);
@@ -47,6 +48,15 @@ const Model = ({ registerMoveForward }) => {
 
     if (velocity.current > 0 && modelRef.current) {
       modelRef.current.position.addScaledVector(direction, velocity.current);
+
+      if (modelRef.current.position.z >= stopZ) {
+        velocity.current = 0;
+        console.log("User now in gallery");
+
+        if (onEnteredGallery) {
+          onEnteredGallery(); // 👈 this will now toggle the overlay
+        }
+      }
     }
   });
 
@@ -62,5 +72,5 @@ const Model = ({ registerMoveForward }) => {
   );
 };
 
-useGLTF.preload('/medias/medias/room5.glb');
+useGLTF.preload('/medias/test3pShift.glb');
 export default Model;
