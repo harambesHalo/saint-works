@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
-const Model = ({ registerMoveForward }) => {
+const Model = ({ registerMoveForward, onEnteredGallery }) => {
   const { scene, animations } = useGLTF('/medias/room7.glb');
   const { viewport, clock } = useThree();
   const modelRef = useRef();
@@ -50,8 +50,12 @@ const Model = ({ registerMoveForward }) => {
       modelRef.current.position.addScaledVector(direction, velocity.current);
 
       if (modelRef.current.position.z >= stopZ) {
-        velocity.current= 0;
+        velocity.current = 0;
         console.log("User now in gallery");
+
+        if (onEnteredGallery) {
+          onEnteredGallery(); // 👈 this will now toggle the overlay
+        }
       }
     }
   });

@@ -1,10 +1,12 @@
 📁 Directory Structure
 components/
 ├── desktop/
-│   ├── GalleryLoader.jsx
-│   ├── GalleryLoader.module.scss
-│   ├── InitialGalleryPreloader.jsx
-│   ├── InitialGalleryPreloader.module.scss
+│   ├── GalleryLoader/
+│   │   ├── GalleryLoader.jsx
+│   │   ├── GalleryLoader.module.scss
+│   ├── InitialGalleryPreloader/
+│   │   └── InitialGalleryPreloader.jsx
+│   │   └── InitialGalleryPreloader.module.scss
 ├── mobile/
 │   └── MobileGalleryLoader.module.scss
 │   └── MobileGalleryLoder.jsx
@@ -26,28 +28,28 @@ page.jsx
 
 GalleryLoader.jsx:
 
-"use client";
 import { useState, useEffect, useRef } from "react";
 import styles from "./GalleryLoader.module.scss";
 import Square from '@/common/SquareButton';
 import dynamic from 'next/dynamic';
+import DesktopGallery from '@/app/(page)/gallery/desktop/DesktopGallery';
 
-const Wall = dynamic(() => import('../../media/Wall'), {
+const Wall = dynamic(() => import('../../../media/Wall'), {
   ssr: false,
   loading: () => <p>Loading 3D...</p>,
 });
 
-const GalleryLoader = ({ onComplete, imageUrls }) => {
+const GalleryLoader = ({ imageUrls }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(false);
   const totalImages = imageUrls.length;
   const moveForwardFn = useRef(null);
 
   useEffect(() => {
     const imagePromises = imageUrls.map((src) => {
       return new Promise((resolve) => {
-        const img = typeof window !== 'undefined' ? new window.Image() : null;
-        if (!img) return resolve();
+        const img = new window.Image();
         img.src = src;
         img.onload = () => {
           setLoadedCount((prev) => prev + 1);
@@ -60,44 +62,44 @@ const GalleryLoader = ({ onComplete, imageUrls }) => {
       });
     });
 
-    Promise.all(imagePromises)
-      .then(() => setIsLoading(false))
-      .catch((err) => {
-        console.error("Error loading images:", err);
-        setIsLoading(false);
-      });
+    Promise.all(imagePromises).then(() => setIsLoading(false));
   }, [imageUrls]);
 
   const handleClick = () => {
-    if (moveForwardFn.current) {
-      moveForwardFn.current();
-    }
-    // setTimeout(() => {
-    //   onComplete();
-    // }, 1500);
+    if (moveForwardFn.current) moveForwardFn.current();
   };
 
   return (
-    <div>
-      <div className={styles.backgroundContainer}>
-        <div className={styles.galleryMedia}>
-          <Wall registerMoveForward={fn => (moveForwardFn.current = fn)} />
-        </div>
+    <div className={styles.loaderWrapper}>
+      {/* Canvas Container */}
+      <div className={styles.canvasContainer}>
+        <Wall registerMoveForward={fn => (moveForwardFn.current = fn)} onEnteredGallery={() => setShowOverlay(true)} />
       </div>
-      <div className={styles.loader}>
-        <div className={styles.loaderContent}>
-          {isLoading ? (
-            <div className={styles.loadingState}>
-              <div className={styles.spinner}></div>
-              <p>Loading Gallery ({loadedCount}/{totalImages})</p>
-            </div>
-          ) : (
-            <Square onClick={handleClick}>
-              <p>Enter Gallery</p>
-            </Square>
-          )}
+
+      {/* UI Loader */}
+      {!showOverlay && (
+        <div className={styles.loader}>
+          <div className={styles.loaderContent}>
+            {isLoading ? (
+              <div className={styles.loadingState}>
+                <div className={styles.spinner}></div>
+                <p>Loading Gallery ({loadedCount}/{totalImages})</p>
+              </div>
+            ) : (
+              <Square onClick={handleClick}>
+                <p>Enter Gallery</p>
+              </Square>
+            )}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Overlay Art Images */}
+      {showOverlay && (
+        <div className={styles.galleryOverlay}>
+          <DesktopGallery />
+        </div>
+      )}
     </div>
   );
 };
@@ -601,9 +603,9 @@ import { useState, useEffect } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
 import DesktopGallery from "./desktop/DesktopGallery";
 import MobileGallery from "./mobile/MobileGallery";
-import GalleryLoader from "./components/desktop/GalleryLoader";
+import GalleryLoader from "./components/desktop/GalleryLoader/GalleryLoader";
 import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder";
-import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader";
+import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader/InitialGalleryPreloader";
 
 // Inline styles to prevent flash of white
 const containerStyle = {

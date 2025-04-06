@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
 import DesktopGallery from "./desktop/DesktopGallery";
 import MobileGallery from "./mobile/MobileGallery";
-import GalleryLoader from "./components/desktop/GalleryLoader";
+import GalleryLoader from "./components/desktop/GalleryLoader/GalleryLoader";
 import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder";
-import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader";
+import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader/InitialGalleryPreloader";
 
 // Inline styles to prevent flash of white
 const containerStyle = {
@@ -17,7 +17,7 @@ const containerStyle = {
   height: '100%',
   backgroundColor: '#000000', // Black background
   overflow: 'hidden',
-  zIndex: 1
+  zIndex: 0
 };
 
 const Gallery = () => {
