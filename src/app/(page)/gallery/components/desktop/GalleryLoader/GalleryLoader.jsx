@@ -67,7 +67,6 @@ const GalleryLoader = ({ imageUrls }) => {
       {/* Overlay Art Images */}
       {showOverlay && (
         <div className={styles.galleryOverlay}>
-          <DesktopGallery />
         </div>
       )}
     </div>
