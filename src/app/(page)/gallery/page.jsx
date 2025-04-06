@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
-import DesktopGallery from "./desktop/DesktopGallery";
-import MobileGallery from "./mobile/MobileGallery";
-import GalleryLoader from "./components/desktop/GalleryLoader/GalleryLoader";
-import MobileGalleryLoader from "./components/mobile/MobileGalleryLoder";
+import MobileGallery from "./components/mobile/MobileGallery/MobileGallery";
+import Gallery3d from "./components/desktop/Gallery3d/Gallery3d";
+import MobileGalleryLoader from "./components/mobile/MobileGalleryLoader/MobileGalleryLoder";
 import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader/InitialGalleryPreloader";
+
 
 // Inline styles to prevent flash of white
 const containerStyle = {
@@ -40,8 +40,7 @@ const Gallery = () => {
   ];
   
   const critical3dAssets = [
-    // "/medias/3d_gallery_wall.glb",
-    "/medias/GalleryRoomTest3.glb",
+    "/medias/test3pShift.glb",
     ...imageUrls
   ];
   
@@ -109,7 +108,7 @@ const Gallery = () => {
 
   // Mobile doesn't need the initial preloader
   if (isMobile) {
-    if (loadingState === "preloading" || loadingState === "loading3d") {
+    if (loadingState === "preloading") {
       return renderWithTransitionPrevention(MobileGalleryLoader, {
         imageUrls: mobileImageUrls,
         onComplete: handleEnterGallery
@@ -119,7 +118,7 @@ const Gallery = () => {
     }
   } 
   
-  // Desktop flow with three distinct loading steps
+  // Desktop flow
   else {
     if (loadingState === "preloading") {
       return renderWithTransitionPrevention(InitialGalleryPreloader, {
@@ -127,13 +126,11 @@ const Gallery = () => {
         onComplete: handlePreloadComplete
       });
     } else if (loadingState === "loading3d") {
-      return renderWithTransitionPrevention(GalleryLoader, {
+      return renderWithTransitionPrevention(Gallery3d, {
         imageUrls: imageUrls,
         onComplete: handleEnterGallery
       });
-    } else {
-      return renderWithTransitionPrevention(DesktopGallery);
-    }
+    } 
   }
 };
 

@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
 const Model = ({ registerMoveForward, onEnteredGallery }) => {
-  const { scene, animations } = useGLTF('/medias/GalleryRoomTest3.glb');
+  const { scene, animations } = useGLTF('/medias/test3pShift.glb');
   const { viewport, clock } = useThree();
   const modelRef = useRef();
   const mixerRef = useRef();
@@ -72,5 +72,5 @@ const Model = ({ registerMoveForward, onEnteredGallery }) => {
   );
 };
 
-useGLTF.preload('/medias/medias/GalleryRoomTest3.glb');
+useGLTF.preload('/medias/test3pShift.glb');
 export default Model;

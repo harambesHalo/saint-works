@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "./InitialGalleryPreloader.module.scss";
+import { useGLTF } from '@react-three/drei';
 
 const InitialGalleryPreloader = ({ onComplete, assets }) => {
   const [progress, setProgress] = useState(0);
@@ -14,19 +15,10 @@ const InitialGalleryPreloader = ({ onComplete, assets }) => {
     const preloadPromises = assets.map(url => {
       return new Promise((resolve) => {
         if (url.endsWith('.glb')) {
-          // For 3D models, use fetch
-          fetch(url)
-            .then(() => {
-              loaded++;
-              setProgress(Math.floor((loaded / total) * 100));
-              resolve();
-            })
-            .catch(error => {
-              console.error(`Error preloading ${url}:`, error);
-              loaded++;
-              setProgress(Math.floor((loaded / total) * 100));
-              resolve();
-            });
+          useGLTF.preload(url);
+          loaded++;
+          setProgress(Math.floor((loaded / total) * 100));
+          resolve();
         } else {
           // For images, use Image object
           const img = new Image();
