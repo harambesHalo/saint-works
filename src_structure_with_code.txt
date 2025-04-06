@@ -1,0 +1,3284 @@
+📁 Directory Structure
+app/
+├── (page)/
+│   ├── about/
+│   │   ├── components/
+│   │   │   ├── preloader/
+│   │   │   │   └── AboutPreloader.jsx
+│   │   │   │   └── AboutPreloader.module.scss
+│   │   ├── about.scss
+│   │   ├── page.jsx
+│   ├── contact/
+│   │   ├── components/
+│   │   │   ├── preloader/
+│   │   │   │   └── ContactPreloader.jsx
+│   │   │   │   └── ContactPreloader.module.scss
+│   │   ├── contact.scss
+│   │   ├── page.jsx
+│   ├── gallery/
+│   │   └── components/
+│   │   │   ├── desktop/
+│   │   │   │   ├── Gallery3d/
+│   │   │   │   │   ├── Gallery3d.jsx
+│   │   │   │   │   ├── Gallery3d.module.scss
+│   │   │   │   ├── GalleryPreloader/
+│   │   │   │   │   ├── GalleryPreloader.jsx
+│   │   │   │   │   ├── GalleryPreloader.module.scss
+│   │   │   │   ├── InitialGalleryPreloader/
+│   │   │   │   │   └── InitialGalleryPreloader.jsx
+│   │   │   │   │   └── InitialGalleryPreloader.module.scss
+│   │   │   ├── mobile/
+│   │   │   │   └── MobileGallery/
+│   │   │   │   │   ├── MobileGallery.jsx
+│   │   │   │   │   ├── MobileGallery.scss
+│   │   │   │   └── MobileGalleryLoader/
+│   │   │   │   │   └── MobileGalleryLoader.module.scss
+│   │   │   │   │   └── MobileGalleryLoder.jsx
+│   │   └── media/
+│   │   │   ├── Wall/
+│   │   │   │   └── index.jsx
+│   │   │   │   └── Model.js
+│   │   └── page.jsx
+├── constants/
+│   ├── metadata.js
+├── ClientLayout.js
+├── favicon.ico
+├── globals.css
+├── layout.js
+├── page.js
+├── page.module.scss
+common/
+├── Magnetic/
+│   ├── index.jsx
+├── RoundedButton/
+│   ├── index.jsx
+│   ├── style.module.scss
+├── SquareButton/
+│   └── index.jsx
+│   └── style.module.scss
+components/
+├── Contact/
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Description/
+│   ├── animation.js
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Header/
+│   ├── nav/
+│   │   ├── Curve/
+│   │   │   ├── index.jsx
+│   │   │   ├── styles.module.scss
+│   │   ├── Footer/
+│   │   │   ├── index.jsx
+│   │   │   ├── style.module.scss
+│   │   ├── Link/
+│   │   │   ├── index.jsx
+│   │   │   ├── style.module.scss
+│   │   ├── index.jsx
+│   │   ├── style.module.scss
+│   ├── animation.js
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Landing/
+│   ├── animation.js
+│   ├── DecorativeSVG.jsx
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Preloader/
+│   ├── anim.js
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Projects/
+│   ├── components/
+│   │   ├── project/
+│   │   │   └── index.jsx
+│   │   │   └── style.module.scss
+│   ├── index.jsx
+│   ├── style.module.scss
+├── SlidingImages/
+│   ├── index.jsx
+│   ├── style.module.scss
+├── Transitions/
+│   ├── LiquidTransition/
+│   │   ├── LiquidTransition.jsx
+│   │   ├── LiquidTransition.module.scss
+│   ├── WipeTransition/
+│   │   └── anim.js
+│   │   └── WipeTransition.module.scss
+│   │   └── WipeTranstion.jsx
+├── SvgFilters.jsx
+lib/
+├── contexts/
+│   ├── DeviceContext.ts
+├── hooks/
+│   └── useDevice.js
+│   └── useDeviceContext.ts
+providers/
+└── DeviceProvider.jsx
+└── NavigationProvider.jsx
+
+
+📄 Code Contents:
+
+
+AboutPreloader.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import styles from './AboutPreloader.module.scss';
+import WipeTransition from '@/components/Transitions/WipeTransition/WipeTranstion';
+
+export default function AboutPreloader() {
+    const [showPreloader, setShowPreloader] = useState(true);
+    
+    useEffect(() => {
+        // After a brief delay, start the exit animation
+        const timer = setTimeout(() => {
+            setShowPreloader(false);
+        }, 1500);
+        
+        return () => clearTimeout(timer);
+    }, []);
+    
+    // Handle wipe transition callbacks
+    const handleWipeMidpoint = () => {
+        // Can trigger any midpoint actions here
+    };
+    
+    const handleWipeComplete = () => {
+        // Can trigger any completion actions here
+    };
+    
+    return (
+        <div className={styles.preloaderContainer}>
+            <AnimatePresence mode="wait">
+                {showPreloader && (
+                    <WipeTransition 
+                        key="wipe-transition"
+                        onMidpoint={handleWipeMidpoint}
+                        onComplete={handleWipeComplete}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+
+
+page.jsx:
+
+'use client';
+import { useState, useEffect } from 'react';
+import AboutPreloader from './components/preloader/AboutPreloader';
+import './about.scss';
+
+const About = () => {
+    const [loading, setLoading] = useState(true);
+    
+    // Simulate content loading
+    // In a real scenario, you'd check if all components/images are loaded
+    useEffect(() => {
+        // Simulate loading time - replace with actual content loading checks
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+        
+        return () => clearTimeout(timer);
+    }, []);
+    
+    return (
+        <>
+            {loading && <AboutPreloader />}
+            <div className='contact-page'>
+                <h1>About Page</h1>
+                <p>Some Shit</p>
+            </div>
+        </>
+    );
+}
+
+export default About;
+
+
+
+ContactPreloader.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import styles from './ContactPreloader.module.scss';
+import WipeTransition from '@/components/Transitions/WipeTransition/WipeTranstion';
+
+export default function ContactPreloader() {
+    const [showPreloader, setShowPreloader] = useState(true);
+    
+    useEffect(() => {
+        // After a brief delay, start the exit animation
+        const timer = setTimeout(() => {
+            setShowPreloader(false);
+        }, 1500);
+        
+        return () => clearTimeout(timer);
+    }, []);
+    
+    // Handle wipe transition callbacks
+    const handleWipeMidpoint = () => {
+        // Can trigger any midpoint actions here
+    };
+    
+    const handleWipeComplete = () => {
+        // Can trigger any completion actions here
+    };
+    
+    return (
+        <div className={styles.preloaderContainer}>
+            <AnimatePresence mode="wait">
+                {showPreloader && (
+                    <WipeTransition 
+                        key="wipe-transition"
+                        onMidpoint={handleWipeMidpoint}
+                        onComplete={handleWipeComplete}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+
+
+page.jsx:
+
+'use client';
+import { useState, useEffect } from 'react';
+import ContactPreloader from './components/preloader/ContactPreloader';
+import './contact.scss';
+
+const Contact = () => {
+    const [loading, setLoading] = useState(true);
+    
+    // Simulate content loading
+    // In a real scenario, you'd check if all components/images are loaded
+    useEffect(() => {
+        // Simulate loading time - replace with actual content loading checks
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+        
+        return () => clearTimeout(timer);
+    }, []);
+    
+    return (
+        <>
+            {loading && <ContactPreloader />}
+            <div className='contact-page'>
+                <h1>Contact Page</h1>
+                <p>Your contact content here</p>
+            </div>
+        </>
+    );
+}
+
+export default Contact;
+
+
+
+Gallery3d.jsx:
+
+import { useState, useEffect, useRef } from "react";
+import styles from "./Gallery3d.module.scss";
+import Square from '@/common/SquareButton';
+import dynamic from 'next/dynamic';
+
+const Wall = dynamic(() => import('../../../media/Wall'), {
+  ssr: false,
+  loading: () => <p>Loading 3D...</p>,
+});
+
+const Gallery3d = ({ imageUrls }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const totalImages = imageUrls.length;
+  const moveForwardFn = useRef(null);
+
+  useEffect(() => {
+    const imagePromises = imageUrls.map((src) => {
+      return new Promise((resolve) => {
+        const img = new window.Image();
+        img.src = src;
+        img.onload = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+        img.onerror = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(imagePromises).then(() => setIsLoading(false));
+  }, [imageUrls]);
+
+  const handleClick = () => {
+    if (moveForwardFn.current) moveForwardFn.current();
+  };
+
+  return (
+    <div className={styles.loaderWrapper}>
+      {/* Canvas Container */}
+      <div className={styles.canvasContainer}>
+        <Wall registerMoveForward={fn => (moveForwardFn.current = fn)} onEnteredGallery={() => setShowOverlay(true) } />
+      </div>
+
+      {/* UI Loader */}
+      {!showOverlay && (
+        <div className={styles.loader}>
+          <div className={styles.loaderContent}>
+            {isLoading ? (
+              <div className={styles.loadingState}>
+                <div className={styles.spinner}></div>
+                <p>Loading Gallery ({loadedCount}/{totalImages})</p>
+              </div>
+            ) : (
+              <Square onClick={handleClick}>
+                <p>Enter Gallery</p>
+              </Square>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Gallery3d;
+
+
+
+
+GalleryPreloader.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import styles from './GalleryPreloader.module.scss';
+import WipeTransition from '@/components/Transitions/WipeTransition/WipeTranstion';
+
+export default function GalleryPreloader() {
+    const [showPreloader, setShowPreloader] = useState(true);
+    
+    useEffect(() => {
+        // After a brief delay, start the exit animation
+        const timer = setTimeout(() => {
+            setShowPreloader(false);
+        }, 1500);
+        
+        return () => clearTimeout(timer);
+    }, []);
+    
+    // Handle wipe transition callbacks
+    const handleWipeMidpoint = () => {
+        // Can trigger any midpoint actions here
+    };
+    
+    const handleWipeComplete = () => {
+        // Can trigger any completion actions here
+    };
+    
+    return (
+        <div className={styles.GalleryPreloaderContainer}>
+            <AnimatePresence mode="wait">
+                {showPreloader && (
+                    <WipeTransition 
+                        key="wipe-transition"
+                        onMidpoint={handleWipeMidpoint}
+                        onComplete={handleWipeComplete}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+
+
+InitialGalleryPreloader.jsx:
+
+"use client";
+import { useState, useEffect } from "react";
+import styles from "./InitialGalleryPreloader.module.scss";
+import { useGLTF } from '@react-three/drei';
+
+const InitialGalleryPreloader = ({ onComplete, assets }) => {
+  const [progress, setProgress] = useState(0);
+  const [isReady, setIsReady] = useState(false);
+  
+  useEffect(() => {
+    let loaded = 0;
+    const total = assets.length;
+    
+    // Preload all critical assets including the 3D model
+    const preloadPromises = assets.map(url => {
+      return new Promise((resolve) => {
+        if (url.endsWith('.glb')) {
+          useGLTF.preload(url);
+          loaded++;
+          setProgress(Math.floor((loaded / total) * 100));
+          resolve();
+        } else {
+          // For images, use Image object
+          const img = new Image();
+          img.src = url;
+          img.onload = () => {
+            loaded++;
+            setProgress(Math.floor((loaded / total) * 100));
+            resolve();
+          };
+          img.onerror = () => {
+            console.error(`Error preloading ${url}`);
+            loaded++;
+            setProgress(Math.floor((loaded / total) * 100));
+            resolve();
+          };
+        }
+      });
+    });
+    
+    // When all assets are loaded, complete
+    Promise.all(preloadPromises)
+      .then(() => {
+        // Set ready state first
+        setIsReady(true);
+        
+        // Add small delay to ensure everything is ready
+        // This prevents flashes during component transitions
+        setTimeout(() => {
+          onComplete();
+        }, 500);
+      })
+      .catch(error => {
+        console.error("Error during preloading:", error);
+        setIsReady(true);
+        // Still complete even if there are errors
+        setTimeout(() => {
+          onComplete();
+        }, 500);
+      });
+  }, [assets, onComplete]);
+
+  return (
+    <div className={styles.preloader}>
+      <div className={styles.content}>
+        <div className={styles.spinner}></div>
+        <h2>Loading Gallery</h2>
+        <div className={styles.progressBar}>
+          <div 
+            className={styles.progressFill} 
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p>{progress}%</p>
+      </div>
+    </div>
+  );
+};
+
+export default InitialGalleryPreloader;
+
+
+
+MobileGallery.jsx:
+
+'use client';
+import Image from "next/image";
+import './MobileGallery.scss';
+import { useEffect } from 'react';
+
+const MobileGallery = () => {
+  // This effect ensures the gallery works with Lenis
+  useEffect(() => {
+    // Update Lenis to handle our gallery content if it exists
+    if (typeof window !== 'undefined' && window.lenis) {
+      // Reset any scroll position
+      window.scrollTo(0, 0);
+      // Update Lenis to recognize new content
+      window.lenis.resize();
+    }
+    
+    // Make sure body scrolling is enabled
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
+    
+    // Add touch scroll indicator if needed
+    const addScrollHint = () => {
+      const gallery = document.querySelector('.gallery-page-mobile');
+      if (gallery && !document.querySelector('.scroll-hint')) {
+        const hint = document.createElement('div');
+        hint.className = 'scroll-hint';
+        hint.innerHTML = '↓ Scroll to see more ↓';
+        hint.style.textAlign = 'center';
+        hint.style.padding = '10px';
+        hint.style.marginTop = '10px';
+        hint.style.opacity = '0.7';
+        gallery.appendChild(hint);
+        
+        // Fade out hint after user scrolls
+        const removeHint = () => {
+          if (window.scrollY > 50) {
+            hint.style.opacity = '0';
+            hint.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+              hint.remove();
+            }, 500);
+            window.removeEventListener('scroll', removeHint);
+          }
+        };
+        
+        window.addEventListener('scroll', removeHint);
+      }
+    };
+    
+    // Add scroll hint with a small delay
+    setTimeout(addScrollHint, 1000);
+    
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
+
+  return (
+    <div className='gallery-page-mobile'>
+      <div className="newsWrapperMobile">
+        <Image
+          src="/images/news.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="news-painting-mobile"
+        />
+      </div>
+      <div className="redlineWrapperMobile">
+        <Image
+          src="/images/redline2.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="red-painting-mobile"
+        />
+      </div>
+      <div className="boxImageWrapperMobile">
+        <Image
+          src="/images/header.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="box-painting-mobile"
+        />
+      </div>
+      <div className="squiggleWrapperMobile">
+        <Image
+          src="/images/squiggle2.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="squiggle-painting-mobile"
+        />
+      </div>
+      <div className="oceanImageWrapperMobile">
+        <Image
+          src="/images/blue-ocean.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="ocean-painting-mobile"
+        />
+      </div>
+      <div className="weatherImageWrapperMobile">
+        <Image
+          src="/images/weather.png"
+          width={500}
+          height={300}
+          alt="background-mobile"
+          priority
+          className="weather-painting-mobile"
+        />
+      </div>
+      {/* Add padding at the bottom to ensure last image has space below */}
+      <div className="gallery-bottom-spacer" style={{ height: '50px', width: '100%' }}></div>
+    </div>
+  );
+}
+
+export default MobileGallery;
+
+
+
+MobileGalleryLoder.jsx:
+
+"use client";
+import { useState, useEffect } from "react";
+import styles from "./MobileGalleryLoader.module.scss";
+import Square from '@/common/SquareButton';
+import Image from 'next/image';
+
+const MobileGalleryLoader = ({ onComplete, imageUrls }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const totalImages = imageUrls.length;
+
+  useEffect(() => {
+    const imagePromises = imageUrls.map((src) => {
+      return new Promise((resolve) => {
+        const img = typeof window !== 'undefined' ? new window.Image() : null;
+        if (!img) return resolve();
+        img.src = src;
+        img.onload = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+        img.onerror = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then(() => setIsLoading(false))
+      .catch((err) => {
+        console.error("Error loading images:", err);
+        setIsLoading(false);
+      });
+  }, [imageUrls]);
+
+  const handleClick = () => {
+    // Just directly call onComplete without any animations
+    onComplete();
+  };
+
+  return (
+    <div>
+      <div className={styles.backgroundContainer}>
+        <Image
+            src="/images/gallery-wall.png"
+            fill={true}
+            alt="background"
+            priority
+            className={styles.backgroundImage}
+          />
+      </div>
+      <div className={styles.loader}>
+        <div className={styles.loaderContent}>
+          {isLoading ? (
+            <div className={styles.loadingState}>
+              <div className={styles.spinner}></div>
+              <p>Loading Gallery ({loadedCount}/{totalImages})</p>
+            </div>
+          ) : (
+            <Square onClick={handleClick}>
+              <p>Enter Gallery</p>
+            </Square>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MobileGalleryLoader;
+
+
+
+index.jsx:
+
+import { Canvas } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
+import Model from './Model';
+
+const Wall = ({ registerMoveForward, onEnteredGallery }) => {
+  return (
+    <Canvas style={{ background: '#000000' }}>
+      <Model 
+        registerMoveForward={registerMoveForward}
+        onEnteredGallery={onEnteredGallery}
+      />
+      <directionalLight intensity={0.75} position={[0, 2, 3]} />
+      <Environment preset="city" />
+    </Canvas>
+  );
+};
+
+export default Wall;
+
+
+
+
+Model.js:
+
+import React, { useRef, useEffect } from 'react';
+import { useGLTF } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import { AnimationMixer, Box3, Vector3 } from 'three';
+
+const Model = ({ registerMoveForward, onEnteredGallery }) => {
+  const { scene, animations } = useGLTF('/medias/test3pShift.glb');
+  const { viewport, clock } = useThree();
+  const modelRef = useRef();
+  const mixerRef = useRef();
+  const actionsRef = useRef([]);
+
+  const velocity = useRef(0);
+  const direction = new Vector3(0.9, 0, 1.0);
+  const stopZ = 3.1;
+
+  useEffect(() => {
+    if (registerMoveForward) {
+      registerMoveForward(() => {
+        console.log("moveForward() called");
+        velocity.current = 0.03;
+      });
+    }
+  }, [registerMoveForward]);
+
+  useEffect(() => {
+    if (animations.length) {
+      mixerRef.current = new AnimationMixer(scene);
+      animations.forEach((clip) => {
+        const action = mixerRef.current.clipAction(clip);
+        action.paused = true;
+        actionsRef.current.push(action);
+      });
+    }
+  }, [animations, scene]);
+
+  useEffect(() => {
+    const box = new Box3().setFromObject(scene);
+    const center = new Vector3();
+    box.getCenter(center);
+    scene.position.sub(center);
+  }, [scene]);
+
+  useFrame(() => {
+    if (mixerRef.current) {
+      mixerRef.current.update(clock.getDelta());
+    }
+
+    if (velocity.current > 0 && modelRef.current) {
+      modelRef.current.position.addScaledVector(direction, velocity.current);
+
+      if (modelRef.current.position.z >= stopZ) {
+        velocity.current = 0;
+        console.log("User now in gallery");
+
+        if (onEnteredGallery) {
+          onEnteredGallery(); // 👈 this will now toggle the overlay
+        }
+      }
+    }
+  });
+
+  return (
+    <group
+      ref={modelRef}
+      scale={viewport.width / 5.35}
+      rotation={[0, 4.72, 0]}
+      position={[-1.75, 0, 0]}
+    >
+      <primitive object={scene} />
+    </group>
+  );
+};
+
+useGLTF.preload('/medias/test3pShift.glb');
+export default Model;
+
+
+
+
+page.jsx:
+
+'use client';
+
+import { useState, useEffect } from "react";
+import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
+import MobileGallery from "./components/mobile/MobileGallery/MobileGallery";
+import Gallery3d from "./components/desktop/Gallery3d/Gallery3d";
+import MobileGalleryLoader from "./components/mobile/MobileGalleryLoader/MobileGalleryLoder";
+import InitialGalleryPreloader from "./components/desktop/InitialGalleryPreloader/InitialGalleryPreloader";
+
+
+// Inline styles to prevent flash of white
+const containerStyle = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundColor: '#000000', // Black background
+  overflow: 'hidden',
+  zIndex: 0
+};
+
+const Gallery = () => {
+  const { isMobile, isClient } = useDeviceContext();
+  
+  // Three possible states: "preloading", "loading3d", "gallery"
+  const [loadingState, setLoadingState] = useState("preloading");
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  // Assets and URLs
+  const imageUrls = [
+    "/images/header.png",
+    "/images/news.png",
+    "/images/redline2.png",
+    "/images/squiggle2.png",
+    "/images/blue-ocean.png",
+    "/images/weather.png",
+    "/images/redline2.png",
+  ];
+  
+  const critical3dAssets = [
+    "/medias/test3pShift.glb",
+    ...imageUrls
+  ];
+  
+  const mobileImageUrls = [
+    "/images/header.png",
+    "/images/news.png",
+    "/images/redline2.png",
+    "/images/squiggle2.png",
+    "/images/blue-ocean.png",
+    "/images/weather.png",
+    "/images/redline2.png",
+  ];
+
+  // Handle hydration
+  useEffect(() => {
+    setIsHydrated(true);
+    
+    // Set initial body background to black to prevent white flashes
+    document.body.style.backgroundColor = "#141516";
+    
+    return () => {
+      // Restore default background when component unmounts
+      document.body.style.backgroundColor = "";
+    };
+  }, []);
+
+  // Handle completion of the initial preloading step
+  const handlePreloadComplete = () => {
+    setIsTransitioning(true);
+    // Add a short delay to ensure smooth transition
+    setTimeout(() => {
+      setLoadingState("loading3d");
+      setIsTransitioning(false);
+    }, 100);
+  };
+
+  // Handle when the gallery loader completes
+  const handleEnterGallery = () => {
+    setIsTransitioning(true);
+    // Add a short delay to ensure smooth transition
+    setTimeout(() => {
+      setLoadingState("gallery");
+      setIsTransitioning(false);
+    }, 100);
+  };
+
+  // Wrapper component to prevent flashes during transitions
+  const renderWithTransitionPrevention = (ComponentToRender, props = {}) => {
+    return (
+      <div style={containerStyle}>
+        {isTransitioning ? (
+          // Show a black div during component transitions
+          <div style={{width: '100%', height: '100%', backgroundColor: '#141516'}}></div>
+        ) : (
+          <ComponentToRender {...props} />
+        )}
+      </div>
+    );
+  };
+
+  // If not yet hydrated, show a black screen
+  if (!isHydrated) {
+    return <div style={containerStyle}></div>;
+  }
+
+  // Mobile doesn't need the initial preloader
+  if (isMobile) {
+    if (loadingState === "preloading") {
+      return renderWithTransitionPrevention(MobileGalleryLoader, {
+        imageUrls: mobileImageUrls,
+        onComplete: handleEnterGallery
+      });
+    } else {
+      return renderWithTransitionPrevention(MobileGallery);
+    }
+  } 
+  
+  // Desktop flow
+  else {
+    if (loadingState === "preloading") {
+      return renderWithTransitionPrevention(InitialGalleryPreloader, {
+        assets: critical3dAssets,
+        onComplete: handlePreloadComplete
+      });
+    } else if (loadingState === "loading3d") {
+      return renderWithTransitionPrevention(Gallery3d, {
+        imageUrls: imageUrls,
+        onComplete: handleEnterGallery
+      });
+    } 
+  }
+};
+
+export default Gallery;
+
+
+
+metadata.js:
+
+export const metadata = {
+    title: 'Joe St.Romain | Artist & Developer | SaintWorks',
+    description: 'Art and oddities out of Boise, Idaho. Combining studio art, web development, and business solutions at SaintWorks.',
+    viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
+    keywords: 'artist, developer, consultant, Boise, Idaho, web development, studio art, SaintWorks',
+    authors: [{ name: 'Joe St.Romain' }],
+    creator: 'Joe St.Romain',
+    publisher: 'SaintWorks',
+    openGraph: {
+      title: 'Joe St.Romain | Artist & Developer',
+      description: 'Art and oddities out of Boise, Idaho. Combining studio art, web development, and business solutions.',
+      url: 'https://www.saintworks.com',
+      siteName: 'SaintWorks',
+      locale: 'en_US',
+      type: 'website',
+      images: [
+        {
+          url: '/images/profile_picture.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'Joe St.Romain - Artist & Developer',
+        }
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Joe St.Romain | Artist & Developer',
+      description: 'Art and oddities out of Boise, Idaho.',
+      images: ['/images/profile_picture.jpg'],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+    metadataBase: new URL('https://www.saintworks.com'),
+  }
+
+
+
+ClientLayout.js:
+
+"use client";
+import { useDeviceContext } from '../lib/hooks/useDeviceContext';
+import { useDevice } from '../lib/hooks/useDevice';
+import { DeviceProvider } from '../providers/DeviceProvider';
+import NavigationProvider from '../providers/NavigationProvider';
+import Header from '../components/Header';
+import { useEffect, useRef } from 'react';
+import Lenis from 'lenis';
+import { usePathname } from 'next/navigation';
+
+// Create a context for Lenis if needed
+import { createContext } from 'react';
+export const LenisContext = createContext(null);
+
+function LayoutContent({ children }) {
+  const { isMobile, isClient } = useDeviceContext();
+  const { deviceType } = useDevice();
+  const lenisRef = useRef(null);
+  const pathname = usePathname();
+  
+  // Log device type (you can remove this if not needed)
+  deviceType ? console.log("User is Mobile", deviceType) : console.log("User not Mobile", deviceType);
+
+  // Initialize Lenis with better cleanup
+  useEffect(() => {
+    if (!isClient) return;
+    
+    // Clean up any existing Lenis instance first
+    if (window.lenis) {
+      window.lenis.destroy();
+      window.lenis = null;
+    }
+    
+    // Configure body for scrolling
+    document.body.style.cursor = 'default';
+    
+    // Determine if this page should use scrolling
+    const shouldEnableScroll = true; // You can add logic here to disable on specific pages
+    
+    if (shouldEnableScroll) {
+      // Remove overflow hidden to allow scrolling
+      document.body.style.overflowY = 'auto';
+      document.body.style.overflowX = 'hidden';
+      
+      // Initialize Lenis
+      const lenisOptions = {
+        duration: isMobile ? 1.2 : 1.8,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+      };
+      
+      const lenisInstance = new Lenis(lenisOptions);
+      
+      // Store reference
+      lenisRef.current = lenisInstance;
+      window.lenis = lenisInstance; // For global access
+      
+      // Setup RAF
+      let rafId;
+      function raf(time) {
+        lenisInstance.raf(time);
+        rafId = requestAnimationFrame(raf);
+      }
+      
+      rafId = requestAnimationFrame(raf);
+      
+      // Return cleanup function
+      return () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        if (lenisInstance) {
+          lenisInstance.destroy();
+        }
+        lenisRef.current = null;
+      };
+    } else {
+      // If scrolling is disabled for this page
+      document.body.style.overflowY = 'hidden';
+    }
+  }, [isMobile, isClient, pathname]); // Add pathname dependency to reinitialize on route changes
+
+  return (
+    <div className="flex flex-col h-screen min-h-screen w-full">
+      <Header />
+      <main className="main">{children}</main>
+    </div>
+  );
+}
+
+const ClientLayout = ({ children }) => {
+  return (
+    <DeviceProvider>
+      <NavigationProvider>
+        <LayoutContent>{children}</LayoutContent>
+      </NavigationProvider>
+    </DeviceProvider>
+  );
+}
+
+export default ClientLayout;
+
+
+
+globals.css:
+
+
+body{
+    margin: 0px;
+    overflow-x: hidden; /* Hide scrollbars */
+    font-family: var(--inter);
+    -webkit-overflow-scrolling: touch;
+}
+
+:root {
+  --bg: #f0ead6;
+  --alt-bg: #141516;
+  --sig-green: #65695a;
+  --blue: #0078b3;
+  --pink: #ef606f;
+  --slate: #3f3d3e;
+  --light-text: #fffafa;
+  --dark-text: #292929;
+}
+
+@media (max-width: 768px) {
+    html, body {
+      font-size: 14px; /* Slightly smaller base font size for mobile */
+    }
+  }
+
+
+
+layout.js:
+
+import './globals.css'
+import { Inter, Caveat, Nunito } from 'next/font/google'
+import ClientLayout from "./ClientLayout";
+import SvgFilters from '../components/SvgFilters';
+
+export const metadata = {
+  title: 'Saint Works',
+  description: 'Artist, Developer, Boise Idaho',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+}
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--inter',
+  display: 'swap'
+})
+
+const caveat = Caveat({
+  variable: "--caveat",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const nunito = Nunito({
+  variable: "--nunito",
+  subsets: ["latin"],
+  weight: ["300", "400", "600"],
+  style: ["normal"],
+  display: "swap",
+});
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body className={`${inter.variable} ${caveat.variable} ${nunito.variable}`}>
+        <SvgFilters />
+        <ClientLayout>{children}</ClientLayout>
+      </body>
+    </html>
+  )
+}
+
+
+
+page.js:
+
+'use client';
+import styles from './page.module.scss'
+import { useEffect, useState } from 'react'
+import { AnimatePresence } from 'framer-motion';
+import { useDeviceContext } from '../lib/hooks/useDeviceContext'
+import Preloader from '../components/Preloader';
+import Landing from '../components/Landing';
+import Projects from '../components/Projects';
+import Description from '../components/Description';
+import SlidingImages from '../components/SlidingImages';
+import Contact from '../components/Contact';
+
+export default function Home() {
+  const { isClient } = useDeviceContext();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize loading state and cleanup without Lenis
+  useEffect(() => {
+    if (!isClient) return;
+    
+    let timeoutId;
+    
+    // Setup loading timeout
+    timeoutId = setTimeout(() => {
+      setIsLoading(false);
+      document.body.style.cursor = 'default';
+      // Note: we're no longer handling scrolling here, just cursor and loading state
+      window.scrollTo(0, 0);
+    }, 2000);
+    
+    // Cleanup timeout
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [isClient]);
+
+  return (
+    <main className={styles.main}>
+      <AnimatePresence mode='wait'>
+        {isLoading && <Preloader />}
+      </AnimatePresence>
+      <Landing />
+      <Description />
+      <Projects />
+      <SlidingImages />
+      <Contact />
+    </main>
+  );
+}
+
+
+
+index.jsx:
+
+import React, { useEffect, useRef } from 'react'
+import gsap from 'gsap';
+
+export default function Magnetic({children}) {
+    const magnetic = useRef(null);
+
+    useEffect( () => {
+        if (typeof window !== 'undefined' && window.innerWidth > 768) {
+            // Only apply magnetic effect on desktop
+            const xTo = gsap.quickTo(magnetic.current, "x", {duration: 1, ease: "elastic.out(1, 0.3)"})
+            const yTo = gsap.quickTo(magnetic.current, "y", {duration: 1, ease: "elastic.out(1, 0.3)"})
+
+            magnetic.current.addEventListener("mousemove", (e) => {
+                const { clientX, clientY } = e;
+                const {height, width, left, top} = magnetic.current.getBoundingClientRect();
+                const x = clientX - (left + width/2)
+                const y = clientY - (top + height/2)
+                xTo(x * 0.35);
+                yTo(y * 0.35)
+            })
+            magnetic.current.addEventListener("mouseleave", (e) => {
+                xTo(0);
+                yTo(0)
+            })
+        }
+    }, [])
+
+    return (
+        React.cloneElement(children, {ref:magnetic})
+    )
+}
+
+
+
+index.jsx:
+
+import React from 'react'
+import { useEffect, useRef } from 'react';
+import styles from './style.module.scss';
+import gsap from 'gsap';
+import Magnetic from '../Magnetic';
+
+export default function RoundedButton({children, backgroundColor="#0078b3", ...attributes}) {
+
+  const circle = useRef(null);
+  let timeline = useRef(null);
+  let timeoutId = null;
+  useEffect( () => {
+    timeline.current = gsap.timeline({paused: true})
+    timeline.current
+      .to(circle.current, {top: "-25%", width: "150%", duration: 0.4, ease: "power3.in"}, "enter")
+      .to(circle.current, {top: "-150%", width: "125%", duration: 0.25}, "exit")
+  }, [])
+  
+  const manageMouseEnter = () => {
+    if(timeoutId) clearTimeout(timeoutId)
+    timeline.current.tweenFromTo('enter', 'exit');
+  }
+
+  const manageMouseLeave = () => {
+    timeoutId = setTimeout( () => {
+      timeline.current.play();
+    }, 300)
+  }
+
+  return (
+    <Magnetic>
+      <div className={styles.roundedButton} style={{overflow: "hidden"}} onMouseEnter={() => {manageMouseEnter()}} onMouseLeave={() => {manageMouseLeave()}} {...attributes}>
+          {
+            children
+          }
+        <div ref={circle} style={{backgroundColor}} className={styles.circle}></div>
+      </div>
+    </Magnetic>
+  )
+}
+
+
+
+
+index.jsx:
+
+import React from 'react'
+import { useEffect, useRef } from 'react';
+import styles from './style.module.scss';
+import gsap from 'gsap';
+import Magnetic from '../Magnetic';
+
+export default function SquareButton({children, backgroundColor="#141516", ...attributes}) {
+
+  const circle = useRef(null);
+  let timeline = useRef(null);
+  let timeoutId = null;
+  useEffect( () => {
+    timeline.current = gsap.timeline({paused: true})
+    timeline.current
+      .to(circle.current, {top: "-25%", width: "150%", duration: 0.4, ease: "power3.in"}, "enter")
+      .to(circle.current, {top: "-150%", width: "125%", duration: 0.25}, "exit")
+  }, [])
+  
+  const manageMouseEnter = () => {
+    if(timeoutId) clearTimeout(timeoutId)
+    timeline.current.tweenFromTo('enter', 'exit');
+  }
+
+  const manageMouseLeave = () => {
+    timeoutId = setTimeout( () => {
+      timeline.current.play();
+    }, 300)
+  }
+
+  return (
+    <Magnetic>
+      <div className={styles.squareButton} style={{overflow: "hidden"}} onMouseEnter={() => {manageMouseEnter()}} onMouseLeave={() => {manageMouseLeave()}} {...attributes}>
+          {
+            children
+          }
+        <div ref={circle} style={{backgroundColor}} className={styles.circle}></div>
+      </div>
+    </Magnetic>
+  )
+}
+
+
+
+
+index.jsx:
+
+import styles from './style.module.scss';
+import Image from 'next/image';
+import Rounded from '../../common/RoundedButton';
+import { useRef } from 'react';
+import { useScroll, motion, useTransform, useSpring } from 'framer-motion';
+import Magnetic from '../../common/Magnetic';
+
+export default function Contact() {
+    const container = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: container,
+        offset: ["start end", "end end"]
+    })
+    const x = useTransform(scrollYProgress, [0, 1], [0, 100])
+    const y = useTransform(scrollYProgress, [0, 1], [-500, 0])
+    const rotate = useTransform(scrollYProgress, [0, 1], [120, 90])
+    return (
+        <motion.div style={{y}} ref={container} className={styles.contact}>
+            <div className={styles.body}>
+                <div className={styles.title}>
+                    <span>
+                        <div className={styles.imageContainer}>
+                            <Image 
+                            fill={true}
+                            sizes="(max-width: 768px) 40vw, 20vw" // Add appropriate sizes
+                            alt={"image"}
+                            src={`/images/profile_picture.jpg`}
+                            />
+                        </div>
+                        <h2>Let&apos;s Create</h2>
+                    </span>
+                    <h2>Something Amazing</h2>
+                    <motion.div style={{x}} className={styles.buttonContainer}>
+                        <Rounded  backgroundColor={"#334BD3"} className={styles.button}>
+                            <p>Get in touch</p>
+                        </Rounded>
+                    </motion.div>
+                    <motion.svg style={{rotate, scale: 2}} width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 8.5C8.27614 8.5 8.5 8.27614 8.5 8L8.5 3.5C8.5 3.22386 8.27614 3 8 3C7.72386 3 7.5 3.22386 7.5 3.5V7.5H3.5C3.22386 7.5 3 7.72386 3 8C3 8.27614 3.22386 8.5 3.5 8.5L8 8.5ZM0.646447 1.35355L7.64645 8.35355L8.35355 7.64645L1.35355 0.646447L0.646447 1.35355Z" fill="white"/>
+                    </motion.svg>
+                </div>
+                <div className={styles.nav}>
+                        <Rounded>
+                            <p>joerstromain@gmail.com</p>
+                        </Rounded>
+                        <Rounded>
+                            <p>208.996.9861</p>
+                        </Rounded>
+                </div>
+                <div className={styles.info}>
+                    <div>
+                        <span>
+                            <h3>SaintWorks LLC.</h3>
+                            <p>2025 © Edition</p>
+                        </span>
+                        <span>
+                            <h3>Version</h3>
+                            <p>1.0.0</p>
+                        </span>
+                    </div>
+                    <div>
+                        <span>
+                            <h3>socials</h3>
+                            <Magnetic>
+                                <p>Facebook</p>
+                            </Magnetic>
+                        </span>
+                        <Magnetic>
+                            <p>Instagram</p>
+                        </Magnetic>
+                        <Magnetic>
+                            <p>Linkedin</p>
+                        </Magnetic>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    )
+}
+
+
+
+
+animation.js:
+
+// animations.js - Clean pendulum swing animation
+
+export const slideUp = {
+    initial: {
+        y: "100%"
+    },
+    open: (i) => ({
+        y: "0%",
+        transition: {duration: 0.5, delay: 0.01 * i}
+    }),
+    closed: {
+        y: "100%",
+        transition: {duration: 0.5}
+    }
+}
+
+export const opacity = {
+    initial: {
+        opacity: 0
+    },
+    open: {
+        opacity: 1,
+        transition: {duration: 0.5}
+    },
+    closed: {
+        opacity: 0,
+        transition: {duration: 0.5}
+    }
+}
+
+// Hanging animation for the image
+export const hangingAnimation = {
+    initial: {
+        scale: 1.4,
+        rotateX: 20,
+        y: -50,
+        z: 100,
+        opacity: 0
+    },
+    open: {
+        scale: 1,
+        rotateX: 0,
+        y: 0,
+        z: 0,
+        opacity: 1,
+        transition: {
+            type: "spring",
+            stiffness: 50,
+            damping: 15,
+            mass: 1,
+            delay: 0.6,
+            duration: 1.2
+        }
+    },
+    closed: {
+        scale: 1.4,
+        rotateX: 20,
+        y: -50,
+        z: 100,
+        opacity: 0,
+        transition: {
+            duration: 0.5
+        }
+    }
+}
+
+// Natural pendulum swing animation
+export const finalPendulumSwing = {
+    swing: {
+        rotate: [0, -45, -35, -42, -37, -40, -38, -39], // Ends at -20 degrees
+        transition: {
+            duration: 3.1,
+            times: [0, 0.05, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1],
+            ease: "easeOut"
+        }
+    }
+}
+
+
+
+index.jsx:
+
+import styles from "./style.module.scss";
+import { useInView, motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { slideUp, hangingAnimation, finalPendulumSwing } from "./animation";
+import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
+import Image from "next/image";
+
+export default function Description() {
+  const { isMobile, isClient } = useDeviceContext();
+  const description = useRef(null);
+  const imageRef = useRef(null);
+  const paintingRef = useRef(null);
+  const [initialAnimationComplete, setInitialAnimationComplete] =
+    useState(false);
+  const [swingTriggered, setSwingTriggered] = useState(false);
+  const [lightOn, setLightOn] = useState(false);
+
+  // InView for initial animations
+  const isInView = useInView(description, { once: true, amount: 0.02 });
+
+  // Handle the initial animation completion
+  useEffect(() => {
+    if (!isClient) return;
+    if (isInView) {
+      // Set a timer to mark when the initial hanging animation is complete
+      const timer = setTimeout(() => {
+        setInitialAnimationComplete(true);
+      }, 1000);
+
+      const lightTimer = setTimeout(() => {
+        setLightOn(true); // Turn on the light after 2 seconds
+      }, 2000); // Turn on the light when the animation is complete
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(lightTimer);
+      };
+    } else {
+      setInitialAnimationComplete(false);
+      setSwingTriggered(false);
+      setLightOn(false);
+    }
+  }, [isInView, setLightOn, isClient]);
+
+  // Add precise scroll position tracking to trigger only when the element is almost off the screen
+  useEffect(() => {
+    if (!isClient) return;
+    const handleScroll = () => {
+      if (!swingTriggered && initialAnimationComplete && paintingRef.current) {
+        const rect = paintingRef.current.getBoundingClientRect();
+
+        // This is the key change: trigger when the top of the image is NEGATIVE (scrolled past top)
+        // -100 means it's 100px past the top of the screen (adjust as needed)
+        if (rect.top <= -1000) {
+          setSwingTriggered(true);
+          console.log("Swing triggered at position:", rect.top);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [swingTriggered, initialAnimationComplete, isClient]);
+
+  // Lenis scroll integration
+  useEffect(() => {
+    if (!isClient) return;
+    if (description.current && typeof window !== "undefined" && window.lenis) {
+      const scrollElements =
+        description.current.querySelectorAll("[data-scroll]");
+
+      if (scrollElements.length) {
+        window.lenis.on("scroll", () => {
+          // We can also add a late trigger here if needed
+          if (
+            !swingTriggered &&
+            initialAnimationComplete &&
+            paintingRef.current
+          ) {
+            const rect = paintingRef.current.getBoundingClientRect();
+            if (rect.top <= -100) {
+              setSwingTriggered(true);
+            }
+          }
+        });
+      }
+
+      return () => {
+        if (window.lenis) {
+          window.lenis.off("scroll");
+        }
+      };
+    }
+  }, [swingTriggered, initialAnimationComplete, isClient]);
+
+  return (
+    <div className={styles.sectionContainer}>
+      <div ref={description} className={styles.description}>
+        <div
+          className={styles.spotlight}
+          style={{
+            opacity: lightOn ? 1 : 0,
+            transition: "opacity 0.5s ease-in-out",
+          }}
+        ></div>
+        <div className={styles.galleryBody}>
+
+          <div className={styles.contextImageWrapper}>
+            <Image
+              src="/images/blankCanvas3.png"
+              width={500}
+              height={300}
+              alt="background"
+              priority
+              sizes="(max-width: 768px) 100vw, 55vw"
+              className={styles.backgroundImage}
+            />
+          </div>
+
+          <div className={styles.slatWallSegment}>
+            <div className={styles.slatWallContainer}>
+              <Image
+                src="/images/lgSlatWall.png"
+                fill={true}
+                alt="slat wall background"
+                priority
+                sizes="50vw"
+                style={styles.slatWall}
+              />
+              <div
+                className={styles.imageContainer}
+                data-scroll
+                data-scroll-speed={0.1}
+                ref={imageRef}
+              >
+                {/* First motion div for the initial animation */}
+                <motion.div
+                  className={styles.painting}
+                  variants={hangingAnimation}
+                  initial="initial"
+                  animate={isInView ? "open" : "closed"}
+                  ref={paintingRef}
+                >
+                  {/* Nested motion div for the swing animation */}
+                  <motion.div
+                    className={styles.paintingInner}
+                    variants={finalPendulumSwing}
+                    animate={swingTriggered ? "swing" : undefined}
+                    style={{
+                      transformOrigin: "top right",
+                      originX: 1,
+                      originY: 0,
+                    }}
+                  >
+                    <Image
+                      src="/images/squiggle2.png"
+                      fill={true}
+                      alt="background"
+                      priority
+                      sizes="100vw"
+                      style={{
+                        objectFit: "contain",
+                        objectPosition: "right top",
+                      }}
+                    />
+                  </motion.div>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+index.jsx:
+
+import React from 'react'
+import { motion } from 'framer-motion';
+import styles from './styles.module.scss';
+
+export default function Index() {
+
+  const initialPath = `M100 0 L100 ${window.innerHeight} Q-100 ${window.innerHeight/2} 100 0`
+  const targetPath = `M100 0 L100 ${window.innerHeight} Q100 ${window.innerHeight/2} 100 0`
+
+  const curve = {
+    initial: {
+        d: initialPath
+    },
+    enter: {
+        d: targetPath,
+        transition: {duration: 1, ease: [0.76, 0, 0.24, 1]}
+    },
+    exit: {
+        d: initialPath,
+        transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1]}
+    }
+  }
+
+  return (
+    <svg className={styles.svgCurve}>
+        <motion.path variants={curve} initial="initial" animate="enter" exit="exit"></motion.path>
+    </svg>
+  )
+}
+
+
+
+
+index.jsx:
+
+import styles from './style.module.scss';
+
+export default function index() {
+  return (
+    <div className={styles.footer}>
+        <a>Instagram</a>
+        <a>Facebook</a>
+        <a>LinkedIn</a>
+    </div>
+  )
+}
+
+
+
+
+index.jsx:
+
+'use client';
+import styles from './style.module.scss';
+import { motion } from 'framer-motion';
+import { slide, scale } from '../../animation';
+
+export default function LinkComponent({data, isActive, setSelectedIndicator, onNavigate}) {
+  const { title, href, index } = data;
+  
+  const handleClick = (e) => {
+    e.preventDefault();
+    setSelectedIndicator(href);
+    onNavigate(href);
+  };
+  
+  return (
+    <motion.div 
+      className={styles.link} 
+      onMouseEnter={() => {setSelectedIndicator(href)}} 
+      custom={index} 
+      variants={slide} 
+      initial="initial" 
+      animate="enter" 
+      exit="exit"
+    >
+      <motion.div 
+        variants={scale} 
+        animate={isActive ? "open" : "closed"} 
+        className={styles.indicator}
+      />
+      <a href={href} onClick={handleClick}>{title}</a>
+    </motion.div>
+  );
+}
+
+
+
+index.jsx:
+
+'use client';
+import { useState } from 'react';
+import styles from './style.module.scss';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { menuSlide } from '../animation';
+import Link from './Link';
+import Curve from './Curve';
+import Footer from './Footer';
+import { useNavigation } from '../../../providers/NavigationProvider';
+
+const navItems = [
+  {
+    title: "Home",
+    href: "/",
+  },
+  {
+    title: "Gallery",
+    href: "/gallery",
+  },
+  {
+    title: "About",
+    href: "/about",
+  },
+  {
+    title: "Contact",
+    href: "/contact",
+  },
+  {
+    title: "Alters",
+    href: "/gallery",
+  }
+];
+
+export default function Nav() {
+  const pathname = usePathname();
+  const [selectedIndicator, setSelectedIndicator] = useState(pathname);
+  const { navigateTo } = useNavigation();
+
+  // Update Link component to use our custom navigation
+  const handleNavigation = (path) => {
+    navigateTo(path);
+  };
+
+  return (
+    <motion.div 
+      variants={menuSlide} 
+      initial="initial" 
+      animate="enter" 
+      exit="exit" 
+      className={styles.menu}
+    >
+      <div className={styles.body}>
+        <div 
+          onMouseLeave={() => {setSelectedIndicator(pathname)}} 
+          className={styles.nav}
+        >
+          <div className={styles.header}>
+            <p>Navigation</p>
+          </div>
+          {navItems.map((data, index) => {
+            return (
+              <Link 
+                key={index}
+                data={{...data, index}} 
+                isActive={selectedIndicator === data.href} 
+                setSelectedIndicator={setSelectedIndicator}
+                onNavigate={handleNavigation}
+              />
+            );
+          })}
+        </div>
+        <Footer />
+      </div>
+      <Curve />
+    </motion.div>
+  );
+}
+
+
+
+animation.js:
+
+export const menuSlide = {
+    initial: {x: "calc(100% + 100px)"},
+    enter: {x: "0", transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1]}},
+    exit: {x: "calc(100% + 100px)", transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1]}}
+}
+
+export const slide = {
+    initial: {x: 80},
+    enter: i => ({x: 0, transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.05 * i}}),
+    exit: i => ({x: 80, transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.05 * i}})
+}
+
+export const scale = {
+    open: {scale: 1, transition: {duration: 0.3}},
+    closed: {scale: 0, transition: {duration: 0.4}}
+}
+
+
+
+index.jsx:
+
+'use client';
+import { usePathname } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
+import Nav from "./nav";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import styles from "./style.module.scss";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Rounded from "../../common/RoundedButton";
+import Magnetic from "../../common/Magnetic";
+import { useNavigation } from "../../providers/NavigationProvider";
+
+export default function Header() {
+  const header = useRef(null);
+  const [isActive, setIsActive] = useState(false);
+  const pathname = usePathname();
+  const button = useRef(null);
+  const { navigateTo } = useNavigation();
+
+  useEffect(() => {
+    if (isActive) setIsActive(false);
+  }, [pathname]);
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(button.current, {
+      scrollTrigger: {
+        trigger: document.documentElement,
+        start: 0,
+        end: window.innerHeight,
+        onLeave: () => {
+          gsap.to(button.current, {
+            scale: 1,
+            duration: 0.25,
+            ease: "power1.out",
+          });
+        },
+        onEnterBack: () => {
+          gsap.to(
+            button.current,
+            { scale: 0, duration: 0.25, ease: "power1.out" },
+            setIsActive(false)
+          );
+        },
+      },
+    });
+  }, []);
+
+  const handleNavigation = (e, path) => {
+    e.preventDefault();
+    if (path !== pathname) {
+      navigateTo(path);
+    }
+  };
+
+  return (
+    <>
+      <div ref={header} className={styles.header}>
+        <div className={styles.logo}>
+          <p className={styles.copyright}>©</p>
+          <a 
+            href="/" 
+            onClick={(e) => handleNavigation(e, "/")} 
+            className={styles.name}
+          >
+            <p className={styles.codeBy}>SaintWorks</p>
+            <p className={styles.joe}></p>
+            <p className={styles.stromain}>Home</p>
+          </a>
+        </div>
+        <div className={styles.nav}>
+          <Magnetic>
+            <div className={styles.el}>
+              <a 
+                href="/contact" 
+                onClick={(e) => handleNavigation(e, "/contact")}
+                className={styles.customLink}
+              >
+                Contact
+              </a>
+              <div className={styles.indicator}></div>
+            </div>
+          </Magnetic>
+          <Magnetic>
+            <div className={styles.el}>
+              <a 
+                href="/about" 
+                onClick={(e) => handleNavigation(e, "/about")}
+                className={styles.customLink}
+              >
+                About
+              </a>
+              <div className={styles.indicator}></div>
+            </div>
+          </Magnetic>
+          <Magnetic>
+            <div className={styles.el}>
+              <a 
+                href="/gallery" 
+                onClick={(e) => handleNavigation(e, "/gallery")}
+                className={styles.customLink}
+              >
+                Work
+              </a>
+              <div className={styles.indicator}></div>
+            </div>
+          </Magnetic>
+        </div>
+      </div>
+      <div ref={button} className={styles.headerButtonContainer}>
+        <Rounded
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+          className={`${styles.button}`}
+        >
+          <div
+            className={`${styles.burger} ${
+              isActive ? styles.burgerActive : ""
+            }`}
+          ></div>
+        </Rounded>
+      </div>
+      <AnimatePresence mode="wait">{isActive && <Nav />}</AnimatePresence>
+    </>
+  );
+}
+
+
+
+animation.js:
+
+export const slideUp = {
+    initial: {
+        y: 300
+    },
+    enter: {
+        y: 0,
+        transition: {duration: 0.6, ease: [0.33, 1, 0.68, 1], delay: 2.5}
+    }
+}
+
+
+
+DecorativeSVG.jsx:
+
+import React, { useEffect, useState } from 'react';
+import gsap from 'gsap';
+
+const DecorativeSVG = React.forwardRef((props, ref) => {
+  // New state to track if we should start animation
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  // Add a state to prevent flash of content
+  const [initialHideApplied, setInitialHideApplied] = useState(false);
+  
+  // First effect - immediately hide all paths to prevent flash
+  useEffect(() => {
+    if (ref?.current && !initialHideApplied) {
+      // Hide all paths immediately
+      const allPaths = ref.current.querySelectorAll('path[fill]');
+      allPaths.forEach(path => {
+        path.style.opacity = 0;
+        path.style.fillOpacity = 0;
+      });
+      setInitialHideApplied(true);
+    }
+  }, [ref, initialHideApplied]);
+  
+  useEffect(() => {
+    // Use a simple approach - wait until after typical preloader disappears + 1 second
+    const totalDelayTime = 2000 + 1000; // 2s preloader time + 1s extra delay
+    
+    const animationTimer = setTimeout(() => {
+      setShouldAnimate(true);
+    }, totalDelayTime);
+    
+    return () => clearTimeout(animationTimer);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate || !ref?.current || !initialHideApplied) return;
+    
+    // We need direct control over the paths to animate them
+    const svgPaths = Array.from(ref.current.querySelectorAll('path[fill]'));
+    
+    // Create separate path elements for drawing the outlines
+    svgPaths.forEach((path, index) => {
+      const originalPath = path;
+      const pathData = originalPath.getAttribute('d');
+      const originalFill = originalPath.getAttribute('fill');
+      
+      // Create a stroke path for drawing
+      const strokePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      strokePath.setAttribute('d', pathData);
+      strokePath.setAttribute('fill', 'none');
+      strokePath.setAttribute('stroke', originalFill);
+      strokePath.setAttribute('stroke-width', '2');
+      strokePath.setAttribute('stroke-linecap', 'round');
+      strokePath.setAttribute('data-index', index);
+      originalPath.parentNode.appendChild(strokePath);
+      
+      // Set up initial state for stroke drawing
+      const pathLength = strokePath.getTotalLength();
+      strokePath.style.strokeDasharray = pathLength;
+      strokePath.style.strokeDashoffset = pathLength;
+    });
+    
+    // Rest of your animation code remains the same...
+    const strokePaths = Array.from(ref.current.querySelectorAll('path[stroke][data-index]'))
+      .sort((a, b) => parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index')));
+    
+    // Create animation timeline
+    const mainTimeline = gsap.timeline({
+      delay: 0.5,
+      onComplete: () => {
+        // Clean up - remove the stroke paths once animation is complete
+        strokePaths.forEach(path => path.remove());
+      }
+    });
+
+    // Animation code remains the same...
+    const staggerDelay = 0.0;
+    const drawDuration = 0.5; 
+    const fillDelay = 0.4;
+    
+    strokePaths.forEach((strokePath, i) => {
+      const originalPath = svgPaths[i];
+      const pathLength = strokePath.getTotalLength();
+      
+      const pathTimeline = gsap.timeline({
+        delay: i * staggerDelay
+      });
+      
+      pathTimeline.to(strokePath, {
+        strokeDashoffset: 0,
+        duration: drawDuration,
+        ease: "power1.inOut"
+      });
+      
+      pathTimeline.to(originalPath, {
+        opacity: 1,
+        fillOpacity: 1,
+        duration: 0.3,
+        ease: "power1.inOut"
+      }, `-=${fillDelay}`);
+      
+      mainTimeline.add(pathTimeline, i > 0 ? `-=${drawDuration * 0.8}` : 0);
+    });
+  }, [ref, shouldAnimate, initialHideApplied]);
+
+  return (
+    <svg 
+      ref={ref}
+      width="163"
+      height="129"
+      viewBox="0 0 122.25 96.75"
+      preserveAspectRatio="xMidYMid meet"
+      xmlns="http://www.w3.org/2000/svg"
+      className={props.className}
+      style={{ opacity: initialHideApplied ? 1 : 0 }} // Hide SVG until we've applied initial hide
+    >
+      <defs>
+        <clipPath id="53aecdca3c">
+          <path d="M 39.261719 60.972656 L 74.613281 60.972656 L 74.613281 92.925781 L 39.261719 92.925781 Z M 39.261719 60.972656 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="f16468ee36">
+          <path d="M 48.15625 63.457031 C 58.515625 61.070312 61.496094 61.667969 63.734375 62.636719 C 65.671875 63.457031 67.3125 64.875 68.652344 66.214844 C 69.847656 67.558594 70.667969 68.898438 71.5625 70.613281 C 72.679688 72.625 74.171875 75.457031 74.46875 77.695312 C 74.765625 79.632812 74.542969 81.347656 73.871094 83.136719 C 73.050781 85.371094 71.113281 88.207031 69.324219 89.769531 C 67.910156 91.039062 66.34375 91.710938 64.554688 92.230469 C 62.390625 92.828125 59.707031 92.976562 57.25 92.902344 C 54.789062 92.828125 51.957031 92.453125 49.867188 91.632812 C 48.15625 90.964844 46.8125 89.921875 45.546875 88.726562 C 44.203125 87.535156 42.9375 85.96875 42.042969 84.402344 C 41.074219 82.765625 40.328125 80.902344 39.878906 79.035156 C 39.433594 77.023438 39.210938 74.789062 39.433594 72.625 C 39.582031 70.464844 40.03125 68.152344 41 66.214844 C 41.894531 64.351562 43.757812 61.519531 44.949219 61.070312 C 45.621094 60.847656 46.367188 61.148438 46.8125 61.519531 C 47.183594 61.890625 47.484375 62.785156 47.484375 63.234375 C 47.410156 63.679688 47.183594 64.128906 46.886719 64.425781 C 46.515625 64.726562 45.621094 65.023438 45.097656 64.949219 C 44.652344 64.949219 44.277344 64.726562 43.980469 64.351562 C 43.683594 63.90625 43.382812 63.085938 43.53125 62.5625 C 43.757812 61.964844 44.800781 61.148438 45.398438 60.996094 C 45.84375 60.921875 46.289062 61.148438 46.664062 61.371094 C 47.035156 61.742188 47.484375 62.339844 47.484375 63.085938 C 47.484375 64.574219 44.425781 67.78125 43.757812 70.089844 C 43.234375 71.957031 43.308594 73.746094 43.457031 75.457031 C 43.53125 77.097656 43.832031 78.664062 44.503906 80.230469 C 45.246094 82.019531 46.441406 84.105469 48.003906 85.523438 C 49.644531 86.9375 51.882812 88.132812 54.191406 88.652344 C 56.875 89.25 60.679688 89.175781 63.210938 88.355469 C 65.375 87.683594 67.3125 86.191406 68.503906 84.703125 C 69.621094 83.433594 70.292969 81.71875 70.441406 80.15625 C 70.59375 78.664062 70.144531 77.324219 69.546875 75.683594 C 68.652344 73.445312 66.640625 69.71875 64.851562 68.078125 C 63.585938 66.960938 62.167969 66.589844 60.679688 66.066406 C 59.261719 65.621094 57.769531 65.097656 56.054688 65.171875 C 53.820312 65.246094 49.945312 67.484375 48.453125 67.109375 C 47.632812 66.886719 46.960938 66.214844 46.886719 65.621094 C 46.8125 65.023438 48.15625 63.457031 48.15625 63.457031 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="87df4b07f6">
+          <path d="M 72.171875 56.539062 L 111.855469 56.539062 L 111.855469 91.324219 L 72.171875 91.324219 Z M 72.171875 56.539062 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="f4f639a443">
+          <path d="M 93.179688 91.1875 C 84.53125 90.589844 83.265625 90.144531 81.625 88.949219 C 79.089844 87.085938 74.839844 82.613281 73.425781 79.707031 C 72.457031 77.695312 72.15625 75.980469 72.304688 73.894531 C 72.457031 71.359375 73.722656 67.78125 74.988281 65.621094 C 76.035156 63.90625 77.226562 62.785156 78.867188 61.667969 C 81.101562 60.101562 84.53125 58.6875 87.511719 57.867188 C 90.421875 57.046875 93.773438 56.597656 96.457031 56.675781 C 98.695312 56.824219 101.003906 57.34375 102.570312 57.941406 C 103.6875 58.386719 104.359375 58.761719 105.328125 59.582031 C 106.597656 60.625 108.308594 62.488281 109.355469 64.203125 C 110.324219 65.84375 111.070312 67.929688 111.441406 69.421875 C 111.738281 70.539062 111.8125 71.136719 111.8125 72.253906 C 111.738281 73.96875 111.144531 77.023438 110.621094 78.664062 C 110.25 79.78125 109.949219 80.453125 109.28125 81.421875 C 108.308594 82.839844 106.746094 84.703125 104.882812 86.117188 C 102.71875 87.832031 98.992188 89.769531 96.683594 90.367188 C 95.117188 90.816406 93.625 90.964844 92.582031 90.664062 C 91.761719 90.367188 90.867188 89.621094 90.792969 89.027344 C 90.644531 88.429688 91.316406 87.160156 91.835938 86.863281 C 92.359375 86.566406 93.253906 86.640625 93.699219 86.9375 C 94.222656 87.160156 94.667969 87.980469 94.742188 88.503906 C 94.742188 89.027344 94.445312 89.921875 94 90.21875 C 93.476562 90.589844 92.132812 90.515625 91.539062 90.292969 C 91.164062 90.070312 90.941406 89.621094 90.792969 89.25 C 90.71875 88.726562 90.71875 87.832031 91.164062 87.386719 C 91.984375 86.566406 94.894531 86.863281 96.53125 86.265625 C 98.246094 85.746094 99.8125 85.074219 101.304688 83.882812 C 103.09375 82.539062 105.328125 80.304688 106.371094 78.441406 C 107.265625 76.949219 107.640625 75.234375 107.789062 73.746094 C 107.9375 72.253906 107.789062 70.835938 107.339844 69.496094 C 106.96875 68.003906 106.222656 66.4375 105.328125 65.246094 C 104.433594 64.054688 103.464844 62.859375 102.050781 62.117188 C 100.261719 61.222656 97.277344 60.847656 95.117188 60.773438 C 93.253906 60.699219 91.6875 60.996094 89.824219 61.445312 C 87.8125 61.964844 85.351562 62.710938 83.5625 63.679688 C 81.921875 64.5 80.28125 65.246094 79.164062 66.589844 C 77.824219 68.226562 76.703125 70.910156 76.40625 72.925781 C 76.183594 74.640625 76.332031 76.351562 76.851562 77.769531 C 77.375 79.035156 78.34375 79.929688 79.386719 81.199219 C 80.730469 82.839844 82.371094 85.296875 84.605469 86.417969 C 87.140625 87.757812 93.105469 86.9375 94.371094 88.054688 C 94.894531 88.578125 95.042969 89.472656 94.816406 89.996094 C 94.667969 90.515625 93.179688 91.1875 93.179688 91.1875 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="6ae675cb24">
+          <path d="M 22.855469 71.554688 L 42.835938 71.554688 L 42.835938 78.246094 L 22.855469 78.246094 Z M 22.855469 71.554688 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="4053f59736">
+          <path d="M 40.179688 78.21875 C 23.40625 75.085938 23.257812 74.863281 23.109375 74.488281 C 22.882812 73.96875 22.808594 73.074219 23.183594 72.550781 C 23.554688 72.03125 24.75 71.507812 25.417969 71.65625 C 25.941406 71.730469 26.613281 72.402344 26.761719 72.925781 C 26.984375 73.519531 26.613281 74.863281 26.015625 75.234375 C 25.492188 75.609375 24.152344 75.535156 23.628906 75.160156 C 23.183594 74.789062 22.882812 73.894531 22.882812 73.371094 C 22.882812 73 23.109375 72.550781 23.40625 72.253906 C 23.777344 71.878906 24.300781 71.65625 25.195312 71.582031 C 27.730469 71.359375 37.421875 73.222656 40.179688 74.117188 C 41.222656 74.414062 41.820312 74.714844 42.265625 75.160156 C 42.636719 75.535156 42.789062 75.980469 42.789062 76.429688 C 42.714844 76.949219 42.414062 77.695312 41.96875 77.992188 C 41.519531 78.292969 40.179688 78.21875 40.179688 78.21875 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="24612eb9e5">
+          <path d="M 108.078125 70 L 114.726562 70 L 114.726562 76.449219 L 108.078125 76.449219 Z M 108.078125 70 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="6684129d32">
+          <path d="M 108.609375 73.445312 C 112.78125 69.941406 113.753906 70.167969 114.199219 70.539062 C 114.570312 70.910156 114.796875 71.730469 114.648438 72.179688 C 114.496094 72.773438 113.527344 73.519531 112.933594 73.59375 C 112.484375 73.667969 111.664062 73.371094 111.441406 72.925781 C 111.070312 72.402344 111.070312 71.136719 111.441406 70.6875 C 111.738281 70.242188 113.007812 69.867188 113.527344 70.089844 C 114.050781 70.316406 114.722656 71.285156 114.648438 72.03125 C 114.570312 73.148438 112.335938 75.535156 111.144531 76.128906 C 110.324219 76.503906 109.203125 76.503906 108.757812 76.203125 C 108.308594 75.90625 108.085938 75.085938 108.085938 74.640625 C 108.085938 74.191406 108.609375 73.445312 108.609375 73.445312 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="99f36053b7">
+          <path d="M 100.71875 4 L 117 4 L 117 36.445312 L 100.71875 36.445312 Z M 100.71875 4 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="b88e2aab20">
+          <path d="M 101.378906 33.640625 C 108.90625 22.757812 111.21875 15.378906 112.261719 11.351562 C 112.933594 8.816406 112.484375 6.285156 113.378906 5.164062 C 113.976562 4.417969 115.242188 3.898438 115.839844 4.195312 C 116.359375 4.417969 116.957031 6.132812 116.660156 6.65625 C 116.359375 7.253906 114.648438 7.625 114.125 7.402344 C 113.601562 7.179688 113.230469 6.433594 113.230469 5.910156 C 113.230469 5.390625 113.527344 4.644531 113.976562 4.34375 C 114.347656 4.046875 115.167969 3.898438 115.617188 4.121094 C 116.136719 4.269531 116.585938 4.71875 116.808594 5.3125 C 117.179688 6.433594 116.808594 8.222656 116.285156 10.382812 C 115.464844 14.257812 112.558594 22.460938 110.621094 26.632812 C 109.28125 29.539062 107.789062 31.851562 106.445312 33.566406 C 105.476562 34.683594 104.582031 35.800781 103.6875 36.175781 C 102.945312 36.472656 101.824219 36.472656 101.378906 36.175781 C 101.078125 36.027344 100.855469 35.503906 100.78125 35.132812 C 100.78125 34.683594 101.378906 33.640625 101.378906 33.640625 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="87cb552780">
+          <path d="M 103.90625 3.144531 L 117.96875 3.144531 L 117.96875 56.589844 L 103.90625 56.589844 Z M 103.90625 3.144531 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="9baddb63ab">
+          <path d="M 116.734375 4.417969 C 118.671875 20.671875 118 26.632812 116.808594 32.296875 C 115.464844 38.410156 112.933594 46.910156 110.695312 51.082031 C 109.429688 53.46875 107.714844 55.480469 106.597656 56.152344 C 106.074219 56.523438 105.550781 56.597656 105.105469 56.523438 C 104.65625 56.375 104.136719 55.929688 103.988281 55.480469 C 103.839844 55.109375 103.988281 54.363281 104.210938 53.992188 C 104.507812 53.691406 105.105469 53.320312 105.550781 53.394531 C 106 53.394531 106.671875 53.765625 106.894531 54.140625 C 107.117188 54.511719 107.265625 55.257812 106.96875 55.628906 C 106.671875 56.078125 105.328125 56.597656 104.808594 56.375 C 104.359375 56.226562 103.914062 55.40625 103.914062 54.660156 C 104.0625 53.097656 107.414062 50.636719 108.832031 47.65625 C 110.769531 43.554688 112.558594 37.144531 113.601562 31.777344 C 114.570312 26.484375 115.167969 20.59375 115.019531 15.75 C 114.871094 11.800781 112.78125 6.804688 113.304688 4.792969 C 113.601562 3.898438 114.273438 3.226562 114.871094 3.152344 C 115.390625 3.078125 116.734375 4.417969 116.734375 4.417969 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="e49e8ca0e7">
+          <path d="M 2.960938 20.605469 L 27.613281 20.605469 L 27.613281 54.5 L 2.960938 54.5 Z M 2.960938 20.605469 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="739de0d79e">
+          <path d="M 25.34375 54.4375 C 15.953125 48.398438 12.152344 42.808594 9.839844 39.304688 C 8.125 36.621094 7.007812 34.460938 5.890625 31.777344 C 4.695312 28.945312 3.054688 24.246094 2.980469 22.535156 C 2.980469 21.863281 3.054688 21.414062 3.355469 21.117188 C 3.652344 20.820312 4.695312 20.59375 5.144531 20.746094 C 5.515625 20.894531 5.890625 21.488281 5.964844 21.863281 C 6.039062 22.308594 5.8125 22.980469 5.515625 23.203125 C 5.21875 23.503906 4.546875 23.726562 4.101562 23.578125 C 3.726562 23.503906 3.207031 23.054688 3.054688 22.683594 C 2.90625 22.234375 3.128906 21.191406 3.578125 20.894531 C 4.023438 20.59375 5.070312 20.746094 5.738281 21.265625 C 7.082031 22.460938 7.15625 27.378906 8.574219 30.507812 C 10.0625 33.9375 12.300781 37.664062 14.683594 40.871094 C 16.996094 43.925781 20.050781 47.429688 22.4375 49.292969 C 24.152344 50.636719 26.761719 50.859375 27.355469 51.976562 C 27.730469 52.574219 27.582031 53.691406 27.207031 54.140625 C 26.835938 54.511719 25.34375 54.4375 25.34375 54.4375 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="530b153a79">
+          <path d="M 2.804688 21.152344 L 32.457031 21.152344 L 32.457031 42.625 L 2.804688 42.625 Z M 2.804688 21.152344 " clipRule="nonzero"/>
+        </clipPath>
+        <clipPath id="a9229d472a">
+          <path d="M 5.515625 21.265625 C 25.941406 36.546875 31.160156 37.964844 32.128906 39.679688 C 32.5 40.421875 32.351562 41.46875 31.980469 41.914062 C 31.53125 42.363281 30.265625 42.585938 29.742188 42.363281 C 29.222656 42.136719 28.773438 41.394531 28.699219 40.945312 C 28.625 40.574219 28.699219 40.125 28.921875 39.753906 C 29.070312 39.453125 29.445312 39.082031 29.816406 38.933594 C 30.265625 38.785156 31.085938 38.785156 31.53125 39.082031 C 32.054688 39.453125 32.5 40.648438 32.351562 41.167969 C 32.277344 41.691406 31.605469 42.289062 31.160156 42.4375 C 30.785156 42.585938 30.414062 42.585938 29.890625 42.4375 C 28.773438 42.136719 26.6875 41.167969 24.523438 39.902344 C 21.171875 37.964844 15.578125 34.085938 11.777344 31.179688 C 8.574219 28.644531 3.949219 25.589844 3.128906 23.652344 C 2.757812 22.832031 2.832031 21.789062 3.28125 21.414062 C 3.652344 20.96875 5.515625 21.265625 5.515625 21.265625 " clipRule="nonzero"/>
+        </clipPath>
+      </defs>
+      <g clipPath="url(#53aecdca3c)">
+        <g clipPath="url(#f16468ee36)">
+          <path fill="#ffa629" d="M 36.453125 58.015625 L 77.574219 58.015625 L 77.574219 95.882812 L 36.453125 95.882812 Z M 36.453125 58.015625 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#87df4b07f6)">
+        <g clipPath="url(#f4f639a443)">
+          <path fill="#ffa629" d="M 69.324219 53.691406 L 114.859375 53.691406 L 114.859375 94.167969 L 69.324219 94.167969 Z M 69.324219 53.691406 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#6ae675cb24)">
+        <g clipPath="url(#4053f59736)">
+          <path fill="#ffa629" d="M 19.902344 68.601562 L 45.789062 68.601562 L 45.789062 81.199219 L 19.902344 81.199219 Z M 19.902344 68.601562 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#24612eb9e5)">
+        <g clipPath="url(#6684129d32)">
+          <path fill="#ffa629" d="M 105.105469 67.109375 L 117.699219 67.109375 L 117.699219 79.1875 L 105.105469 79.1875 Z M 105.105469 67.109375 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#99f36053b7)">
+        <g clipPath="url(#b88e2aab20)">
+          <path fill="#ff6c7c" d="M 97.800781 1.140625 L 119.789062 1.140625 L 119.789062 39.191406 L 97.800781 39.191406 Z M 97.800781 1.140625 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#87cb552780)">
+        <g clipPath="url(#9baddb63ab)">
+          <path fill="#ff6c7c" d="M 100.929688 0.171875 L 121.503906 0.171875 L 121.503906 59.5625 L 100.929688 59.5625 Z M 100.929688 0.171875 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#e49e8ca0e7)">
+        <g clipPath="url(#739de0d79e)">
+          <path fill="#ff6c7c" d="M 0 17.761719 L 30.339844 17.761719 L 30.339844 57.464844 L 0 57.464844 Z M 0 17.761719 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+      <g clipPath="url(#530b153a79)">
+        <g clipPath="url(#a9229d472a)">
+          <path fill="#ff6c7c" d="M 0.148438 18.285156 L 35.433594 18.285156 L 35.433594 45.492188 L 0.148438 45.492188 Z M 0.148438 18.285156 " fillOpacity="1" fillRule="nonzero"/>
+        </g>
+      </g>
+    </svg>
+  );
+});
+
+DecorativeSVG.displayName = 'DecorativeSVG';
+
+export default DecorativeSVG;
+
+
+
+index.jsx:
+
+'use client'
+import Image from 'next/image'
+import styles from './style.module.scss'
+import { useRef, useLayoutEffect, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
+import { slideUp } from './animation';
+import { motion } from 'framer-motion';
+import DecorativeSVG from './DecorativeSVG';
+import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
+
+export default function Home() {
+  const firstText = useRef(null);
+  const secondText = useRef(null);
+  const slider = useRef(null);
+  const svgRef = useRef(null);
+  const { isMobile, isClient } = useDeviceContext();
+
+  useLayoutEffect(() => { 
+    if (!isClient) return; 
+    
+    gsap.registerPlugin(ScrollTrigger); 
+    
+    let scrollAnimation; 
+    let xPercent = 0; 
+    let direction = -1; 
+    
+    if (!isMobile) { 
+      // Desktop animation 
+      scrollAnimation = gsap.to(slider.current, { 
+        scrollTrigger: { 
+          trigger: document.documentElement, 
+          scrub: 0.25, 
+          start: 0, 
+          end: window.innerHeight, 
+          onUpdate: e => direction = e.direction * -1 
+        }, 
+        x: "-600px", 
+      }); 
+      
+      // Add animation for the SVG 
+      if (svgRef.current) { 
+        gsap.from(svgRef.current, {
+          scrollTrigger: {
+            trigger: document.documentElement,
+            scrub: 0.5,
+            start: "top top",
+            end: "bottom bottom",
+          },
+          rotate: -10,
+          scale: 0.9,
+          opacity: 0.7,
+          duration: 1.5
+        });
+      } 
+      
+      // Use GSAP ticker instead of requestAnimationFrame 
+      const tickerFunction = () => { 
+        if (!firstText.current || !secondText.current) return; 
+        
+        if(xPercent < -100){ 
+          xPercent = 0; 
+        } 
+        else if(xPercent > 0){ 
+          xPercent = -100; 
+        } 
+        gsap.set(firstText.current, {xPercent: xPercent}); 
+        gsap.set(secondText.current, {xPercent: xPercent}); 
+        xPercent += 0.08 * direction; 
+      }; 
+      
+      gsap.ticker.add(tickerFunction); 
+      
+      return () => { 
+        if (scrollAnimation) scrollAnimation.kill(); 
+        gsap.ticker.remove(tickerFunction); 
+      }; 
+    } else { 
+      // Simpler mobile animation
+      scrollAnimation = gsap.to(slider.current, {
+        scrollTrigger: {
+          trigger: document.documentElement,
+          scrub: 0.25,
+          start: 0,
+          end: window.innerHeight/2,
+        },
+        x: "-100px",
+      });
+      
+      // Mobile SVG animation
+      if (svgRef.current) {
+        gsap.from(svgRef.current, {
+          scrollTrigger: {
+            trigger: document.documentElement,
+            scrub: 0.5,
+            start: "top top",
+            end: "center center",
+          },
+          rotate: -5,
+          scale: 0.95,
+          opacity: 0.8,
+          duration: 1
+        });
+      }
+
+      const mobileTickerFunction = () => {
+        if (!firstText.current || !secondText.current) return;
+        
+        if(xPercent < -100) {
+          xPercent = 0;
+        }
+        else if(xPercent > 0) {
+          xPercent = -100;
+        }
+        
+        gsap.set(firstText.current, {xPercent: xPercent});
+        gsap.set(secondText.current, {xPercent: xPercent});
+        // Use a smaller increment for mobile for smoother animation
+        xPercent += 0.04 * direction;
+      };
+      
+      gsap.ticker.add(mobileTickerFunction);
+      
+      return () => { 
+        if (scrollAnimation) scrollAnimation.kill();
+        gsap.ticker.remove(mobileTickerFunction);
+      }; 
+    } 
+  }, [isMobile, isClient]);
+
+  // Link ScrollTrigger with Lenis
+  useEffect(() => {
+    if (!isClient || !window.lenis) return;
+
+    const linkLenisToScrollTrigger = () => {
+      ScrollTrigger.update();
+    };
+    
+    window.lenis.on('scroll', linkLenisToScrollTrigger);
+    
+    return () => {
+      if (window.lenis) {
+        window.lenis.off('scroll', linkLenisToScrollTrigger);
+      }
+    };
+  }, [isClient]);
+
+  return (
+    <motion.main variants={slideUp} initial="initial" animate="enter" className={styles.landing}>
+        <div className={styles.backgroundImageContainer}>
+          <Image
+            src="/images/header.png"
+            fill={true}
+            alt="background"
+            priority
+            className={styles.backgroundImage}
+          />
+        </div>
+      <div className={styles.sliderContainer}>
+        <div ref={slider} className={styles.slider}>
+          <p ref={firstText}>Artist - Developer - MBA - Consultant -</p>
+          <p ref={secondText}>Artist - Developer - MBA - Consultant -</p>
+        </div>
+      </div>
+      <div data-scroll data-scroll-speed={0.1} className={styles.description}>
+        <div className={styles.photoContainer}>
+          <Image
+            src="/images/profile_picture.jpg"
+            fill={true}
+            alt="background"
+            priority
+            sizes="(max-width: 768px) 100vw, 33vw" 
+            style={{objectFit: 'cover'}}
+          />
+          <div className={styles.svgOverlay}>
+            <DecorativeSVG ref={svgRef} className={styles.decorativeSvg} />
+          </div>
+        </div>
+      </div>
+    </motion.main>
+  )
+}
+
+
+
+anim.js:
+
+export const opacity = {
+    initial: {
+        opacity: 0
+    },
+    enter: {
+        opacity: 0.75,
+        transition: {duration: 1, delay: 0.2}
+    },
+}
+
+export const slideUp = {
+    initial: {
+        top: 0
+    },
+    exit: {
+        top: "-100vh",
+        transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2}
+    }
+}
+
+
+
+index.jsx:
+
+'use client';
+import styles from './style.module.scss';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { opacity, slideUp } from './anim';
+
+const words = ["Artist", "Developer", "Consultant", "MBA", "Artist", "Developer", "Consultant", "Artist"]
+
+export default function Preloader() {
+    const [index, setIndex] = useState(0);
+    const [dimension, setDimension] = useState({width: 0, height:0});
+
+    useEffect( () => {
+        setDimension({width: window.innerWidth, height: window.innerHeight})
+    }, [])
+
+    useEffect( () => {
+        if(index == words.length - 1) return;
+        setTimeout( () => {
+            setIndex(index + 1)
+        }, index == 0 ? 1000 : 150)
+    }, [index])
+
+    const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height + 300} 0 ${dimension.height}  L0 0`
+    const targetPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height} 0 ${dimension.height}  L0 0`
+
+    const curve = {
+        initial: {
+            d: initialPath,
+            transition: {duration: 0.7, ease: [0.76, 0, 0.24, 1]}
+        },
+        exit: {
+            d: targetPath,
+            transition: {duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.3}
+        }
+    }
+
+    return (
+        <motion.div variants={slideUp} initial="initial" exit="exit" className={styles.introduction}>
+            {dimension.width > 0 && 
+            <>
+                <motion.p variants={opacity} initial="initial" animate="enter"><span></span>{words[index]}</motion.p>
+                <svg>
+                    <motion.path variants={curve} initial="initial" exit="exit"></motion.path>
+                </svg>
+            </>
+            }
+        </motion.div>
+    )
+}
+
+
+
+
+index.jsx:
+
+'use client';
+import React, { useState, useRef } from 'react';
+import styles from './style.module.scss';
+
+export default function Project({index, title, manageModal, isMobile}) {
+  // Track touch start position to differentiate between taps and scrolls
+  const touchStartY = useRef(0);
+  const touchStartX = useRef(0);
+  const isScrolling = useRef(false);
+  
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartX.current = e.touches[0].clientX;
+    isScrolling.current = false;
+  };
+  
+  const handleTouchMove = (e) => {
+    // If the user moves more than 10px, consider it scrolling, not tapping
+    if (Math.abs(e.touches[0].clientY - touchStartY.current) > 10 ||
+        Math.abs(e.touches[0].clientX - touchStartX.current) > 10) {
+      isScrolling.current = true;
+    }
+  };
+  
+  const handleTouchEnd = (e) => {
+    // Only open modal if user wasn't scrolling
+    if (!isScrolling.current) {
+      if (isMobile) {
+        // Always center the modal on mobile
+        const x = window.innerWidth / 2;
+        const y = window.innerHeight / 2;
+        manageModal(true, index, x, y);
+      }
+    }
+  };
+
+  const handleInteraction = (isEntering, e) => {
+    // For desktop hover/click only
+    if (!isMobile) {
+      manageModal(isEntering, index, e.clientX, e.clientY);
+    }
+  };
+  
+  // Handle keyboard accessibility
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Center the modal for keyboard users
+      const x = window.innerWidth / 2;
+      const y = window.innerHeight / 2;
+      manageModal(true, index, x, y);
+    }
+  };
+
+  return (
+    <div 
+      onMouseEnter={(e) => !isMobile && handleInteraction(true, e)} 
+      onMouseLeave={(e) => !isMobile && handleInteraction(false, e)}
+      onClick={(e) => !isMobile && handleInteraction(true, e)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onKeyDown={handleKeyDown}
+      className={`${styles.project} ${isMobile ? styles.projectMobile : ''}`}
+      aria-label={`View ${title} project`}
+      tabIndex={0}
+      role="button"
+    >
+      <h2>{title}</h2>
+      <p>Design & Development</p>
+      {isMobile && <span className={styles.tapHint}>Tap to view</span>}
+    </div>
+  );
+}
+
+
+
+index.jsx:
+
+'use client';
+import styles from './style.module.scss'
+import { useState, useEffect, useRef } from 'react';
+import Project from './components/project';
+import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import Image from 'next/image';
+import Rounded from '../../common/RoundedButton';
+import { useDeviceContext } from '../../lib/hooks/useDeviceContext';
+
+const projects = [
+  {
+    title: "Studio Work",
+    src: "piece-8.jpg",
+    color: "#000000"
+  },
+  {
+    title: "Ariel Photography",
+    src: "ariel_image.jpg",
+    color: "#8C8C8C"
+  },
+  {
+    title: "MTG Alters",
+    src: "wb-2.png",
+    color: "#EFE8D3"
+  },
+  {
+    title: "Your Accounting Friend",
+    src: "yaf.png",
+    color: "#706D63"
+  }
+]
+
+const scaleAnimation = {
+    initial: {scale: 0, x:"-20%", y:"-20%"},
+    enter: {scale: 1, x:"-20%", y:"-20%", transition: {duration: 0.4, ease: [0.76, 0, 0.24, 1]}},
+    closed: {scale: 0, x:"-20%", y:"-20%", transition: {duration: 0.4, ease: [0.32, 0, 0.67, 0]}}
+}
+
+export default function Home() {
+  const { isMobile, isClient } = useDeviceContext();
+  const [modal, setModal] = useState({active: false, index: 0})
+  const { active, index } = modal;
+  const modalContainer = useRef(null);
+  const cursor = useRef(null);
+  const cursorLabel = useRef(null);
+
+  let xMoveContainer = useRef(null);
+  let yMoveContainer = useRef(null);
+  let xMoveCursor = useRef(null);
+  let yMoveCursor = useRef(null);
+  let xMoveCursorLabel = useRef(null);
+  let yMoveCursorLabel = useRef(null);
+
+  useEffect(() => {
+    // Initialize GSAP animations only if client-side and not mobile
+    if (!isClient || isMobile) {
+      return;
+    }
+    
+    // Move Container
+    xMoveContainer.current = gsap.quickTo(modalContainer.current, "left", {duration: 0.8, ease: "power3"});
+    yMoveContainer.current = gsap.quickTo(modalContainer.current, "top", {duration: 0.8, ease: "power3"});
+    
+    // Move cursor
+    xMoveCursor.current = gsap.quickTo(cursor.current, "left", {duration: 0.5, ease: "power3"});
+    yMoveCursor.current = gsap.quickTo(cursor.current, "top", {duration: 0.5, ease: "power3"});
+    
+    // Move cursor label
+    xMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "left", {duration: 0.45, ease: "power3"});
+    yMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "top", {duration: 0.45, ease: "power3"});
+  }, [isMobile, isClient]);
+
+  // Handle mobile touch events to close modal when tapping outside
+  useEffect(() => {
+    if (!isClient || !isMobile) return;
+    
+    const handleTouchOutside = (e) => {
+      if (active && modalContainer.current && !modalContainer.current.contains(e.target)) {
+        setModal({active: false, index: 0});
+      }
+    };
+    
+    document.addEventListener('touchend', handleTouchOutside);
+    return () => {
+      document.removeEventListener('touchend', handleTouchOutside);
+    };
+  }, [active, isMobile, isClient]);
+
+  const moveItems = (x, y) => {
+    if (!isClient || isMobile || 
+        !xMoveContainer.current || !yMoveContainer.current || 
+        !xMoveCursor.current || !yMoveCursor.current ||
+        !xMoveCursorLabel.current || !yMoveCursorLabel.current) {
+      return; // Guard clause if animations aren't initialized or on mobile
+    }
+    
+    xMoveContainer.current(x);
+    yMoveContainer.current(y);
+    xMoveCursor.current(x);
+    yMoveCursor.current(y);
+    xMoveCursorLabel.current(x);
+    yMoveCursorLabel.current(y);
+  }
+  
+  const manageModal = (active, index, x, y) => {
+    
+    if (isMobile) {
+      x = window.innerWidth / 2;
+      y = window.innerHeight / 2;
+    }
+
+    moveItems(x, y);
+    setModal({active, index});
+  }
+
+  useEffect(() => {
+    if (!isClient || !active) return;
+    
+    const handleClickOutside = (e) => {
+      // Check if click is outside the modal
+      if (modalContainer.current && !modalContainer.current.contains(e.target)) {
+        setModal({active: false, index: 0});
+      }
+    };
+    
+    // Use the right event for mobile vs desktop
+    const eventType = isMobile ? 'touchend' : 'mousedown';
+    document.addEventListener(eventType, handleClickOutside);
+    
+    return () => {
+      document.removeEventListener(eventType, handleClickOutside);
+    };
+  }, [active, isMobile, isClient]);
+  
+  return (
+    <main 
+      onMouseMove={(e) => !isMobile && moveItems(e.clientX, e.clientY)} 
+      className={styles.projects}
+      id="work"
+    >
+      <div className={styles.body}>
+        {
+          projects.map((project, index) => {
+            return <Project 
+              index={index} 
+              title={project.title} 
+              manageModal={manageModal} 
+              isMobile={isMobile}
+              key={index}
+            />
+          })
+        }
+      </div>
+      <Rounded>
+        <p>More work</p>
+      </Rounded>
+      <>
+        <motion.div 
+          ref={modalContainer} 
+          variants={scaleAnimation} 
+          initial="initial" 
+          animate={active ? "enter" : "closed"} 
+          className={styles.modalContainer}
+        >
+          <div style={{top: index * -100 + "%"}} className={styles.modalSlider}>
+            {
+              projects.map((project, index) => {
+                const { src, color } = project;
+                return (
+                  <div 
+                    className={styles.modal} 
+                    style={{backgroundColor: color}} 
+                    key={`modal_${index}`}
+                  >
+                    <Image 
+                      src={`/images/${src}`}
+                      width={350}
+                      height={350}
+                      sizes="(max-width: 768px) 100vw, 33vw" 
+                      style={{ height: 'auto', objectFit: 'contain' }}
+                      alt={`${project.title} project image`}
+                    />
+                  </div>
+                )
+              })
+            }
+          </div>
+        </motion.div>
+        <motion.div 
+          ref={cursor} 
+          className={styles.cursor} 
+          variants={scaleAnimation} 
+          initial="initial" 
+          animate={active ? "enter" : "closed"}
+        ></motion.div>
+        <motion.div 
+          ref={cursorLabel} 
+          className={styles.cursorLabel} 
+          variants={scaleAnimation} 
+          initial="initial" 
+          animate={active ? "enter" : "closed"}
+        >
+          View
+        </motion.div>
+      </>
+    </main>
+  )
+}
+
+
+
+index.jsx:
+
+import { useRef, useEffect } from "react";
+import { useScroll, useTransform, motion } from "framer-motion";
+import styles from "./style.module.scss";
+import Image from "next/image";
+
+const slider1 = [
+  {
+    color: "#e3e5e7",
+    src: "piece-1.jpg",
+  },
+  {
+    color: "#d6d7dc",
+    src: "piece-2.jpg",
+  },
+  {
+    color: "#e3e3e3",
+    src: "piece-3.jpg",
+  },
+  {
+    color: "#21242b",
+    src: "piece-4.jpg",
+  },
+];
+
+const slider2 = [
+  {
+    color: "#d4e3ec",
+    src: "news.png",
+  },
+  {
+    color: "#e5e0e1",
+    src: "piece-6.jpg",
+  },
+  {
+    color: "#d7d4cf",
+    src: "piece-7.jpg",
+  },
+  {
+    color: "#e1dad6",
+    src: "piece-8.jpg",
+  },
+];
+
+export default function SlidingImages() {
+  const container = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start end", "end start"],
+  });
+
+  useEffect(() => {
+    // Update ScrollTrigger when Lenis updates
+    if (container.current && typeof window !== "undefined" && window.lenis) {
+      window.lenis.on("scroll", () => {
+        // This would be used to manually update scroll animations if needed
+      });
+
+      return () => {
+        if (window.lenis) {
+          window.lenis.off("scroll");
+        }
+      };
+    }
+  }, []);
+
+  const x1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const height = useTransform(scrollYProgress, [0, 0.9], [50, 0]);
+
+  return (
+    <div ref={container} className={styles.slidingImages}>
+      <motion.div style={{ x: x1 }} className={styles.slider}>
+        {slider1.map((project, index) => {
+          return (
+            <div
+              key={index}
+              className={styles.project}
+              style={{ backgroundColor: project.color }}
+            >
+              <div className={styles.imageContainer}>
+                <Image
+                  fill={true}
+                  alt={"image"}
+                  src={`/images/${project.src}`}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </motion.div>
+      <motion.div style={{ x: x2 }} className={styles.slider}>
+        {slider2.map((project, index) => {
+          return (
+            <div
+              key={index}
+              className={styles.project}
+              style={{ backgroundColor: project.color }}
+            >
+              <div key={index} className={styles.imageContainer}>
+                <Image
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  alt={"image"}
+                  src={`/images/${project.src}`}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </motion.div>
+      <motion.div style={{ height }} className={styles.circleContainer}>
+        <div className={styles.circle}></div>
+      </motion.div>
+    </div>
+  );
+}
+
+
+
+
+LiquidTransition.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import styles from './LiquidTransition.module.scss';
+
+// This component focuses only on the liquid drip effect
+export default function LiquidTransition({ onMidpoint, onComplete }) {
+  useEffect(() => {
+    // Call midpoint callback during the liquid animation
+    const midpointTimer = setTimeout(() => {
+      if (onMidpoint) onMidpoint();
+    }, 500); // Midpoint of the liquid animation
+    
+    // Call complete callback after liquid animation finishes
+    const completeTimer = setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 1000); // Total liquid animation time
+    
+    return () => {
+      clearTimeout(midpointTimer);
+      clearTimeout(completeTimer);
+    };
+  }, [onMidpoint, onComplete]);
+
+  return (
+    <div className={styles.transitionContainer}>
+      <div className={styles.liquidContainer}>
+        <div className={styles.blobs}>
+          <div className={styles.liquid}></div>
+          {/* Create specific number of blobs to match the CSS */}
+          {Array(22).fill().map((_, i) => (
+            <div key={i} className={styles.blob}></div>
+          ))}
+        </div>
+      </div>
+      
+      {/* SVG Filter for the goo effect */}
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style={{ display: 'none' }}>
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
+
+
+anim.js:
+
+export const opacity = {
+    initial: {
+        opacity: 0
+    },
+    enter: {
+        opacity: 0.75,
+        transition: {duration: 1, delay: 0.2}
+    },
+}
+
+export const slideUp = {
+    initial: {
+        top: 0
+    },
+    exit: {
+        top: "-100vh",
+        transition: {duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2}
+    }
+}
+
+
+
+WipeTranstion.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import styles from './WipeTransition.module.scss';
+import { slideUp } from './anim';
+
+export default function WipeTransition({ onMidpoint, onComplete }) {
+  const [dimension, setDimension] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    setDimension({ width: window.innerWidth, height: window.innerHeight });
+    
+    // Call midpoint callback during the wipe animation
+    const midpointTimer = setTimeout(() => {
+      if (onMidpoint) onMidpoint();
+    }, 300); // Midpoint of the wipe animation
+    
+    // Call complete callback after animation finishes
+    const completeTimer = setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 800); // Total animation time
+    
+    return () => {
+      clearTimeout(midpointTimer);
+      clearTimeout(completeTimer);
+    };
+  }, [onMidpoint, onComplete]);
+
+  const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height + 300} 0 ${dimension.height} L0 0`;
+  const targetPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width/2} ${dimension.height} 0 ${dimension.height} L0 0`;
+
+  const curve = {
+    initial: {
+      d: initialPath,
+      transition: {duration: 0.7, ease: [0.76, 0, 0.24, 1]}
+    },
+    exit: {
+      d: targetPath,
+      transition: {duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: 0.3}
+    }
+  };
+
+  return (
+    dimension.width > 0 ? (
+      <motion.div 
+        variants={slideUp} 
+        initial="initial" 
+        exit="exit" 
+        className={styles.pageTransition}
+      >
+        <svg>
+          <motion.path 
+            variants={curve} 
+            initial="initial" 
+            exit="exit"
+          ></motion.path>
+        </svg>
+      </motion.div>
+    ) : null
+  );
+}
+
+
+
+SvgFilters.jsx:
+
+'use client';
+
+// This component defines SVG filters that are used for special effects
+export default function SvgFilters() {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      version="1.1" 
+      height="0" 
+      style={{
+        position: 'absolute',
+        width: 0,
+        height: 0,
+        visibility: 'hidden',
+        overflow: 'hidden'
+      }}
+    >
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+          <feColorMatrix 
+            in="blur" 
+            mode="matrix" 
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" 
+            result="goo" 
+          />
+          <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+
+
+
+DeviceContext.ts:
+
+import { createContext } from 'react';
+
+export type DeviceContextType = {
+  isMobile: boolean;
+  isClient: boolean; // Add this to track if we're on client side
+};
+
+export const DeviceContext = createContext<DeviceContextType>({
+  isMobile: false,
+  isClient: false
+});
+
+
+
+useDevice.js:
+
+// lib/hooks/useDevice.js
+import { useDeviceContext } from './useDeviceContext';
+
+export function useDevice() {
+  const { isMobile, isClient } = useDeviceContext();
+  
+  // For backward compatibility with existing code
+  return { 
+    isMobile, 
+    isClient,
+    deviceType: isMobile ? 'mobile' : 'desktop' 
+  };
+}
+
+
+
+useDeviceContext.ts:
+
+import { useContext } from 'react';
+import { DeviceContext } from '../contexts/DeviceContext';
+
+export function useDeviceContext() {
+  return useContext(DeviceContext);
+}
+
+
+
+DeviceProvider.jsx:
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { DeviceContext } from '@/lib/contexts/DeviceContext';
+
+export function DeviceProvider({ children }) {
+  const [deviceType, setDeviceType] = useState({
+    isMobile: false,
+    isClient: false
+  });
+
+  useEffect(() => {
+    // Mark that we're now on the client side
+    setDeviceType(prev => ({ ...prev, isClient: true }));
+
+    const checkDeviceType = () => {
+      const isMobile = window.innerWidth < 768;
+      setDeviceType(prev => ({ ...prev, isMobile }));
+    };
+
+    // Initial check
+    checkDeviceType();
+
+    // Listen for window resize events
+    window.addEventListener('resize', checkDeviceType);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkDeviceType);
+  }, []);
+
+  return (
+    <DeviceContext.Provider value={deviceType}>
+      {children}
+    </DeviceContext.Provider>
+  );
+}
+
+export default DeviceProvider;
+
+
+
+NavigationProvider.jsx:
+
+'use client';
+import { createContext, useState, useContext, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { AnimatePresence } from 'framer-motion';
+import LiquidTransition from '../components/Transitions/LiquidTransition/LiquidTransition';
+
+// Create context
+const NavigationContext = createContext({
+  isNavigating: false,
+  navigateTo: () => {},
+});
+
+export const useNavigation = () => useContext(NavigationContext);
+
+export default function NavigationProvider({ children }) {
+  const [isNavigating, setIsNavigating] = useState(false);
+  const nextPathRef = useRef(null);
+  const router = useRouter();
+
+  // Function to handle navigation with transition
+  const navigateTo = (path) => {
+    // Don't trigger navigation if already navigating
+    if (isNavigating) return;
+    
+    // Store the target path in a ref for later use
+    nextPathRef.current = path;
+    
+    // Start the transition animation
+    setIsNavigating(true);
+  };
+  
+  // Called when the transition animation is at the midpoint
+  // This is the key change - we navigate during the transition, not after
+  const handleTransitionMidpoint = () => {
+    if (nextPathRef.current) {
+      // Perform the actual navigation during the transition
+      router.push(nextPathRef.current);
+    }
+  };
+  
+  // Called when the transition is fully complete
+  const handleTransitionComplete = () => {
+    // Reset navigation state
+    setIsNavigating(false);
+    nextPathRef.current = null;
+  };
+
+  return (
+    <NavigationContext.Provider value={{ isNavigating, navigateTo }}>
+      {children}
+      <AnimatePresence mode="wait">
+        {isNavigating && (
+          <LiquidTransition 
+            onMidpoint={handleTransitionMidpoint} 
+            onComplete={handleTransitionComplete} 
+          />
+        )}
+      </AnimatePresence>
+    </NavigationContext.Provider>
+  );
+}
+
+

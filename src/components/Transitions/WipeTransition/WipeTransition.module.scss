@@ -1,0 +1,33 @@
+.transitionContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    pointer-events: none;
+  }
+  
+  .pageTransition {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--alt-bg);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+    
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 300px);
+  
+      path {
+        fill: var(--alt-bg);
+      }
+    }
+  }
