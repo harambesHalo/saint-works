@@ -12,7 +12,7 @@
     position: fixed;
     height: 100vh;
     width: 100vw;
-    background-color: var(--alt-bg);
+    background-color: var(--sig-green);
     top: 0;
     bottom: 0;
     right: 0;
@@ -27,7 +27,7 @@
       height: calc(100% + 300px);
   
       path {
-        fill: var(--alt-bg);
+        fill: var(--sig-green);
       }
     }
   }

@@ -26,7 +26,7 @@ export default function AboutPreloader() {
     };
     
     return (
-        <div className={styles.preloaderContainer}>
+        <div className={styles.AboutPreloaderContainer}>
             <AnimatePresence mode="wait">
                 {showPreloader && (
                     <WipeTransition 

@@ -2,44 +2,57 @@ import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
+// import { BoxHelper } from 'three';
 
-const Model = ({ registerMoveForward, onEnteredGallery }) => {
-  const { scene, animations } = useGLTF('/medias/test3pShift.glb');
+const Model = ({ registerMoveForward }) => {
+  const { scene, animations } = useGLTF('/medias/test3pShift.glb', {
+    onLoad: () => console.log('[Model] GLB model loaded successfully'),
+    onError: (err) => console.error('[Model] Error loading GLB:', err)
+  });
+  console.log("[Model] Loaded scene:", scene);
   const { viewport, clock } = useThree();
   const modelRef = useRef();
   const mixerRef = useRef();
-  const actionsRef = useRef([]);
 
+  const baseScale = Math.min(viewport.width, viewport.height) / 2.5;
   const velocity = useRef(0);
   const direction = new Vector3(0.9, 0, 1.0);
-  const stopZ = 3.1;
+  const stopZRef = useRef(3);
 
   useEffect(() => {
     if (registerMoveForward) {
       registerMoveForward(() => {
-        console.log("moveForward() called");
         velocity.current = 0.03;
       });
     }
   }, [registerMoveForward]);
 
+  // useEffect(() => {
+  //   if (scene && modelRef.current) {
+  //     const helper = new BoxHelper(modelRef.current, 0xff0000);
+  //     scene.add(helper);
+  //     console.log('[Model] Added BoxHelper for visual debug');
+  //   }
+  // }, [scene]);
+
   useEffect(() => {
     if (animations.length) {
       mixerRef.current = new AnimationMixer(scene);
-      animations.forEach((clip) => {
-        const action = mixerRef.current.clipAction(clip);
-        action.paused = true;
-        actionsRef.current.push(action);
-      });
     }
-  }, [animations, scene]);
-
-  useEffect(() => {
+    
+    // Center the model
     const box = new Box3().setFromObject(scene);
     const center = new Vector3();
     box.getCenter(center);
     scene.position.sub(center);
-  }, [scene]);
+
+    // Store stopZ as a % of model's bounding box depth
+    const size = new Vector3();
+    box.getSize(size);
+    stopZRef.current = size.z * 0.5;
+    console.log("[Model] Scene box size:", size);
+    console.log("[Model] Scene center offset:", center);
+  }, [animations, scene]);
 
   useFrame(() => {
     if (mixerRef.current) {
@@ -49,13 +62,8 @@ const Model = ({ registerMoveForward, onEnteredGallery }) => {
     if (velocity.current > 0 && modelRef.current) {
       modelRef.current.position.addScaledVector(direction, velocity.current);
 
-      if (modelRef.current.position.z >= stopZ) {
+      if (modelRef.current.position.z >= stopZRef.current) {
         velocity.current = 0;
-        console.log("User now in gallery");
-
-        if (onEnteredGallery) {
-          onEnteredGallery(); // 👈 this will now toggle the overlay
-        }
       }
     }
   });
@@ -63,7 +71,7 @@ const Model = ({ registerMoveForward, onEnteredGallery }) => {
   return (
     <group
       ref={modelRef}
-      scale={viewport.width / 5.35}
+      scale={[baseScale, baseScale, baseScale]}
       rotation={[0, 4.72, 0]}
       position={[-1.75, 0, 0]}
     >

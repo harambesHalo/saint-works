@@ -26,7 +26,7 @@ export default function ContactPreloader() {
     };
     
     return (
-        <div className={styles.preloaderContainer}>
+        <div className={styles.ContactPreloaderContainer}>
             <AnimatePresence mode="wait">
                 {showPreloader && (
                     <WipeTransition 

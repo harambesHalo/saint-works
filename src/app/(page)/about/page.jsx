@@ -20,7 +20,7 @@ const About = () => {
     return (
         <>
             {loading && <AboutPreloader />}
-            <div className='contact-page'>
+            <div className='about-page'>
                 <h1>About Page</h1>
                 <p>Some Shit</p>
             </div>

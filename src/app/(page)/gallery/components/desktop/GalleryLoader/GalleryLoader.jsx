@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import styles from './GalleryPreloader.module.scss';
+import styles from './GalleryLoader.module.scss';
 import WipeTransition from '@/components/Transitions/WipeTransition/WipeTranstion';
 
 export default function GalleryPreloader() {
@@ -24,9 +24,9 @@ export default function GalleryPreloader() {
     const handleWipeComplete = () => {
         // Can trigger any completion actions here
     };
-    
+
     return (
-        <div className={styles.GalleryPreloaderContainer}>
+        <div className={styles.AboutPreloaderContainer}>
             <AnimatePresence mode="wait">
                 {showPreloader && (
                     <WipeTransition 
