@@ -25,7 +25,7 @@ const Gallery3d = () => {
       setStartExit(true); // this starts the animation after canvas mount
     });
 
-    setIsLoaded(true); // enable button etc.
+    setIsLoaded(true);
   };
 
   return (
