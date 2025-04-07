@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import styles from "./Gallery3d.module.scss";
 import dynamic from 'next/dynamic';
 import GalleryPreloader from '@/app/(page)/gallery/components/desktop/GalleryLoader/GalleryLoader';
@@ -8,18 +8,24 @@ const Wall = dynamic(() => import('../../../media/Wall'), {
   loading: () => <p>Loading 3D...</p>,
 });
 
-const Gallery3d = ({ imageUrls }) => {
+const Gallery3d = () => {
   const moveForwardFn = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [showPreloader, setShowPreloader] = useState(true);
+  const [startExit, setStartExit] = useState(false);
 
   const handleClick = () => {
     if (moveForwardFn.current) moveForwardFn.current();
   };
 
   const handleLoadingComplete = () => {
-    setIsLoaded(true); // triggers preloader to finish\
-    console.log("Loading Complete")
+    console.log("✅ 3D Model Loaded");
+
+    // Wait for canvas remount before triggering animation
+    requestAnimationFrame(() => {
+      setStartExit(true); // this starts the animation after canvas mount
+    });
+
+    setIsLoaded(true); // enable button etc.
   };
 
   return (
@@ -29,14 +35,12 @@ const Gallery3d = ({ imageUrls }) => {
         onLoadingComplete={handleLoadingComplete}
       />
 
-      {/* ⬇️ GalleryPreloader wraps the transition effect */}
-      {showPreloader && (
-        <GalleryPreloader
-          onComplete={() => setShowPreloader(false)} // only hide after animation
-        />
-      )}
+      {/* ⬇️ Preloader stays mounted, exits when `startExit` is true */}
+      <GalleryPreloader
+        startExit={startExit}
+        onComplete={() => console.log("🧹 Preloader exit complete")}
+      />
 
-      {/* Button always available, optionally disable it until loaded */}
       <button 
         onClick={handleClick}
         disabled={!isLoaded}
