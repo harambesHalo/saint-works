@@ -2,7 +2,7 @@
 import { createContext, useState, useContext, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
-import LiquidTransition from '../components/Transitions/liquid/LiquidTransition';
+import LiquidTransition from '../components/Transitions/LiquidTransition/LiquidTransition';
 
 // Create context
 const NavigationContext = createContext({

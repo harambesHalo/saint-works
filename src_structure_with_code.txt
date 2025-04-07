@@ -1,0 +1,503 @@
+📁 Directory Structure
+components/
+├── desktop/
+│   ├── Gallery3d/
+│   │   ├── Gallery3d.jsx
+│   │   ├── Gallery3d.module.scss
+│   ├── GalleryLoader/
+│   │   └── GalleryLoader.jsx
+│   │   └── GalleryLoader.module.scss
+├── mobile/
+│   └── MobileGallery/
+│   │   ├── MobileGallery.jsx
+│   │   ├── MobileGallery.scss
+│   └── MobileGalleryLoader/
+│   │   └── MobileGalleryLoader.module.scss
+│   │   └── MobileGalleryLoder.jsx
+media/
+├── Wall/
+│   └── index.jsx
+│   └── Model.js
+│   └── style.module.scss
+page.jsx
+style.module.scss
+
+
+📄 Code Contents:
+
+
+Gallery3d.jsx:
+
+import { useRef, useState } from "react";
+import styles from "./Gallery3d.module.scss";
+import dynamic from 'next/dynamic';
+import GalleryPreloader from '@/app/(page)/gallery/components/desktop/GalleryLoader/GalleryLoader';
+
+const Wall = dynamic(() => import('../../../media/Wall'), {
+  ssr: false,
+  loading: () => <p>Loading 3D...</p>,
+});
+
+const Gallery3d = ({ imageUrls }) => {
+  const moveForwardFn = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(true);
+
+  const handleClick = () => {
+    if (moveForwardFn.current) moveForwardFn.current();
+  };
+
+  const handleLoadingComplete = () => {
+    setIsLoaded(true); // triggers preloader to finish\
+    console.log("Loading Complete")
+  };
+
+  return (
+    <div className={styles.canvasContainer}>
+      <Wall 
+        registerMoveForward={fn => (moveForwardFn.current = fn)} 
+        onLoadingComplete={handleLoadingComplete}
+      />
+
+      {/* ⬇️ GalleryPreloader wraps the transition effect */}
+      {showPreloader && (
+        <GalleryPreloader
+          onComplete={() => setShowPreloader(false)} // only hide after animation
+        />
+      )}
+
+      {/* Button always available, optionally disable it until loaded */}
+      <button 
+        onClick={handleClick}
+        disabled={!isLoaded}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          padding: '10px 20px',
+          background: isLoaded ? '#fff' : '#888',
+          color: isLoaded ? '#000' : '#ccc',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: isLoaded ? 'pointer' : 'not-allowed',
+          zIndex: 10
+        }}
+      >
+        Enter Gallery
+      </button>
+    </div>
+  );
+};
+
+export default Gallery3d;
+
+
+
+
+GalleryLoader.jsx:
+
+'use client';
+import { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import styles from './GalleryLoader.module.scss';
+import WipeTransition from '@/components/Transitions/WipeTransition/WipeTranstion';
+
+export default function GalleryPreloader() {
+    const [showPreloader, setShowPreloader] = useState(true);
+    
+    useEffect(() => {
+        // After a brief delay, start the exit animation
+        const timer = setTimeout(() => {
+            setShowPreloader(false);
+        }, 1500);
+        
+        return () => clearTimeout(timer);
+    }, []);
+    
+    // Handle wipe transition callbacks
+    const handleWipeMidpoint = () => {
+        // Can trigger any midpoint actions here
+    };
+    
+    const handleWipeComplete = () => {
+        // Can trigger any completion actions here
+    };
+
+    return (
+        <div className={styles.AboutPreloaderContainer}>
+            <AnimatePresence mode="wait">
+                {showPreloader && (
+                    <WipeTransition 
+                        key="wipe-transition"
+                        onMidpoint={handleWipeMidpoint}
+                        onComplete={handleWipeComplete}
+                    />
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+
+
+MobileGallery.jsx:
+
+'use client';
+import Image from "next/image";
+import './MobileGallery.scss';
+import { useEffect } from 'react';
+
+const MobileGallery = () => {
+  // This effect ensures the gallery works with Lenis
+  useEffect(() => {
+    // Update Lenis to handle our gallery content if it exists
+    if (typeof window !== 'undefined' && window.lenis) {
+      // Reset any scroll position
+      window.scrollTo(0, 0);
+      // Update Lenis to recognize new content
+      window.lenis.resize();
+    }
+    
+    // Make sure body scrolling is enabled
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
+    
+    // Add touch scroll indicator if needed
+    const addScrollHint = () => {
+      const gallery = document.querySelector('.gallery-page-mobile');
+      if (gallery && !document.querySelector('.scroll-hint')) {
+        const hint = document.createElement('div');
+        hint.className = 'scroll-hint';
+        hint.innerHTML = '↓ Scroll to see more ↓';
+        hint.style.textAlign = 'center';
+        hint.style.padding = '10px';
+        hint.style.marginTop = '10px';
+        hint.style.opacity = '0.7';
+        gallery.appendChild(hint);
+        
+        // Fade out hint after user scrolls
+        const removeHint = () => {
+          if (window.scrollY > 50) {
+            hint.style.opacity = '0';
+            hint.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+              hint.remove();
+            }, 500);
+            window.removeEventListener('scroll', removeHint);
+          }
+        };
+        
+        window.addEventListener('scroll', removeHint);
+      }
+    };
+    
+    // Add scroll hint with a small delay
+    setTimeout(addScrollHint, 1000);
+    
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
+
+  return (
+    <div className='gallery-page-mobile'>
+      <div className="newsWrapperMobile">
+        <Image
+          src="/images/news.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="news-painting-mobile"
+        />
+      </div>
+      <div className="redlineWrapperMobile">
+        <Image
+          src="/images/redline2.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="red-painting-mobile"
+        />
+      </div>
+      <div className="boxImageWrapperMobile">
+        <Image
+          src="/images/header.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="box-painting-mobile"
+        />
+      </div>
+      <div className="squiggleWrapperMobile">
+        <Image
+          src="/images/squiggle2.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="squiggle-painting-mobile"
+        />
+      </div>
+      <div className="oceanImageWrapperMobile">
+        <Image
+          src="/images/blue-ocean.png"
+          width={500}
+          height={300}
+          alt="background"
+          priority
+          className="ocean-painting-mobile"
+        />
+      </div>
+      <div className="weatherImageWrapperMobile">
+        <Image
+          src="/images/weather.png"
+          width={500}
+          height={300}
+          alt="background-mobile"
+          priority
+          className="weather-painting-mobile"
+        />
+      </div>
+      {/* Add padding at the bottom to ensure last image has space below */}
+      <div className="gallery-bottom-spacer" style={{ height: '50px', width: '100%' }}></div>
+    </div>
+  );
+}
+
+export default MobileGallery;
+
+
+
+MobileGalleryLoder.jsx:
+
+"use client";
+import { useState, useEffect } from "react";
+import styles from "./MobileGalleryLoader.module.scss";
+import Square from '@/common/SquareButton';
+import Image from 'next/image';
+
+const MobileGalleryLoader = ({ onComplete, imageUrls }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const totalImages = imageUrls.length;
+
+  useEffect(() => {
+    const imagePromises = imageUrls.map((src) => {
+      return new Promise((resolve) => {
+        const img = typeof window !== 'undefined' ? new window.Image() : null;
+        if (!img) return resolve();
+        img.src = src;
+        img.onload = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+        img.onerror = () => {
+          setLoadedCount((prev) => prev + 1);
+          resolve();
+        };
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then(() => setIsLoading(false))
+      .catch((err) => {
+        console.error("Error loading images:", err);
+        setIsLoading(false);
+      });
+  }, [imageUrls]);
+
+  const handleClick = () => {
+    // Just directly call onComplete without any animations
+    onComplete();
+  };
+
+  return (
+    <div>
+      <div className={styles.backgroundContainer}>
+        <Image
+            src="/images/gallery-wall.png"
+            fill={true}
+            alt="background"
+            priority
+            className={styles.backgroundImage}
+          />
+      </div>
+      <div className={styles.loader}>
+        <div className={styles.loaderContent}>
+          {isLoading ? (
+            <div className={styles.loadingState}>
+              <div className={styles.spinner}></div>
+              <p>Loading Gallery ({loadedCount}/{totalImages})</p>
+            </div>
+          ) : (
+            <Square onClick={handleClick}>
+              <p>Enter Gallery</p>
+            </Square>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MobileGalleryLoader;
+
+
+
+index.jsx:
+
+import { Canvas } from '@react-three/fiber';
+import { Environment, useProgress } from '@react-three/drei';
+import Model from './Model';
+import { useEffect, useState } from 'react';
+import styles from './style.module.scss';
+
+
+// Component to track loading progress
+const LoadingTracker = ({ onLoaded }) => {
+  const { progress, loaded } = useProgress();
+  
+  useEffect(() => {
+    if (progress === 100 && loaded) {
+      onLoaded();
+    }
+  }, [progress, loaded, onLoaded]);
+  
+  return null;
+};
+
+const Wall = ({ registerMoveForward, onLoadingComplete }) => {
+  return (
+    <Canvas className={styles.wallParent}>
+      <LoadingTracker className={styles.loadingTracker}
+        onLoaded={onLoadingComplete} 
+      />
+      <Model registerMoveForward={registerMoveForward} />
+      <directionalLight intensity={0.75} position={[0, 2, 3]} />
+      <Environment preset="city" />
+    </Canvas>
+  );
+};
+
+export default Wall;
+
+
+
+Model.js:
+
+import React, { useRef, useEffect } from 'react';
+import { useGLTF } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import { AnimationMixer, Box3, Vector3 } from 'three';
+
+const Model = ({ registerMoveForward }) => {
+  const { scene, animations } = useGLTF('/medias/test3pShift.glb', {
+    onLoad: () => console.log('GLB model loaded successfully') 
+  });
+  const { viewport, clock } = useThree();
+  const modelRef = useRef();
+  const mixerRef = useRef();
+
+  const baseScale = Math.min(viewport.width, viewport.height) / 2.5;
+  const velocity = useRef(0);
+  const direction = new Vector3(0.9, 0, 1.0);
+  const stopZRef = useRef(3);
+
+  useEffect(() => {
+    if (registerMoveForward) {
+      registerMoveForward(() => {
+        velocity.current = 0.03;
+      });
+    }
+  }, [registerMoveForward]);
+
+  useEffect(() => {
+    if (animations.length) {
+      mixerRef.current = new AnimationMixer(scene);
+    }
+    
+    // Center the model
+    const box = new Box3().setFromObject(scene);
+    const center = new Vector3();
+    box.getCenter(center);
+    scene.position.sub(center);
+
+    // Store stopZ as a % of model's bounding box depth
+    const size = new Vector3();
+    box.getSize(size);
+    stopZRef.current = size.z * 0.5;
+  }, [animations, scene]);
+
+  useFrame(() => {
+    if (mixerRef.current) {
+      mixerRef.current.update(clock.getDelta());
+    }
+
+    if (velocity.current > 0 && modelRef.current) {
+      modelRef.current.position.addScaledVector(direction, velocity.current);
+
+      if (modelRef.current.position.z >= stopZRef.current) {
+        velocity.current = 0;
+      }
+    }
+  });
+
+  return (
+    <group
+      ref={modelRef}
+      scale={[baseScale, baseScale, baseScale]}
+      rotation={[0, 4.72, 0]}
+      position={[-1.75, 0, 0]}
+    >
+      <primitive object={scene} />
+    </group>
+  );
+};
+
+useGLTF.preload('/medias/test3pShift.glb');
+export default Model;
+
+
+
+page.jsx:
+
+'use client';
+
+import { useDeviceContext } from "../../../lib/hooks/useDeviceContext";
+import MobileGallery from "./components/mobile/MobileGallery/MobileGallery";
+import Gallery3d from "./components/desktop/Gallery3d/Gallery3d";
+import styles from './style.module.scss';
+
+const Gallery = () => {
+  const { isMobile } = useDeviceContext();
+  
+  // Image URLs
+  const imageUrls = [
+    "/images/header.png",
+    "/images/news.png",
+    "/images/redline2.png",
+    "/images/squiggle2.png",
+    "/images/blue-ocean.png",
+    "/images/weather.png",
+    "/images/redline2.png",
+  ];
+
+  // Simplified rendering logic
+  if (isMobile) {
+    return <MobileGallery imageUrls={imageUrls} />;
+  } else {
+    return (
+        <div className={styles.desktopGallery}>
+            <Gallery3d />
+        </div>
+    );
+  }
+};
+
+export default Gallery;
+
+

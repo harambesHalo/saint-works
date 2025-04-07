@@ -1,0 +1,13 @@
+.wallParent{
+    position: absoolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background-color: aqua;
+    z-index: 0;
+    .loadingTracker{
+        position: absolute;
+        background-color: var(--alt-bg);
+        z-index: 0;
+    }
+}

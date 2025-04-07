@@ -2,11 +2,12 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background-color: var(--alt-bg);
+    background-color: var(--bg);
     overflow: hidden;
     align-items: center;
     justify-content: center;
     display: flex;
+    flex-direction: column;
     
     &::before {
       content: '';
@@ -17,4 +18,17 @@
       height: 100%;
       z-index: 0;
     }
-  }
+    
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    p {
+        font-size: 1.2rem;
+        position: relative;
+        z-index: 1;
+    }
+}

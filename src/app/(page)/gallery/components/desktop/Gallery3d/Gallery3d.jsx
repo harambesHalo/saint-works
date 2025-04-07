@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 import styles from "./Gallery3d.module.scss";
-import Square from '@/common/SquareButton';
 import dynamic from 'next/dynamic';
+import GalleryPreloader from '@/app/(page)/gallery/components/desktop/GalleryLoader/GalleryLoader';
 
 const Wall = dynamic(() => import('../../../media/Wall'), {
   ssr: false,
@@ -9,59 +9,53 @@ const Wall = dynamic(() => import('../../../media/Wall'), {
 });
 
 const Gallery3d = ({ imageUrls }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadedCount, setLoadedCount] = useState(0);
-  const [showOverlay, setShowOverlay] = useState(false);
-  const totalImages = imageUrls.length;
   const moveForwardFn = useRef(null);
-
-  useEffect(() => {
-    const imagePromises = imageUrls.map((src) => {
-      return new Promise((resolve) => {
-        const img = new window.Image();
-        img.src = src;
-        img.onload = () => {
-          setLoadedCount((prev) => prev + 1);
-          resolve();
-        };
-        img.onerror = () => {
-          setLoadedCount((prev) => prev + 1);
-          resolve();
-        };
-      });
-    });
-
-    Promise.all(imagePromises).then(() => setIsLoading(false));
-  }, [imageUrls]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(true);
 
   const handleClick = () => {
     if (moveForwardFn.current) moveForwardFn.current();
   };
 
-  return (
-    <div className={styles.loaderWrapper}>
-      {/* Canvas Container */}
-      <div className={styles.canvasContainer}>
-        <Wall registerMoveForward={fn => (moveForwardFn.current = fn)} onEnteredGallery={() => setShowOverlay(true) } />
-      </div>
+  const handleLoadingComplete = () => {
+    setIsLoaded(true); // triggers preloader to finish\
+    console.log("Loading Complete")
+  };
 
-      {/* UI Loader */}
-      {!showOverlay && (
-        <div className={styles.loader}>
-          <div className={styles.loaderContent}>
-            {isLoading ? (
-              <div className={styles.loadingState}>
-                <div className={styles.spinner}></div>
-                <p>Loading Gallery ({loadedCount}/{totalImages})</p>
-              </div>
-            ) : (
-              <Square onClick={handleClick}>
-                <p>Enter Gallery</p>
-              </Square>
-            )}
-          </div>
-        </div>
+  return (
+    <div className={styles.canvasContainer}>
+      <Wall 
+        registerMoveForward={fn => (moveForwardFn.current = fn)} 
+        onLoadingComplete={handleLoadingComplete}
+      />
+
+      {/* ⬇️ GalleryPreloader wraps the transition effect */}
+      {showPreloader && (
+        <GalleryPreloader
+          onComplete={() => setShowPreloader(false)} // only hide after animation
+        />
       )}
+
+      {/* Button always available, optionally disable it until loaded */}
+      <button 
+        onClick={handleClick}
+        disabled={!isLoaded}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          padding: '10px 20px',
+          background: isLoaded ? '#fff' : '#888',
+          color: isLoaded ? '#000' : '#ccc',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: isLoaded ? 'pointer' : 'not-allowed',
+          zIndex: 10
+        }}
+      >
+        Enter Gallery
+      </button>
     </div>
   );
 };
