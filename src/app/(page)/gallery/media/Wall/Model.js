@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
-// import { BoxHelper } from 'three';
 
 const Model = ({ registerMoveForward }) => {
   const { scene, animations } = useGLTF('/medias/test3pShift.glb', {
@@ -26,14 +25,6 @@ const Model = ({ registerMoveForward }) => {
       });
     }
   }, [registerMoveForward]);
-
-  // useEffect(() => {
-  //   if (scene && modelRef.current) {
-  //     const helper = new BoxHelper(modelRef.current, 0xff0000);
-  //     scene.add(helper);
-  //     console.log('[Model] Added BoxHelper for visual debug');
-  //   }
-  // }, [scene]);
 
   useEffect(() => {
     if (animations.length) {

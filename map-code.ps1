@@ -53,7 +53,7 @@ function Get-DirectoryTree {
 
         # If it's a code file, add to array for later processing
         $FileExtension = $File.Extension.ToLower()
-        if ($FileExtension -in @(".js", ".ts", ".jsx", ".tsx", ".json", ".css", ".py", ".html")) {
+        if ($FileExtension -in @(".js", ".ts", ".jsx", ".tsx", ".json", ".css", ".scss", ".py", ".html")) {
             $Global:CodeFiles += @{
                 Path = $File.FullName
                 Name = $File.Name

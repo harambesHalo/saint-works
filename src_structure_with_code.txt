@@ -32,6 +32,7 @@ import { useRef, useState } from "react";
 import styles from "./Gallery3d.module.scss";
 import dynamic from 'next/dynamic';
 import GalleryPreloader from '@/app/(page)/gallery/components/desktop/GalleryLoader/GalleryLoader';
+import Square from '@/common/SquareButton';
 
 const Wall = dynamic(() => import('../../../media/Wall'), {
   ssr: false,
@@ -59,39 +60,55 @@ const Gallery3d = ({ imageUrls }) => {
         onLoadingComplete={handleLoadingComplete}
       />
 
-      {/* ⬇️ GalleryPreloader wraps the transition effect */}
       {showPreloader && (
-        <GalleryPreloader
-          onComplete={() => setShowPreloader(false)} // only hide after animation
-        />
+        <div className={styles.visiblePreloader}>
+          <div className={styles.preloaderText}>
+          <Square onClick={handleClick}>
+            <p>Enter Gallery</p>
+          </Square>
+          </div>
+          <GalleryPreloader
+            onComplete={() => setShowPreloader(false)} // only hide after animation
+          />
+        </div>
       )}
-
-      {/* Button always available, optionally disable it until loaded */}
-      <button 
-        onClick={handleClick}
-        disabled={!isLoaded}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          padding: '10px 20px',
-          background: isLoaded ? '#fff' : '#888',
-          color: isLoaded ? '#000' : '#ccc',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: isLoaded ? 'pointer' : 'not-allowed',
-          zIndex: 10
-        }}
-      >
-        Enter Gallery
-      </button>
     </div>
   );
 };
 
 export default Gallery3d;
 
+
+
+
+Gallery3d.module.scss:
+
+.canvasContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-color: var(--alt-bg);
+  .visiblePreloader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    .preloaderText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      color: var(--slate);
+    }
+  }
+}
 
 
 
@@ -137,6 +154,30 @@ export default function GalleryPreloader() {
             </AnimatePresence>
         </div>
     );
+}
+
+
+
+GalleryLoader.module.scss:
+
+.GalleryPreloaderContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+}
+
+.GalleryPreloader {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 99;
+    background-color: var(--alt-bg);
 }
 
 
@@ -272,6 +313,188 @@ export default MobileGallery;
 
 
 
+MobileGallery.scss:
+
+.gallery-page-mobile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--alt-bg);
+    align-items: center;
+    justify-content: center;
+
+    .newsWrapperMobile {
+        display: flex;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25%;
+        transform: rotate(-0.75deg);
+        .news-painting-mobile {
+            width: 75%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            z-index: 1;
+        }
+    }
+    .squiggleWrapperMobile {
+        display: flex;
+        width: 100%;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8%;
+        .squiggle-painting-mobile {
+            width: 75%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            z-index: 1;
+        }
+    }
+    .boxImageWrapperMobile {
+        display: flex;
+        width: 100%;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8%;
+        transform: rotate(-1.25deg);
+        .box-painting-mobile {
+            width: 85%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            z-index: 1;
+        }
+    }
+    .weatherImageWrapperMobile {
+        display: flex;
+        width: 100%;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8%;
+        transform: rotate(0.25deg);
+        .weather-painting-mobile {
+            width: 75%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            z-index: 1;
+        }
+    }
+    .oceanImageWrapperMobile {
+        display: flex;
+        width: 100%;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8%;
+        transform: rotate(-0.15deg);
+        .ocean-painting-mobile {
+            width: 85%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            z-index: 1;
+        }
+    }
+    .redlineWrapperMobile {
+        display: flex;
+        width: 100%;
+        z-index: 1;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8%;
+        transform: rotate(0.35deg);
+        .red-painting-mobile {
+            width: 75%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            z-index: 1;
+        }
+    }
+  }
+
+
+
+
+MobileGalleryLoader.module.scss:
+
+.backgroundContainer {
+    .galleryMedia{
+      z-index: 0;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+    .galleryWallImg{
+      z-index: 0;
+    }
+  }
+  
+  .loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; // Using your bg color from globals.css
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .loaderContent {
+      text-align: center;
+      padding: 2rem;
+      .enterButton {
+        background-color: var(--blue);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        &:hover {
+          background-color: #0069a1; // Darker blue on hover
+        }
+      }
+      p {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+        color: var(--sig-green);
+      }
+      .loadingState {
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .spinner {
+          width: 50px;
+          height: 50px;
+          border: 5px solid rgba(0, 0, 0, 0.1);
+          border-radius: 50%;
+          border-top-color: var(--sig-green);
+          animation: spin 1s ease-in-out infinite;
+        }
+        
+      }
+    }
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+
+
 MobileGalleryLoder.jsx:
 
 "use client";
@@ -359,30 +582,43 @@ import styles from './style.module.scss';
 
 // Component to track loading progress
 const LoadingTracker = ({ onLoaded }) => {
-  const { progress, loaded } = useProgress();
-  
+  const { progress, loaded, total, active } = useProgress();
+
   useEffect(() => {
-    if (progress === 100 && loaded) {
+    console.log(`[LoadingTracker] Progress: ${progress}% | Loaded: ${loaded}/${total} | Active: ${active}`);
+    
+    if (progress === 100 && loaded === total && active === false) {
+      console.log("[LoadingTracker] Everything loaded, calling onLoaded()");
       onLoaded();
     }
-  }, [progress, loaded, onLoaded]);
-  
+  }, [progress, loaded, total, active, onLoaded]);
+
   return null;
 };
 
 const Wall = ({ registerMoveForward, onLoadingComplete }) => {
+  const [canvasKey, setCanvasKey] = useState(0);
+
+  useEffect(() => {
+    if (onLoadingComplete) {
+      // This will trigger a Canvas remount when loading completes
+      setCanvasKey(prev => prev + 1);
+    }
+  }, [onLoadingComplete]);
+
   return (
-    <Canvas className={styles.wallParent}>
-      <LoadingTracker className={styles.loadingTracker}
-        onLoaded={onLoadingComplete} 
-      />
+    <Canvas
+      key={canvasKey} // 🔁 Force remount
+      className={styles.wallParent}
+      style={{ background: '#222' }}
+    >
+      <LoadingTracker onLoaded={onLoadingComplete} />
       <Model registerMoveForward={registerMoveForward} />
       <directionalLight intensity={0.75} position={[0, 2, 3]} />
       <Environment preset="city" />
     </Canvas>
   );
 };
-
 export default Wall;
 
 
@@ -396,8 +632,10 @@ import { AnimationMixer, Box3, Vector3 } from 'three';
 
 const Model = ({ registerMoveForward }) => {
   const { scene, animations } = useGLTF('/medias/test3pShift.glb', {
-    onLoad: () => console.log('GLB model loaded successfully') 
+    onLoad: () => console.log('[Model] GLB model loaded successfully'),
+    onError: (err) => console.error('[Model] Error loading GLB:', err)
   });
+  console.log("[Model] Loaded scene:", scene);
   const { viewport, clock } = useThree();
   const modelRef = useRef();
   const mixerRef = useRef();
@@ -430,6 +668,8 @@ const Model = ({ registerMoveForward }) => {
     const size = new Vector3();
     box.getSize(size);
     stopZRef.current = size.z * 0.5;
+    console.log("[Model] Scene box size:", size);
+    console.log("[Model] Scene center offset:", center);
   }, [animations, scene]);
 
   useFrame(() => {
@@ -460,6 +700,24 @@ const Model = ({ registerMoveForward }) => {
 
 useGLTF.preload('/medias/test3pShift.glb');
 export default Model;
+
+
+
+style.module.scss:
+
+.wallParent{
+    position: absoolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background-color: aqua;
+    z-index: 0;
+    .loadingTracker{
+        position: absolute;
+        background-color: var(--alt-bg);
+        z-index: 0;
+    }
+}
 
 
 
@@ -499,5 +757,20 @@ const Gallery = () => {
 };
 
 export default Gallery;
+
+
+
+style.module.scss:
+
+
+.desktopGallery{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--alt-bg);
+    overflow: hidden;
+}
 
 
