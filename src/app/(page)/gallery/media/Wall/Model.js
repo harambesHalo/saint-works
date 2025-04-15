@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
 const Model = ({ registerMoveForward }) => {
-  const { scene, animations } = useGLTF('/medias/test3pShift.glb', {
+  const { scene, animations } = useGLTF('/medias/galleryNew1.glb', {
     onLoad: () => console.log('[Model] GLB model loaded successfully'),
     onError: (err) => console.error('[Model] Error loading GLB:', err)
   });
@@ -15,7 +15,7 @@ const Model = ({ registerMoveForward }) => {
 
   const baseScale = Math.min(viewport.width, viewport.height) / 2.5;
   const velocity = useRef(0);
-  const direction = new Vector3(0.9, 0, 1.0);
+  const direction = new Vector3(0.8, 0, 1.5);
   const stopZRef = useRef(3);
 
   useEffect(() => {
@@ -28,6 +28,7 @@ const Model = ({ registerMoveForward }) => {
 
   useEffect(() => {
     if (animations.length) {
+      console.log("animations", animations);
       mixerRef.current = new AnimationMixer(scene);
     }
     
@@ -40,7 +41,7 @@ const Model = ({ registerMoveForward }) => {
     // Store stopZ as a % of model's bounding box depth
     const size = new Vector3();
     box.getSize(size);
-    stopZRef.current = size.z * 0.5;
+    stopZRef.current = size.z * 0.75;
     console.log("[Model] Scene box size:", size);
     console.log("[Model] Scene center offset:", center);
   }, [animations, scene]);
@@ -63,13 +64,13 @@ const Model = ({ registerMoveForward }) => {
     <group
       ref={modelRef}
       scale={[baseScale, baseScale, baseScale]}
-      rotation={[0, 4.72, 0]}
-      position={[-1.75, 0, 0]}
+      rotation={[0, 4.71, 0]}
+      position={[-1.75, 1.0, 0]}
     >
       <primitive object={scene} />
     </group>
   );
 };
 
-useGLTF.preload('/medias/test3pShift.glb');
+useGLTF.preload('/medias/galleryNew1.glb');
 export default Model;
