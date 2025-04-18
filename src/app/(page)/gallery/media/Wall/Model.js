@@ -4,7 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
 const Model = ({ registerMoveForward }) => {
-  const { scene, animations } = useGLTF('/medias/galleryNew1.glb', {
+  const { scene, animations } = useGLTF('/medias/fullSizeGallery.glb', {
     onLoad: () => console.log('[Model] GLB model loaded successfully'),
     onError: (err) => console.error('[Model] Error loading GLB:', err)
   });
@@ -12,11 +12,25 @@ const Model = ({ registerMoveForward }) => {
   const { viewport, clock } = useThree();
   const modelRef = useRef();
   const mixerRef = useRef();
-
   const baseScale = Math.min(viewport.width, viewport.height) / 2.5;
   const velocity = useRef(0);
-  const direction = new Vector3(0.8, 0, 1.5);
+  const direction = new Vector3(1.0, 0, 1.5);
   const stopZRef = useRef(3);
+
+  // ─── enable shadows on all meshes & imported lights ─────────────────────────
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+      if (child.isLight) {
+        child.castShadow = true;
+        child.shadow.mapSize.set(1024, 1024);
+        child.shadow.bias = -0.0001;
+      }
+    });
+  }, [scene]);
 
   useEffect(() => {
     if (registerMoveForward) {
@@ -64,13 +78,14 @@ const Model = ({ registerMoveForward }) => {
     <group
       ref={modelRef}
       scale={[baseScale, baseScale, baseScale]}
-      rotation={[0, 4.71, 0]}
-      position={[-1.75, 1.0, 0]}
+      // rotation={[0, 4.71, 0]}
+      rotation={[0, 0, 0]}
+      position={[0, 1.5, -5.25]}
     >
       <primitive object={scene} />
     </group>
   );
 };
 
-useGLTF.preload('/medias/galleryNew1.glb');
+useGLTF.preload('/medias/fullSizeGallery.glb');
 export default Model;

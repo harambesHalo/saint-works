@@ -585,7 +585,7 @@ import { Environment, useProgress } from '@react-three/drei';
 import Model from './Model';
 import { useEffect, useState } from 'react';
 import styles from './style.module.scss';
-
+import { ACESFilmicToneMapping } from 'three'
 
 // Component to track loading progress
 const LoadingTracker = ({ onLoaded }) => {
@@ -618,11 +618,17 @@ const Wall = ({ registerMoveForward, onLoadingComplete }) => {
       key={canvasKey} // 🔁 Force remount
       className={styles.wallParent}
       style={{ background: '#222' }}
+      shadows
+      gl={{ 
+        toneMapping: ACESFilmicToneMapping,
+        toneMappingExposure: 1 // Adjust this value to make lighting less intense
+      }}
     >
       <LoadingTracker onLoaded={onLoadingComplete} />
       <Model registerMoveForward={registerMoveForward} />
-      <directionalLight intensity={0.75} position={[0, 2, 3]} />
-      <Environment preset="city" />
+      {/* <directionalLight intensity={0.75} position={[0, 2, 3]} /> */}
+      {/* <Environment preset="warehouse" /> */}
+      {/* Preset must be one of: apartment, city, dawn, forest, lobby, night, park, studio, sunset, warehouse*/} 
     </Canvas>
   );
 };
@@ -638,7 +644,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { AnimationMixer, Box3, Vector3 } from 'three';
 
 const Model = ({ registerMoveForward }) => {
-  const { scene, animations } = useGLTF('/medias/galleryNew1.glb', {
+  const { scene, animations } = useGLTF('/medias/room.glb', {
     onLoad: () => console.log('[Model] GLB model loaded successfully'),
     onError: (err) => console.error('[Model] Error loading GLB:', err)
   });
@@ -649,7 +655,7 @@ const Model = ({ registerMoveForward }) => {
 
   const baseScale = Math.min(viewport.width, viewport.height) / 2.5;
   const velocity = useRef(0);
-  const direction = new Vector3(0.8, 0, 1.5);
+  const direction = new Vector3(1.2, 0, 1.5);
   const stopZRef = useRef(3);
 
   useEffect(() => {
@@ -699,14 +705,14 @@ const Model = ({ registerMoveForward }) => {
       ref={modelRef}
       scale={[baseScale, baseScale, baseScale]}
       rotation={[0, 4.71, 0]}
-      position={[-1.75, 1.0, 0]}
+      position={[-1.25, 1.0, -0.75]}
     >
       <primitive object={scene} />
     </group>
   );
 };
 
-useGLTF.preload('/medias/galleryNew1.glb');
+useGLTF.preload('/medias/room.glb');
 export default Model;
 
 
