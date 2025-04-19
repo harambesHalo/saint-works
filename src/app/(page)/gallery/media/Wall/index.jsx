@@ -39,7 +39,7 @@ const Wall = ({ registerMoveForward, onLoadingComplete }) => {
       shadows
       gl={{ 
         toneMapping: ACESFilmicToneMapping,
-        toneMappingExposure: 1 // Adjust this value to make lighting less intense
+        toneMappingExposure: .5 // Adjust this value to make lighting less intense
       }}
     >
       <LoadingTracker onLoaded={onLoadingComplete} />
