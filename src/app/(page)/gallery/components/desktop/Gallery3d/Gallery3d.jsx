@@ -13,6 +13,7 @@ const Gallery3d = ({ imageUrls }) => {
   const moveForwardFn = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
+  const [showControls, setShowControls] = useState(true);
   const buttonRef = useRef();
 
   const handleClick = () => {
@@ -23,12 +24,32 @@ const Gallery3d = ({ imageUrls }) => {
       buttonRef.current.style.opacity = 0;
       buttonRef.current.style.pointerEvents = "none";
     }
+    
+    // Show controls for a brief period
+    setShowControls(true);
+    setTimeout(() => {
+      setShowControls(false);
+    }, 5000); // Hide after 5 seconds
   };
 
   const handleLoadingComplete = () => {
     setIsLoaded(true);
     console.log("Loading Complete");
   };
+  
+  // Show controls when pressing '?' key
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === '?') {
+        setShowControls(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   return (
     <div className={styles.canvasContainer}>
@@ -47,6 +68,19 @@ const Gallery3d = ({ imageUrls }) => {
           <GalleryPreloader
             onComplete={() => setShowPreloader(false)}
           />
+        </div>
+      )}
+      
+      {showControls && !showPreloader && (
+        <div className={styles.controlsOverlay}>
+          <div className={styles.controlsPanel}>
+            <h3>Gallery Controls</h3>
+            <ul>
+              <li>Arrow Keys / WASD: Move around</li>
+              <li>Q/E: Rotate view</li>
+              <li>Press '?' to toggle this help menu</li>
+            </ul>
+          </div>
         </div>
       )}
     </div>
